@@ -35,8 +35,8 @@ require(ObjectFiles, function () {
 
             player = new Q.Player({
                 playerId: selfId,
-                x: 100,
-                y: 100,
+                x: 200,
+                y: 0,
                 socket: socket
             });
 
@@ -76,16 +76,16 @@ require(ObjectFiles, function () {
         //Parallax (Background moves as player moves)
         //TODO: Not sure if parallax works with multiple players
         //TODO: Might need foldername/file for each of these assets
-        stage.insert(new Q.Repeater({
-            asset: "tmp-background.png",
-            speedX: 0.5,
-            speedY: 0.5
-        }));
+        //        stage.insert(new Q.Repeater({
+        //            asset: "tmpbackground.png",
+        //            speedX: 0.5,
+        //            speedY: 0.5
+        //        }));
 
         //Create the walls of the game. Level is described by json. Blocks are
         //described by the sheet.
         stage.collisionLayer(new Q.TileLayer({
-            dataAsset: 'tmplevel.json',
+            dataAsset: '/data/tmplevel.json',
             sheet: 'tmptiles'
         }));
 
@@ -109,13 +109,13 @@ require(ObjectFiles, function () {
         '/data/tmplevel.json',
         '/images/tmpsprites.png',
         '/data/tmpsprites.json',
-        '/images/tmp-background.png'
+        '/images/tmpbackground.png'
     ];
 
     //Split up the blocks and sprites from being one long PNG.
     //Load the actual level and run the game.
     Q.load(files.join(','), function () {
-        Q.sheet('tiles', '/images/tmptiles.png', {
+        Q.sheet('tmptiles', '/images/tmptiles.png', {
             tilew: 32,
             tileh: 32
         });
