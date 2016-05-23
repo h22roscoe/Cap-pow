@@ -14,29 +14,37 @@ var playerCount = 0;
 var id = 0;
 
 io.on('connection', function (socket) {
+    console.log("A user connected");
+
     playerCount++;
     id++;
+
     setTimeout(function () {
         socket.emit('connected', {
             playerId: id
         });
+
         io.emit('count', {
             playerCount: playerCount
         });
+
     }, 1500);
 
     socket.on('disconnect', function () {
+        console.log("A user disconnected");
+
         playerCount--;
+
         io.emit('count', {
             playerCount: playerCount
         });
     });
-
 
     socket.on('update', function (data) {
         socket.broadcast.emit('updated', data);
     });
 });
 
-server.listen(80);
-console.log("Multiplayer app listening on port 80");
+server.listen(3000, function () {
+    console.log("Multiplayer app listening on port 3000");
+});

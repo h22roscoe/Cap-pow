@@ -6,7 +6,6 @@ require([], function () {
 
         // the init constructor is called on creation
         init: function (p) {
-
             // You can call the parent's constructor with this._super(..)
             this._super(p, {
                 sheet: "player" // Setting a sprite sheet sets sprite width and height
@@ -40,10 +39,12 @@ require([], function () {
             });
 
             var temp = this;
+
             setInterval(function () {
                 if (!temp.p.update) {
                     temp.destroy();
                 }
+
                 temp.p.update = false;
             }, 3000);
         }
