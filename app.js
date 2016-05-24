@@ -48,5 +48,5 @@ io.on('connection', function (socket) {
 
 // Server listens for http connections only at the moment
 server.listen(PORT, function () {
-    console.log(`Multiplayer app listening on port ${PORT}`);
+    console.log('Multiplayer app listening on port ' + PORT);
 });
