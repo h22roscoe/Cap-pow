@@ -12,6 +12,7 @@ app.get('/', function (req, res) {
 
 var playerCount = 0;
 var id = 0;
+var PORT = process.env['NODE_PORT'] || 3000;
 
 io.on('connection', function (socket) {
     console.log("A user connected");
@@ -45,6 +46,7 @@ io.on('connection', function (socket) {
     });
 });
 
-server.listen(2000, function () {
-    console.log("Multiplayer app listening on port 2000");
+// Server listens for http connections only at the moment
+server.listen(PORT, function () {
+    console.log(`Multiplayer app listening on port ${PORT}`);
 });
