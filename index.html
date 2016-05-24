@@ -6,8 +6,7 @@
 
     <meta name="viewport" content="width=device-width, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
     <title>Cap-pow!</title>
-    <script src='/lib/quintus-all.js'></script>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src='./lib/quintus-all.js'></script>
 </head>
 
 <style>
@@ -24,7 +23,7 @@
         right: 0;
         text-align: right;
         font-size: 1.5em;
-        font-family: sans-serif;
+        font-family: merriweather;
     }
 
 </style>
@@ -40,8 +39,12 @@
         u wot m8
     </p>
 
-    <script src="/lib/require.js"></script>
-    <script src='/src/game.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js"></script>
+    <script>
+        var socket = io.connect('http://146.169.45.144');
+    </script>
+    <script src="./lib/require.js"></script>
+    <script src='./src/game.js'></script>
 </body>
 
 </html>

@@ -1,10 +1,14 @@
 {
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/h22roscoe/Cap-pow"
-  },
-  "name": "Cap-pow",
-  "author": "Group 13",
-  "version": "0.0.1",
-  "dependencies": {}
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/h22roscoe/Cap-pow"
+    },
+    "license": "MIT",
+    "name": "Cap-pow",
+    "author": "Group 13",
+    "version": "0.0.1",
+    "dependencies": {
+        "express": "^4.13.4",
+        "socket.io": "^1.4.6"
+    }
 }
