@@ -1,22 +1,11 @@
-var Q = new Quintus({
-        audioSupported: ['mp3', 'ogg'],
-        development: true
-    })
-    .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
-    .setup({
-        maximize: true
-    })
-    .controls().touch()
-    .enableSound();
-
-define("Player", function () {
+describe("Player", function () {
     var player;
 
     beforeEach(function () {
-        player = Q.Player();
+        player = new Q.Player();
     });
 
     it("Does nothing", function () {
-
+        expect(1).toEqual(1);
     });
 });
