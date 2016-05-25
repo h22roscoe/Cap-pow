@@ -10,21 +10,24 @@ app.get('/', function (req, res) {
     res.render('/index.html');
 });
 
-//Tracks number of players and gives each player a unique id
+// Tracks number of players and gives each player a unique id
 var playerCount = 0;
 var id = 0;
 //Port is 3000 by default
 var PORT = process.env['NODE_PORT'] || 3000;
 
-//Whenever a user connects...
+// Whenever a user connects...
 io.on('connection', function (socket) {
     console.log("A user connected");
 
-    //Increment number of players as a new player connected
+    // Increment number of players as a new player connected
     playerCount++;
     id++;
 
-    //1.5 second delay before sending the user their id and emit the player count to every player, allowing the player count to be updated in the game, to ensure that the user has time to load the proper javascript files first
+    // 1.5 second delay before sending the user their id and emit the player
+    // count to every player, allowing the player count to be updated in the
+    // game, to ensure that the user has time to load the proper javascript
+    // files first
     setTimeout(function () {
         socket.emit('connected', {
             playerId: id
@@ -36,7 +39,8 @@ io.on('connection', function (socket) {
 
     }, 1500);
 
-    //On a disconnect we just tell every player that the player count has decreased
+    // On a disconnect we just tell every player that the player
+    // count has decreased
     socket.on('disconnect', function () {
         console.log("A user disconnected");
 

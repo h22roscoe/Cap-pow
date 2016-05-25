@@ -32,7 +32,6 @@ var UiPlayers = document.getElementById("players");
 
 //setUp deals with communication over the socket
 function setUp(stage) {
-
     //Count is emitted to all players on a connect and a disconnect. Update the playerCount displayed (in index.html) when the playerCount changes
     socket.on('count', function (data) {
         UiPlayers.innerHTML = 'Players: ' + data.playerCount;
@@ -105,11 +104,11 @@ Q.scene("tmplevel", function (stage) {
     }));
 
     //TODO: Will need to add the flag
+    stage.insert(new Q.Flag({ x: 180, y: 80 }));
 
     //Set up the socket connections.
     setUp(stage);
 
-    stage.insert(new Q.Flag({ x:180, y:50 }));
 });
 
 

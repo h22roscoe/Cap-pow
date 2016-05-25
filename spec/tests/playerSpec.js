@@ -1,10 +1,15 @@
-describe('Player Tests', function () {
+describe('Player', function () {
     var player;
+
     beforeEach(function () {
-        player = Q.Player();
+        player = new Q.Player();
     });
 
-    it("has instantiated the Quintus Engine (Q)", function () {
-        expect(Q).isNot.toBeNull;
-    })
+    it("has a sheet of flag when created", function () {
+        expect(player.p.sheet).toEqual("player");
+    });
+
+    it("has a type of SPRITE_PLAYER when created", function () {
+        expect(player.p.type).toEqual(Q.SPRITE_PLAYER);
+    });
 })
