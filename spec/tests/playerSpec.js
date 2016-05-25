@@ -1,10 +1,19 @@
+<<<<<<< HEAD
 describe("Player", function () {
+=======
+describe('Player', function () {
+>>>>>>> origin/flag
     var player;
+
     beforeEach(function () {
-        player = Q.Player();
+        player = new Q.Player();
     });
 
-    it("does nothing", function () {
-        expect(1).toEqual(1);
+    it("has a sheet of flag when created", function () {
+        expect(player.p.sheet).toEqual("player");
     });
-});
+
+    it("has a type of SPRITE_PLAYER when created", function () {
+        expect(player.p.type).toEqual(Q.SPRITE_PLAYER);
+    });
+})

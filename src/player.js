@@ -6,9 +6,12 @@ Q.Sprite.extend("Player", {
     init: function (p) {
         // You can call the parent's constructor with this._super(..)
         this._super(p, {
-            sheet: "player", // Setting a sprite sheet sets sprite width and height
+            sheet: "player",
+            // Setting a sprite sheet sets sprite width
+            // and height
             type: Q.SPRITE_PLAYER
-            //TODO: Need to change collisionMask so that players dont collide with each other
+            // TODO: Need to change collisionMask so that players dont collide
+            // with each other
         });
 
         // Add in pre-made components to get up and running quickly
@@ -16,14 +19,14 @@ Q.Sprite.extend("Player", {
         // and kinetics (velocity, gravity)
         // The `platformerControls` makes the player controllable by the
         // default input actions (left, right to move,  up or action to jump)
-        // It also checks to make sure the player is on a horizontal surface before
-        // letting them jump.
-        this.add('2d, platformerControls, animation');
+        // It also checks to make sure the player is on a horizontal
+        // surface before letting them jump.
+        this.add("2d, platformerControls, animation");
     },
 
     //TODO: Add event driven stuff (Collisions, down to go through door, etc)
     step: function (dt) {
-        this.p.socket.emit('update', {
+        this.p.socket.emit("update", {
             playerId: this.p.playerId,
             x: this.p.x,
             y: this.p.y,
@@ -32,7 +35,7 @@ Q.Sprite.extend("Player", {
     }
 });
 
-Q.Sprite.extend('Actor', {
+Q.Sprite.extend("Actor", {
     init: function (p) {
         this._super(p, {
             update: true
@@ -40,7 +43,8 @@ Q.Sprite.extend('Actor', {
 
         var temp = this;
 
-        // This interval method will destroy an actor when it disconnects after 3 seconds
+        // This interval method will destroy an actor when it disconnects
+        // after 3 seconds
         setInterval(function () {
             if (!temp.p.update) {
                 temp.destroy();
@@ -50,4 +54,3 @@ Q.Sprite.extend('Actor', {
         }, 3000);
     }
 });
-
