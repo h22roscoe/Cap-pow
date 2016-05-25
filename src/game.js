@@ -19,9 +19,10 @@ var Q = window.Q = Quintus({
     .enableSound();
 
 var players = [];
+var socket = io.connect("http://146.169.45.144");
 var UiPlayers = document.getElementById("players");
 
-function setUp(socket, stage) {
+function setUp(stage) {
     socket.on('count', function (data) {
         UiPlayers.innerHTML = 'Players: ' + data.playerCount;
     });
@@ -95,7 +96,7 @@ Q.scene("tmplevel", function (stage) {
     //TODO: Will need to add the flag
 
     //Set up the socket connections.
-    setUp(socket, stage);
+    setUp(stage);
 });
 
 
