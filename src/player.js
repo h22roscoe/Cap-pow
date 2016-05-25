@@ -7,7 +7,9 @@ Q.Sprite.extend("Player", {
     init: function (p) {
         // You can call the parent's constructor with this._super(..)
         this._super(p, {
-            sheet: "player" // Setting a sprite sheet sets sprite width and height
+            sheet: "player", // Setting a sprite sheet sets sprite width and height
+            type: Q.SPRITE_PLAYER
+            //TODO: Need to change collisionMask so that players dont collide with each other
         });
 
         // Add in pre-made components to get up and running quickly

@@ -18,18 +18,31 @@ var Q = window.Q = Quintus({
     .controls().touch()
     .enableSound();
 
+Q.SPRITE_PLAYER = 1;
+Q.SPRITE_FLAG = 2;
+Q.SPRITE_POWERUP = 4;
+
+//players will hold all Player objects currently in game
 var players = [];
+//Create socket object that connects to our server (CloudStack VM IP address)
 var socket = io.connect("http://146.169.45.144");
+//UiPlayers is element in index.html with id "players"
 var UiPlayers = document.getElementById("players");
 
+//setUp deals with communication over the socket
 function setUp(stage) {
+    
+    //Count is emitted to all players on a connect and a disconnect. Update the playerCount displayed (in index.html) when the playerCount changes
     socket.on('count', function (data) {
         UiPlayers.innerHTML = 'Players: ' + data.playerCount;
     });
 
+    //Just after a user connects...
     socket.on('connected', function (data) {
+        //Set this players unique id
         selfId = data.playerId;
 
+        //Create the actual player with this unique id
         player = new Q.Player({
             playerId: selfId,
             x: 200,
@@ -37,7 +50,10 @@ function setUp(stage) {
             socket: socket
         });
 
+        //Insert this player into the stage
         stage.insert(player);
+        //Add a camera for this player
+        //TODO: Change to view the whole screen? Or keep like this? Is this different for mobile/web?
         stage.add('viewport').follow(player);
     });
 
@@ -97,6 +113,8 @@ Q.scene("tmplevel", function (stage) {
 
     //Set up the socket connections.
     setUp(stage);
+    
+    stage.insert(new Q.Flag({ x:180, y:50 }));
 });
 
 

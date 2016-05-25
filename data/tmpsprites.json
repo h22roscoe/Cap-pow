@@ -1,6 +1,6 @@
 {
     "player": {
-        "sx": 0,
+        "sx": 30,
         "sy": 0,
         "cols": 1,
         "tilew": 30,
@@ -8,18 +8,18 @@
         "frames": 1
     },
     "enemy": {
-        "sx": 0,
+        "sx": 30,
         "sy": 31,
         "cols": 1,
         "tilew": 30,
         "tileh": 24,
         "frames": 1
     },
-    "tower": {
+    "flag": {
         "sx": 0,
         "sy": 56,
         "cols": 1,
-        "tilew": 30,
+        "tilew": 90,
         "tileh": 30,
         "frames": 1
     }
