@@ -21,12 +21,12 @@ Q.Sprite.extend("Player", {
         // default input actions (left, right to move,  up or action to jump)
         // It also checks to make sure the player is on a horizontal
         // surface before letting them jump.
-        this.add('2d, platformerControls, animation');
+        this.add("2d, platformerControls, animation");
     },
 
     //TODO: Add event driven stuff (Collisions, down to go through door, etc)
     step: function (dt) {
-        this.p.socket.emit('update', {
+        this.p.socket.emit("update", {
             playerId: this.p.playerId,
             x: this.p.x,
             y: this.p.y,
@@ -35,7 +35,7 @@ Q.Sprite.extend("Player", {
     }
 });
 
-Q.Sprite.extend('Actor', {
+Q.Sprite.extend("Actor", {
     init: function (p) {
         this._super(p, {
             update: true

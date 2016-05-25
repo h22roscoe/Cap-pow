@@ -8,7 +8,7 @@
 Q.Sprite.extend("Flag", {
     init: function (p) {
         this._super(p, {
-            sheet: 'flag',
+            sheet: "flag",
             type: Q.SPRITE_FLAG,
             // collisionMask specifies what things will collide
             // with the sprite when the other things move into this sprite

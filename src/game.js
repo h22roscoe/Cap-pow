@@ -10,7 +10,7 @@
 //Enables sound.
 
 var Q = window.Q = Quintus({
-        audioSupported: ['mp3', 'ogg'],
+        audioSupported: ["mp3", "ogg"],
         development: true
     })
     .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
@@ -36,7 +36,7 @@ var setUpObject = {
 };
 
 setUpObject.updateCount = function (data) {
-    UiPlayers.innerHTML = 'Players: ' + data.playerCount;
+    UiPlayers.innerHTML = "Players: " + data.playerCount;
 };
 
 setUpObject.addNewPlayer = function (data) {
@@ -57,7 +57,7 @@ setUpObject.addNewPlayer = function (data) {
     // Add a camera for this player
     // TODO: Change to view the whole screen? Or keep like this?
     //  Is this different for mobile/web?
-    setUpObject.stage.add('viewport').follow(player);
+    setUpObject.stage.add("viewport").follow(player);
 };
 
 setUpObject.updateSpecificPlayerId = function (data) {
@@ -93,13 +93,13 @@ function setUp(stage) {
 
     // Update the playerCount displayed (in index.html) when
     // the playerCount changes
-    socket.on('count', setUpObject.updateCount);
+    socket.on("count", setUpObject.updateCount);
 
     // Just after a user connects...
-    socket.on('connected', setUpObject.addNewPlayer);
+    socket.on("connected", setUpObject.addNewPlayer);
 
     // Updates the player (actor) w/ playerId who just asked to be updated
-    socket.on('updated', setUpObject.updateSpecificPlayerId);
+    socket.on("updated", setUpObject.updateSpecificPlayerId);
 }
 
 //Creating the stage for tmplevel
@@ -116,8 +116,8 @@ Q.scene("tmplevel", function (stage) {
     // Create the walls of the game. Level is described by json. Blocks are
     // described by the sheet.
     stage.collisionLayer(new Q.TileLayer({
-        dataAsset: '/data/tmplevel.json',
-        sheet: 'tmptiles'
+        dataAsset: "/data/tmplevel.json",
+        sheet: "tmptiles"
     }));
 
     // TODO: Will need to add the flag
@@ -133,20 +133,20 @@ Q.scene("tmplevel", function (stage) {
 
 // TODO: May not need background in files here
 var files = [
-        '/images/tmptiles.png',
-        '/data/tmplevel.json',
-        '/images/tmpsprites.png',
-        '/data/tmpsprites.json',
-        '/images/tmpbackground.png'
+        "/images/tmptiles.png",
+        "/data/tmplevel.json",
+        "/images/tmpsprites.png",
+        "/data/tmpsprites.json",
+        "/images/tmpbackground.png"
     ];
 
 // Split up the blocks and sprites from being one long PNG.
 // Load the actual level and run the game.
 Q.load(files.join(','), function () {
-    Q.sheet('tmptiles', '/images/tmptiles.png', {
+    Q.sheet("tmptiles", "/images/tmptiles.png", {
         tilew: 32,
         tileh: 32
     });
-    Q.compileSheets('/images/tmpsprites.png', '/data/tmpsprites.json');
-    Q.stageScene('tmplevel', 0);
+    Q.compileSheets("/images/tmpsprites.png", "/data/tmpsprites.json");
+    Q.stageScene("tmplevel");
 });
