@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 describe("Player", function () {
-=======
-describe('Player', function () {
->>>>>>> origin/flag
     var player;
 
     beforeEach(function () {
