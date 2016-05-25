@@ -2,7 +2,7 @@ describe("Player", function () {
     var player;
 
     beforeEach(function () {
-        player = new Q.Player();
+        player = Q.Player();
     });
 
     it("Does nothing", function () {

@@ -7,6 +7,7 @@
 //Turns on default controls and allows touch input with mouse/touch screen.
 //Giving control() a parameter of true will use a joypad instead.
 //Enables sound.
+
 var Q = window.Q = Quintus({
         audioSupported: ['mp3', 'ogg'],
         development: true
@@ -45,6 +46,7 @@ function setUp(stage) {
         var actor = players.filter(function (obj) {
             return obj.playerId === data.playerId;
         })[0];
+
         if (actor) {
             actor.player.p.x = data.x;
             actor.player.p.y = data.y;
@@ -85,13 +87,6 @@ Q.scene("tmplevel", function (stage) {
         dataAsset: '/data/tmplevel.json',
         sheet: 'tmptiles'
     }));
-
-    //Create the player and add them to the stage at (0,0)
-    //var player = stage.insert(new Q.Player());
-
-    //Camera will follow the player.
-    //TODO: Change to view the whole level
-    //stage.add("viewport").follow(player);
 
     //TODO: Will need to add the flag
 
