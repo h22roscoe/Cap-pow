@@ -2,12 +2,13 @@
 // The very basic player sprite, this is just a normal sprite
 // using the player sprite sheet with default controls added to it.
 Q.Sprite.extend("Player", {
-
     // the init constructor is called on creation
     init: function (p) {
         // You can call the parent's constructor with this._super(..)
         this._super(p, {
-            sheet: "player" // Setting a sprite sheet sets sprite width and height
+            sheet: "player", // Setting a sprite sheet sets sprite width and height
+            type: Q.SPRITE_PLAYER
+            //TODO: Need to change collisionMask so that players dont collide with each other
         });
 
         // Add in pre-made components to get up and running quickly
@@ -39,6 +40,7 @@ Q.Sprite.extend('Actor', {
 
         var temp = this;
 
+        // This interval method will destroy an actor when it disconnects after 3 seconds
         setInterval(function () {
             if (!temp.p.update) {
                 temp.destroy();
@@ -48,3 +50,4 @@ Q.Sprite.extend('Actor', {
         }, 3000);
     }
 });
+
