@@ -1,4 +1,5 @@
-//TODO: May need window.addEventListener("load",function() {...}); around everything
+// TODO: May need
+//  window.addEventListener("load",function() {...}); around everything
 
 //Set up instance of the Quintus engine.
 //Supports .mp3 and .ogg audio files.
@@ -23,66 +24,82 @@ Q.SPRITE_PLAYER = 1;
 Q.SPRITE_FLAG = 2;
 Q.SPRITE_POWERUP = 4;
 
-//players will hold all Player objects currently in game
+// players will hold all Player objects currently in game
 var players = [];
-//Create socket object that connects to our server (CloudStack VM IP address)
+// Create socket object that connects to our server (CloudStack VM IP address)
 var socket = io.connect("http://146.169.45.144");
-//UiPlayers is element in index.html with id "players"
+// UiPlayers is element in index.html with id "players"
 var UiPlayers = document.getElementById("players");
 
-//setUp deals with communication over the socket
-function setUp(stage) {
-    //Count is emitted to all players on a connect and a disconnect. Update the playerCount displayed (in index.html) when the playerCount changes
-    socket.on('count', function (data) {
-        UiPlayers.innerHTML = 'Players: ' + data.playerCount;
+var setUpObject = {
+    stage: null
+};
+
+setUpObject.updateCount = function (data) {
+    UiPlayers.innerHTML = 'Players: ' + data.playerCount;
+};
+
+setUpObject.addNewPlayer = function (data) {
+    // Set this players unique id
+    selfId = data.playerId;
+
+    // Create the actual player with this unique id
+    player = new Q.Player({
+        playerId: selfId,
+        x: 200,
+        y: 0,
+        socket: socket
     });
 
-    //Just after a user connects...
-    socket.on('connected', function (data) {
-        //Set this players unique id
-        selfId = data.playerId;
+    // Insert this player into the stage
+    setUpObject.stage.insert(player);
 
-        //Create the actual player with this unique id
-        player = new Q.Player({
-            playerId: selfId,
-            x: 200,
-            y: 0,
-            socket: socket
+    // Add a camera for this player
+    // TODO: Change to view the whole screen? Or keep like this?
+    //  Is this different for mobile/web?
+    setUpObject.stage.add('viewport').follow(player);
+};
+
+setUpObject.updateSpecificPlayerId = function (data) {
+    var actor = players.filter(function (obj) {
+        return obj.playerId === data.playerId;
+    })[0];
+
+    if (actor) {
+        actor.player.p.x = data.x;
+        actor.player.p.y = data.y;
+        actor.player.p.sheet = data.sheet;
+        actor.player.p.update = true;
+    } else {
+        var temp = new Q.Actor({
+            playerId: data.playerId,
+            x: data.x,
+            y: data.y,
+            sheet: data.sheet
         });
 
-        //Insert this player into the stage
-        stage.insert(player);
-        //Add a camera for this player
-        //TODO: Change to view the whole screen? Or keep like this? Is this different for mobile/web?
-        stage.add('viewport').follow(player);
-    });
+        players.push({
+            player: temp,
+            playerId: data.playerId
+        });
 
-    socket.on('updated', function (data) {
-        var actor = players.filter(function (obj) {
-            return obj.playerId === data.playerId;
-        })[0];
+        setUpObject.stage.insert(temp);
+    }
+};
 
-        if (actor) {
-            actor.player.p.x = data.x;
-            actor.player.p.y = data.y;
-            actor.player.p.sheet = data.sheet;
-            actor.player.p.update = true;
-        } else {
-            var temp = new Q.Actor({
-                playerId: data.playerId,
-                x: data.x,
-                y: data.y,
-                sheet: data.sheet
-            });
+// setUp deals with communication over the socket
+function setUp(stage) {
+    setUpObject.stage = stage;
 
-            players.push({
-                player: temp,
-                playerId: data.playerId
-            });
+    // Update the playerCount displayed (in index.html) when
+    // the playerCount changes
+    socket.on('count', setUpObject.updateCount);
 
-            stage.insert(temp);
-        }
-    });
+    // Just after a user connects...
+    socket.on('connected', setUpObject.addNewPlayer);
+
+    // Updates the player (actor) w/ playerId who just asked to be updated
+    socket.on('updated', setUpObject.updateSpecificPlayerId);
 }
 
 //Creating the stage for tmplevel
@@ -96,23 +113,25 @@ Q.scene("tmplevel", function (stage) {
         speedY: 0.5
     }));
 
-    //Create the walls of the game. Level is described by json. Blocks are
-    //described by the sheet.
+    // Create the walls of the game. Level is described by json. Blocks are
+    // described by the sheet.
     stage.collisionLayer(new Q.TileLayer({
         dataAsset: '/data/tmplevel.json',
         sheet: 'tmptiles'
     }));
 
-    //TODO: Will need to add the flag
-    stage.insert(new Q.Flag({ x: 180, y: 80 }));
+    // TODO: Will need to add the flag
+    stage.insert(new Q.Flag({
+        x: 180,
+        y: 80
+    }));
 
-    //Set up the socket connections.
+    // Set up the socket connections.
     setUp(stage);
-
 });
 
 
-//TODO: May not need background in files here
+// TODO: May not need background in files here
 var files = [
         '/images/tmptiles.png',
         '/data/tmplevel.json',
@@ -121,8 +140,8 @@ var files = [
         '/images/tmpbackground.png'
     ];
 
-//Split up the blocks and sprites from being one long PNG.
-//Load the actual level and run the game.
+// Split up the blocks and sprites from being one long PNG.
+// Load the actual level and run the game.
 Q.load(files.join(','), function () {
     Q.sheet('tmptiles', '/images/tmptiles.png', {
         tilew: 32,
