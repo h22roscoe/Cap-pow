@@ -1,10 +1,10 @@
-describe('Player Tests', function () {
+describe("Player", function () {
     var player;
     beforeEach(function () {
         player = Q.Player();
     });
 
-    it("has instantiated the Quintus Engine (Q)", function () {
-        expect(Q).isNot.toBeNull;
-    })
-})
+    it("does nothing", function () {
+        expect(1).toEqual(1);
+    });
+});
