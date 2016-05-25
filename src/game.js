@@ -100,7 +100,7 @@ function setUp(stage) {
 
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
-}
+};
 
 //Creating the stage for tmplevel
 Q.scene("tmplevel", function (stage) {
