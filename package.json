@@ -8,14 +8,13 @@
   "author": "Group 13",
   "version": "0.0.1",
   "dependencies": {
-    "atropa-jasmine-spec-runner-generator-html": "0.1.0-2",
     "express": "^4.13.4",
     "socket.io": "^1.4.6"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-cli": "^1.2.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-jasmine": "^2.3.0"
+    "gulp": "~3.9.1",
+    "gulp-concat": "~2.6.0",
+    "gulp-uglify": "~1.5.3",
+    "gulp-streamify": "~1.0.2",
   }
 }
