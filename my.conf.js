@@ -26,7 +26,7 @@ module.exports = function (config) {
                 served: true
             },
             'build/all.min.js',
-            'spec/tests/*Spec.js'
+            'build/tests.min.js'
         ],
 
         proxies: {

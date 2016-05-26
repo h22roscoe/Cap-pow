@@ -16,3 +16,10 @@ gulp.task('tests', function () {
         //.pipe(streamify(uglify()))
         .pipe(gulp.dest('./build/'));
 });
+
+gulp.task('testing', function () {
+    return gulp.src(['./lib/quintus-all.js', './src/test.js', './src/game.js', './src/*.js'])
+        .pipe(concat('all.min.js'))
+        //.pipe(streamify(uglify()))
+        .pipe(gulp.dest('./build/'));
+});

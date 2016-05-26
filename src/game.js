@@ -73,7 +73,7 @@ setUpObject.addNewPlayer = function (data) {
     setUpObject.flag.p.player = setUpObject.player;
 
     // Updates the players points every second if within range of flag
-    timerId = setInterval(updatePoints, 1000);
+    setUpObject.timerId = setInterval(updatePoints, 1000);
 
     return setUpObject.player;
 };

@@ -2,7 +2,13 @@ describe("Game setup", function () {
     var flag, player;
 
     beforeEach(function () {
-        player = setUpObject.addNewPlayer({ playerId: "test" });
+        player = new Q.Player({
+            playerId: "test",
+            x: 200,
+            y: 0
+        });
+
+        setUpObject.player = player;
 
         flag = new Q.Flag({
             x: 200,
@@ -16,7 +22,7 @@ describe("Game setup", function () {
     afterEach(function () {
         player.destroy();
         flag.destroy();
-        clearInterval(timerId);
+        clearInterval(setUpObject.timerId);
     });
 
     it("has instantiated the global Q (Quintus Engine)", function () {
@@ -40,9 +46,6 @@ describe("Game setup", function () {
 
         flag.step(flag, null);
         updatePoints();
-
-        console.log("Player: ", player);
-        console.log("Flag: ", flag);
 
         expect(player.p.gamePoints).toEqual(1);
     });
