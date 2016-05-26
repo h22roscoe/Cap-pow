@@ -14,6 +14,10 @@ describe("Game setup", function () {
     });
 
     it("has created a stage", function () {
+        setTimeout(function () {
+            // Do nothing but wait ten milliseconds for loading
+            //  before running test
+        }, 10);
         expect(Q.stages).toContain(jasmine.any(Object));
     })
 });
