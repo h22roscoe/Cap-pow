@@ -8,10 +8,8 @@
 function withinRange(flagX, flagY, playerX, playerY) {
     // assumes flagX and flagY are centred and size of
     // a flag is 90 frames wide and 30 tall (as in tmpsprites.json)
-    var x = (playerX >= flagX - 45 && playerX < flagX + 45
+    return (playerX >= flagX - 45 && playerX < flagX + 45
          && playerY >= flagY - 15 && playerY < flagY + 15);
-    console.log(x);
-    return x;
 }
 
 function contains(a, obj) {

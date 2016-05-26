@@ -9,9 +9,10 @@ Q.Sprite.extend("Player", {
             sheet: "player",
             // Setting a sprite sheet sets sprite width
             // and height
-            type: Q.SPRITE_PLAYER
+            type: Q.SPRITE_PLAYER,
             // TODO: Need to change collisionMask so that players dont collide
             // with each other
+            points: 0
         });
 
         // Add in pre-made components to get up and running quickly
