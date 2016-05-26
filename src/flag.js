@@ -46,7 +46,6 @@ Q.Sprite.extend("Flag", {
                     players[i].player.p.y)) {
                 if (!contains(this.p.nearbyPlayers, players[i].player)) {
                     this.p.nearbyPlayers.push(players[i].player);
-                    console.log(this.p.nearbyPlayers);
                 }
             }
         }
@@ -58,7 +57,6 @@ Q.Sprite.extend("Flag", {
                     this.p.nearbyPlayers[i].p.x,
                     this.p.nearbyPlayers[i].p.y)) {
                 this.p.nearbyPlayers.splice(i, 1);
-                console.log(this.p.nearbyPlayers);
             }
         }
     }
