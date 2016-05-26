@@ -2,7 +2,7 @@
 // Generated on Thu May 26 2016 13:34:38 GMT+0100 (BST)
 
 module.exports = function (config) {
-    config.set({
+    configuration = {
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
 
@@ -13,13 +13,23 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js',
-            {pattern: 'images/*.png', watched: false, included: false, served: true},
-            {pattern: 'data/*.json', watched: false, included: false, served: true},
+            {
+                pattern: 'images/*.png',
+                watched: false,
+                included: false,
+                served: true
+            },
+            {
+                pattern: 'data/*.json',
+                watched: false,
+                included: false,
+                served: true
+            },
             'build/all.min.js',
             'spec/tests/*Spec.js'
         ],
 
-        proxies:  {
+        proxies: {
             '/images': 'http://localhost:9876/images',
             '/data': 'http://localhost:9876/data'
         },
@@ -55,6 +65,13 @@ module.exports = function (config) {
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['Chrome', 'Firefox'],
 
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        },
+
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: false,
@@ -62,5 +79,11 @@ module.exports = function (config) {
         // Concurrency level
         // how many browser should be started simultaneous
         concurrency: Infinity
-    });
+    }
+
+    if (process.env.TRAVIS) {
+        configuration.browsers = ['Chrome_travis_ci'];
+    }
+
+    config.set(configuration);
 }
