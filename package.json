@@ -15,6 +15,11 @@
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-streamify": "^1.0.2",
-    "gulp-uglify": "^1.5.3"
+    "gulp-uglify": "^1.5.3",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-socketio-server": "^1.0.0"
   }
 }
