@@ -13,9 +13,16 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js',
+            {pattern: 'images/*.png', watched: false, included: false, served: true},
+            {pattern: 'data/*.json', watched: false, included: false, served: true},
             'build/all.min.js',
             'spec/tests/*Spec.js'
         ],
+
+        proxies:  {
+            '/images': 'http://localhost:9876/images',
+            '/data': 'http://localhost:9876/data'
+        },
 
         // list of files to exclude
         exclude: [
