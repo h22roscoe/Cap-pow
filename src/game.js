@@ -27,13 +27,20 @@ Q.SPRITE_POWERUP = 4;
 // players will hold all Player objects currently in game
 var players = [];
 // Create socket object that connects to our server (CloudStack VM IP address)
-var socket = io.connect("https://cap-pow.herokuapp.com");
+var socket = TEST? null : io.connect("https://cap-pow.herokuapp.com");
 //var socket = io.connect("localhost");
 //var socket = io.connect("http://localhost:3000");
 //var socket = io.connect("http://146.169.45.144");
 
 // UiPlayers is element in index.html with id "players"
 var UiPlayers = document.getElementById("players");
+
+var updatePoints = function () {
+    if (setUpObject.flag.p.withinRange) {
+        setUpObject.player.p.gamePoints++;
+        console.log(setUpObject.player.p.gamePoints);
+    }
+};
 
 var setUpObject = {
     stage: null
@@ -62,6 +69,13 @@ setUpObject.addNewPlayer = function (data) {
     // TODO: Change to view the whole screen? Or keep like this?
     //  Is this different for mobile/web?
     setUpObject.stage.add("viewport").follow(setUpObject.player);
+
+    setUpObject.flag.p.player = setUpObject.player;
+
+    // Updates the players points every second if within range of flag
+    timerId = setInterval(updatePoints, 1000);
+
+    return setUpObject.player;
 };
 
 setUpObject.updateSpecificPlayerId = function (data) {
@@ -88,7 +102,11 @@ setUpObject.updateSpecificPlayerId = function (data) {
         });
 
         setUpObject.stage.insert(temp);
+
+        actor = temp;
     }
+
+    return actor;
 };
 
 // setUp deals with communication over the socket

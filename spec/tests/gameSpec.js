@@ -1,4 +1,24 @@
 describe("Game setup", function () {
+    var flag, player;
+
+    beforeEach(function () {
+        player = setUpObject.addNewPlayer({ playerId: "test" });
+
+        flag = new Q.Flag({
+            x: 200,
+            y: 0,
+            player: player
+        });
+
+        setUpObject.flag = flag;
+    });
+
+    afterEach(function () {
+        player.destroy();
+        flag.destroy();
+        clearInterval(timerId);
+    });
+
     it("has instantiated the global Q (Quintus Engine)", function () {
         expect(Q).not.toBeNull();
     });
@@ -11,5 +31,19 @@ describe("Game setup", function () {
 
     it("has created the tmplevel scene on the Q variable", function () {
         expect(Q.scenes.tmplevel).toBeDefined();
+    });
+
+    it("updates the value of the players points each second", function () {
+        expect(player.p.gamePoints).toEqual(0);
+        player.p.x = flag.p.x;
+        player.p.y = flag.p.y;
+
+        flag.step(flag, null);
+        updatePoints();
+
+        console.log("Player: ", player);
+        console.log("Flag: ", flag);
+
+        expect(player.p.gamePoints).toEqual(1);
     });
 });

@@ -2,9 +2,16 @@ describe("Flag", function () {
     var flag, player;
 
     beforeEach(function () {
+        player = new Q.Player({
+            playerId: "test",
+            x: 10,
+            y: 0
+        });
+
         flag = new Q.Flag({
             x: 0,
-            y: 0
+            y: 0,
+            player: player
         });
     });
 
@@ -13,7 +20,7 @@ describe("Flag", function () {
     });
 
     it("has a type of SPRITE_FLAG when created", function () {
-       expect(flag.p.type).toEqual(Q.SPRITE_FLAG);
+        expect(flag.p.type).toEqual(Q.SPRITE_FLAG);
     });
 
     it("has nothing which will collide with it", function () {
@@ -21,14 +28,6 @@ describe("Flag", function () {
     });
 
     describe("how flag responds to Player with selfId", function () {
-        beforeEach(function () {
-            setUpObject.player = new Q.Player({
-                playerId: setUpObject.selfId,
-                x: 10,
-                y: 0
-            });
-        });
-
         it("knows that selfId is near flag", function () {
             setTimeout(flag.step(flag, 10), 10);
 

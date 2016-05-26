@@ -12,7 +12,7 @@ Q.Sprite.extend("Player", {
             type: Q.SPRITE_PLAYER,
             // TODO: Need to change collisionMask so that players dont collide
             // with each other
-            points: 0
+            gamePoints: 0
         });
 
         // Add in pre-made components to get up and running quickly
@@ -31,7 +31,8 @@ Q.Sprite.extend("Player", {
             playerId: this.p.playerId,
             x: this.p.x,
             y: this.p.y,
-            sheet: this.p.sheet
+            sheet: this.p.sheet,
+            gamePoints: this.p.gamePoints
         });
     }
 });

@@ -32,14 +32,15 @@ Q.Sprite.extend("Flag", {
             withinRange: false,
             // collisionMask specifies what things will collide
             // with the sprite when the other things move into this sprite
-            collisionMask: Q.SPRITE_NONE
+            collisionMask: Q.SPRITE_NONE,
+            player: undefined
         });
     },
 
     step: function (dt) {
         this.p.withinRange = withinRange(this.p.x,
                                          this.p.y,
-                                         setUpObject.player.p.x,
-                                         setUpObject.player.p.y);
+                                         this.p.player.p.x,
+                                         this.p.player.p.y);
     }
 });

@@ -14,6 +14,6 @@ describe("Player", function () {
     });
 
     it("initialises players points to 0", function () {
-        expect(player.p.points).toEqual(0);
+        expect(player.p.gamePoints).toEqual(0);
     });
 });
