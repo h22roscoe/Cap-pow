@@ -7,15 +7,6 @@ describe("Flag", function () {
             y: 0
         });
 
-        player = new Q.Player({
-            x: 10,
-            y: 0
-        });
-
-        players.push({
-            player: player,
-            playerId: null
-        });
     });
 
     it("has a sheet of flag when created", function () {
@@ -30,10 +21,20 @@ describe("Flag", function () {
         expect(flag.p.collisionMask).toEqual(Q.SPRITE_NONE);
     });
 
-    it("knows if a player is nearby", function () {
-        setTimeout(flag.step(flag, 10), 10);
+    describe("how Flag responds to Player with selfId", function () {
 
-        expect(flag.p.nearbyPlayers).toBeDefined();
-        expect(flag.p.nearbyPlayers).toContain(player);
+        beforeEach(function () {
+            player = new Q.Player({
+                playerId: selfId,
+                x: 50,
+                y: 0
+            });
+        });
+
+        it("Flag is near Player", function () {
+            setTimeout(function)
+            expect(flag.p.withinRange).toBe(true);
+        });
+
     });
 });
