@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var streamify = require('gulp-streamify');
+//var uglify = require('gulp-uglify');
+//var streamify = require('gulp-streamify');
 
 gulp.task('default', function () {
     return gulp.src(['./lib/quintus-all.js', './src/game.js', './src/*.js'])

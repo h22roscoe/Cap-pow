@@ -6,7 +6,6 @@ describe("Flag", function () {
             x: 0,
             y: 0
         });
-
     });
 
     it("has a sheet of flag when created", function () {
@@ -21,20 +20,19 @@ describe("Flag", function () {
         expect(flag.p.collisionMask).toEqual(Q.SPRITE_NONE);
     });
 
-    describe("how Flag responds to Player with selfId", function () {
-
+    describe("how flag responds to Player with selfId", function () {
         beforeEach(function () {
-            player = new Q.Player({
-                playerId: selfId,
-                x: 50,
+            setUpObject.player = new Q.Player({
+                playerId: setUpObject.selfId,
+                x: 10,
                 y: 0
             });
         });
 
-        it("Flag is near Player", function () {
-            setTimeout(function)
+        it("knows that selfId is near flag", function () {
+            setTimeout(flag.step(flag, 10), 10);
+
             expect(flag.p.withinRange).toBe(true);
         });
-
     });
 });

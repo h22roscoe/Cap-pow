@@ -12,4 +12,8 @@ describe("Player", function () {
     it("has a type of SPRITE_PLAYER when created", function () {
         expect(player.p.type).toEqual(Q.SPRITE_PLAYER);
     });
-})
+
+    it("initialises players points to 0", function () {
+        expect(player.p.points).toEqual(0);
+    });
+});

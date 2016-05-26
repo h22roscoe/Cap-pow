@@ -8,8 +8,10 @@
 function withinRange(flagX, flagY, playerX, playerY) {
     // assumes flagX and flagY are centred and size of
     // a flag is 90 frames wide and 30 tall (as in tmpsprites.json)
-    return (playerX >= flagX - 45 && playerX < flagX + 45
-         && playerY >= flagY - 15 && playerY < flagY + 15)
+    var x = (playerX >= flagX - 45 && playerX < flagX + 45
+         && playerY >= flagY - 15 && playerY < flagY + 15);
+    console.log(x);
+    return x;
 }
 
 function contains(a, obj) {
@@ -37,6 +39,9 @@ Q.Sprite.extend("Flag", {
     },
 
     step: function (dt) {
-
+        this.p.withinRange = withinRange(this.p.x,
+                                         this.p.y,
+                                         setUpObject.player.p.x,
+                                         setUpObject.player.p.y);
     }
 });
