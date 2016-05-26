@@ -1,26 +1,26 @@
 {
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/h22roscoe/Cap-pow"
-    },
-    "start": "node app.js",
-    "license": "MIT",
-    "name": "Cap-pow",
-    "author": "Group 13",
-    "version": "0.0.1",
-    "dependencies": {
-        "express": "^4.13.4",
-        "socket.io": "^1.4.6"
-    },
-    "devDependencies": {
-        "gulp": "^3.9.1",
-        "gulp-concat": "^2.6.0",
-        "gulp-streamify": "^1.0.2",
-        "gulp-uglify": "^1.5.3",
-        "karma": "^0.13.22",
-        "karma-chrome-launcher": "^1.0.1",
-        "karma-firefox-launcher": "^1.0.0",
-        "karma-jasmine": "^1.0.2",
-        "karma-socketio-server": "^1.0.0"
-    }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/h22roscoe/Cap-pow"
+  },
+  "start": "node app.js",
+  "license": "MIT",
+  "name": "Cap-pow",
+  "author": "Group 13",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.6"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "~2.6.0",
+    "gulp-streamify": "^1.0.2",
+    "gulp-uglify": "^1.5.3",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-socketio-server": "^1.0.0"
+  }
 }

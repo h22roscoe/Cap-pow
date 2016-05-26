@@ -45,23 +45,23 @@ setUpObject.updateCount = function (data) {
 
 setUpObject.addNewPlayer = function (data) {
     // Set this players unique id
-    selfId = data.playerId;
+    setUpObject.selfId = data.playerId;
 
     // Create the actual player with this unique id
-    player = new Q.Player({
-        playerId: selfId,
+    setUpObject.player = new Q.Player({
+        playerId: setUpObject.selfId,
         x: 200,
         y: 0,
         socket: socket
     });
 
     // Insert this player into the stage
-    setUpObject.stage.insert(player);
+    setUpObject.stage.insert(setUpObject.player);
 
-    // Add a camera for this player
+    // Add a camera  for this player
     // TODO: Change to view the whole screen? Or keep like this?
     //  Is this different for mobile/web?
-    setUpObject.stage.add("viewport").follow(player);
+    setUpObject.stage.add("viewport").follow(setUpObject.player);
 };
 
 setUpObject.updateSpecificPlayerId = function (data) {
@@ -124,11 +124,13 @@ Q.scene("tmplevel", function (stage) {
         sheet: "tmptiles"
     }));
 
-    // TODO: Will need to add the flag
-    stage.insert(new Q.Flag({
+    setUpObject.flag = new Q.Flag({
         x: 180,
         y: 80
-    }));
+    });
+
+    // TODO: Will need to add the flag
+    stage.insert(setUpObject.flag);
 
     // Set up the socket connections.
     setUp(stage);
