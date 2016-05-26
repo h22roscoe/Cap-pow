@@ -12,6 +12,18 @@ function withinRange(flagX, flagY, playerX, playerY) {
         && (playerY >= flagY - 15 && playerY < flagY + 15)
 }
 
+function contains(a, obj) {
+    var i = a.length;
+
+    while (i--) {
+       if (a[i] === obj) {
+           return true;
+       }
+    }
+
+    return false;
+}
+
 Q.Sprite.extend("Flag", {
     init: function (p) {
         this._super(p, {
@@ -32,7 +44,10 @@ Q.Sprite.extend("Flag", {
                     this.p.y,
                     players[i].player.p.x,
                     players[i].player.p.y)) {
-                this.p.nearbyPlayers.push(players[i].player);
+                if (!contains(this.p.nearbyPlayers, players[i].player)) {
+                    this.p.nearbyPlayers.push(players[i].player);
+                    console.log(this.p.nearbyPlayers);
+                }
             }
         }
 
@@ -43,6 +58,7 @@ Q.Sprite.extend("Flag", {
                     this.p.nearbyPlayers[i].p.x,
                     this.p.nearbyPlayers[i].p.y)) {
                 this.p.nearbyPlayers.splice(i, 1);
+                console.log(this.p.nearbyPlayers);
             }
         }
     }
