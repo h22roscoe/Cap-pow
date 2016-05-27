@@ -5,7 +5,15 @@ describe("Game setup", function () {
         player = new Q.Player({
             playerId: "test",
             x: 200,
-            y: 0
+            y: 0,
+            sheet: null
+        });
+
+        setUpObject.updateSpecificPlayerId({
+            playerId: "test",
+            x: 200,
+            y: 0,
+            sheet: null
         });
 
         setUpObject.player = player;
@@ -48,5 +56,49 @@ describe("Game setup", function () {
         updatePoints();
 
         expect(player.p.gamePoints).toEqual(1);
+    });
+
+    describe("with two players", function () {
+        var player2;
+
+        beforeEach(function () {
+            player2 = new Q.Player({
+                playerId: "test2",
+                x: 200,
+                y: 0,
+                sheet: null
+            });
+
+            setUpObject.updateSpecificPlayerId({
+                playerId: "test2",
+                x: 200,
+                y: 0,
+                sheet: null
+            });
+        });
+
+        it('only updates points if one player is near the flag', function () {
+            expect(player.p.gamePoints).toEqual(0);
+            expect(player2.p.gamePoints).toEqual(0);
+
+            setUpObject.updateSpecificPlayerId({
+                playerId: "test",
+                x: flag.p.x,
+                y: flag.p.y,
+                sheet: null
+            });
+            setUpObject.updateSpecificPlayerId({
+                playerId: "test2",
+                x: flag.p.x,
+                y: flag.p.y,
+                sheet: null
+            });
+
+            flag.step(flag, null);
+            updatePoints();
+
+            expect(player.p.gamePoints).toEqual(0);
+            expect(player2.p.gamePoints).toEqual(0);
+        });
     });
 });

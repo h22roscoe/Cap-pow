@@ -34,6 +34,8 @@ Q.Sprite.extend("Player", {
             sheet: this.p.sheet,
             gamePoints: this.p.gamePoints
         });
+
+        UiScore.innerHTML = "Score: " + this.p.gamePoints;
     }
 });
 

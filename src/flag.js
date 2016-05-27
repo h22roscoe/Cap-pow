@@ -5,31 +5,12 @@
 //  (i.e. make sprite 'bigger')
 // Needs to update score for whoever holds it
 
-function withinRange(flagX, flagY, playerX, playerY) {
-    // assumes flagX and flagY are centred and size of
-    // a flag is 90 frames wide and 30 tall (as in tmpsprites.json)
-    return (playerX >= flagX - 45 && playerX < flagX + 45
-         && playerY >= flagY - 15 && playerY < flagY + 15);
-}
-
-function contains(a, obj) {
-    var i = a.length;
-
-    while (i--) {
-       if (a[i] === obj) {
-           return true;
-       }
-    }
-
-    return false;
-}
-
 Q.Sprite.extend("Flag", {
     init: function (p) {
         this._super(p, {
             sheet: "flag",
             type: Q.SPRITE_FLAG,
-            withinRange: false,
+            shouldUpdatePoints: false,
             // collisionMask specifies what things will collide
             // with the sprite when the other things move into this sprite
             collisionMask: Q.SPRITE_NONE,
@@ -38,9 +19,39 @@ Q.Sprite.extend("Flag", {
     },
 
     step: function (dt) {
-        this.p.withinRange = withinRange(this.p.x,
-                                         this.p.y,
-                                         this.p.player.p.x,
-                                         this.p.player.p.y);
+        this.p.shouldUpdatePoints = this.withinRange(this.p.player)
+            && !this.othersWithinRange();
+    },
+
+    withinRange: function (player) {
+        // assumes flagX and flagY are centred and size of
+        // a flag is 90 frames wide and 30 tall (as in tmpsprites.json)
+        return (player.p.x >= this.p.x - 45 && player.p.x < this.p.x + 45
+                && player.p.y >= this.p.y - 15 && player.p.y < this.p.y + 15);
+    },
+
+    othersWithinRange: function () {
+        // This doesn't take in parameters because it should already
+        // know the player that it is not looking for (ie this client's player)
+        for (var i = 0; i < actors.length; i++) {
+            if (actors[i].player.p.playerId != this.p.player.p.playerId
+                && this.withinRange(actors[i].player)) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    contains: function (a, obj) {
+        var i = a.length;
+
+        while (i--) {
+            if (a[i] === obj) {
+                return true;
+            }
+        }
+
+        return false;
     }
 });

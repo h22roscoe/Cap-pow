@@ -24,21 +24,21 @@ Q.SPRITE_PLAYER = 1;
 Q.SPRITE_FLAG = 2;
 Q.SPRITE_POWERUP = 4;
 
-// players will hold all Player objects currently in game
-var players = [];
+// actors will hold all Player objects currently in game
+var actors = [];
 // Create socket object that connects to our server (CloudStack VM IP address)
-var socket = TEST? null : io.connect("https://cap-pow.herokuapp.com");
+var socket = TEST ? null : io.connect("https://cap-pow.herokuapp.com");
 //var socket = io.connect("localhost");
 //var socket = io.connect("http://localhost:3000");
 //var socket = io.connect("http://146.169.45.144");
 
 // UiPlayers is element in index.html with id "players"
 var UiPlayers = document.getElementById("players");
+var UiScore = document.getElementById("score");
 
 var updatePoints = function () {
-    if (setUpObject.flag.p.withinRange) {
+    if (setUpObject.flag.p.shouldUpdatePoints) {
         setUpObject.player.p.gamePoints++;
-        console.log(setUpObject.player.p.gamePoints);
     }
 };
 
@@ -79,7 +79,7 @@ setUpObject.addNewPlayer = function (data) {
 };
 
 setUpObject.updateSpecificPlayerId = function (data) {
-    var actor = players.filter(function (obj) {
+    var actor = actors.filter(function (obj) {
         return obj.playerId === data.playerId;
     })[0];
 
@@ -96,12 +96,14 @@ setUpObject.updateSpecificPlayerId = function (data) {
             sheet: data.sheet
         });
 
-        players.push({
+        actors.push({
             player: temp,
             playerId: data.playerId
         });
 
-        setUpObject.stage.insert(temp);
+        if (!TEST) {
+            setUpObject.stage.insert(temp);
+        }
 
         actor = temp;
     }

@@ -31,7 +31,7 @@ describe("Flag", function () {
         it("knows that selfId is near flag", function () {
             setTimeout(flag.step(flag, 10), 10);
 
-            expect(flag.p.withinRange).toBe(true);
+            expect(flag.p.shouldUpdatePoints).toBe(true);
         });
     });
 });
