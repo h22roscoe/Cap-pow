@@ -25,7 +25,7 @@ module.exports = function (config) {
                 included: false,
                 served: true
             },
-            'build/all.min.js',
+            'build/alltest.min.js',
             'build/tests.min.js'
         ],
 
