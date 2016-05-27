@@ -57,8 +57,8 @@ setUpObject.addNewPlayer = function (data) {
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
         playerId: setUpObject.selfId,
-        x: 200,
-        y: 0,
+        x: 500,
+        y: 400,
         socket: socket
     });
 
@@ -134,7 +134,9 @@ Q.scene("tmplevel", function (stage) {
     stage.insert(new Q.Repeater({
         asset: "../images/tmpbackground.png",
         speedX: 0.5,
-        speedY: 0.5
+        speedY: 0.5,
+        //Only repeat the background horizontally
+        repeatY: false
     }));
 
     // Create the walls of the game. Level is described by json. Blocks are
@@ -146,7 +148,7 @@ Q.scene("tmplevel", function (stage) {
 
     setUpObject.flag = new Q.Flag({
         x: 180,
-        y: 80
+        y: 530
     });
 
     // TODO: Will need to add the flag
