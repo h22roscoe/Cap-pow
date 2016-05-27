@@ -101,7 +101,7 @@ setUpObject.updateSpecificPlayerId = function (data) {
             playerId: data.playerId
         });
 
-        if (!TEST) {
+        if (setUpObject.stage) {
             setUpObject.stage.insert(temp);
         }
 
