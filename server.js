@@ -20,10 +20,14 @@ app.use(cookieParser());
 // Get information from HTML forms
 app.use(bodyParser());
 
-/*
- * May want to set a view engine here e.g. app.set("view engine", "hulk");
- * and hulk = require('hulk-hogan');
- */
+app.set('views', __dirname + '/views');
+
+app.set('view options', {
+    layout: false
+});
+
+app.set('view engine', 'hulk');
+app.register('.hulk', hulk);
 
 // -- Required for passport --
 // Session secret
