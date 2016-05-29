@@ -1,27 +1,38 @@
 {
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/h22roscoe/Cap-pow"
-    },
-    "license": "MIT",
-    "name": "Cap-pow",
-    "author": "Group 13",
-    "version": "0.0.1",
-    "dependencies": {
-        "express": "^4.13.4",
-        "socket.io": "^1.4.6",
-        "gulp": "^3.9.1",
-        "gulp-concat": "^2.6.0",
-        "gulp-streamify": "^1.0.2",
-        "gulp-uglify": "^1.5.3"
-    },
-    "devDependencies": {
-        "karma": "^0.13.22",
-        "karma-chrome-launcher": "^1.0.1",
-        "karma-firefox-launcher": "^1.0.0",
-        "karma-jasmine": "^1.0.2"
-    },
-    "scripts": {
-        "heroku-postbuild": "gulp"
-    }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/h22roscoe/Cap-pow"
+  },
+  "license": "MIT",
+  "name": "Cap-pow",
+  "author": "Group 13",
+  "version": "0.0.1",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.4.2",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-streamify": "^1.0.2",
+    "gulp-uglify": "^1.5.3",
+    "hulk-hogan": "0.0.9",
+    "mongoose": "^4.4.19",
+    "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "socket.io": "^1.4.6"
+  },
+  "devDependencies": {
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2"
+  },
+  "scripts": {
+    "heroku-postbuild": "gulp"
+  }
 }

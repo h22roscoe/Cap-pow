@@ -13,15 +13,15 @@ function isLoggedIn(req, res, next) {
 module.exports = function (app, passport) {
     // HOME
     app.get('/', function (req, res) {
-        // load the index.hulk file
-        res.render('index.hulk');
+        // load the index.ejs file
+        res.render('index.ejs');
     });
 
     // LOGIN
     // Show the login form
     app.get('/login', function (req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('login.hulk', {
+        res.render('login.ejs', {
             message: req.flash('loginMessage')
         });
     });
@@ -33,7 +33,7 @@ module.exports = function (app, passport) {
     // Show the signup form
     app.get('/signup', function (req, res) {
         // Render the page and pass in any flash data if it exists
-        res.render('signup.hulk', {
+        res.render('signup.ejs', {
             message: req.flash('signupMessage')
         });
     });
@@ -45,7 +45,7 @@ module.exports = function (app, passport) {
     // We will want this protected so you have to be logged in to visit
     // We will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function (req, res) {
-        res.render('profile.hulk', {
+        res.render('profile.ejs', {
             user: req.user // get the user out of session and pass to template
         });
     });
