@@ -31,8 +31,6 @@ app.use(bodyParser());
 // pass passport for configuration
 require('./config/passport')(passport);
 
-// app.set("views", __dirname + "/views");
-
 // set up ejs for templating
 app.set('view engine', 'ejs');
 

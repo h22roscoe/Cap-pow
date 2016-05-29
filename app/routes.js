@@ -27,7 +27,11 @@ module.exports = function (app, passport) {
     });
 
     // Process the login form
-    // app.post('/login', do all our passport stuff here);
+    app.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/profile', // redirect to the secure profile section
+        failureRedirect : '/login', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }));
 
     // SIGNUP
     // Show the signup form
@@ -39,7 +43,16 @@ module.exports = function (app, passport) {
     });
 
     // Process the signup form
-    // app.post('/signup', do all our passport stuff here);
+    app.post('/signup', passport.authenticate('local-signup', {
+        // Redirect to the secure profile section
+        successRedirect : '/profile',
+
+        // Redirect back to the signup page if there is an error
+        failureRedirect : '/signup',
+
+        // Allow flash messages
+        failureFlash : true
+    }));
 
     // PROFILE SECTION -- POSSIBLY TEMPORARY ONLY
     // We will want this protected so you have to be logged in to visit
