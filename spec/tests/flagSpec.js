@@ -29,7 +29,7 @@ describe("Flag", function () {
 
     describe("how flag responds to Player with selfId", function () {
         it("knows that selfId is near flag", function () {
-            setTimeout(flag.step(flag, 10), 10);
+            flag.step();
 
             expect(flag.p.shouldUpdatePoints).toBe(true);
         });
