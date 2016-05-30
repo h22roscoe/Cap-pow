@@ -38,9 +38,9 @@ describe("Game setup", function () {
     });
 
     it("sets the global bit points for various sprites", function () {
-        expect(Q.SPRITE_PLAYER).toEqual(1);
-        expect(Q.SPRITE_FLAG).toEqual(2);
-        expect(Q.SPRITE_POWERUP).toEqual(4);
+        expect(Q.SPRITE_PLAYER).toEqual(64);
+        expect(Q.SPRITE_FLAG).toEqual(128);
+        expect(Q.SPRITE_POWERUP).toEqual(256);
     });
 
     it("has created the tmplevel scene on the Q variable", function () {
