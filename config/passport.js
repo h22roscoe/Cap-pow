@@ -1,16 +1,11 @@
 var LocalStrategy = require('passport-local').Strategy;
 
-// load up the user model
-var configDB = require("./database");
-var Sequelize = require("sequelize");
-var sequelize = new Sequelize(configDB.url, {
-    dialect: "postgres"
-});
+var models = require('../app/models');
 
-var User = require('../app/models/user')(sequelize, Sequelize);
+function findUser(req, username, password, done) {
+    "use strict";
 
-function findUser(username, password, done) {
-    User.find({
+    models.User.find({
         where: {
             'username': username
         }
@@ -23,54 +18,63 @@ function findUser(username, password, done) {
         if (user) {
             return done(null, false,
                 req.flash("signupMessage",
-                          "That email is already taken."));
+                          "That username is already taken."));
         } else {
-            // If there is no user with that email create the user
-            User.create({
+            // If there is no user with that username create the user
+            models.User.create({
                 where: {
                     username: username,
                     password: password
                 }
-            })
+            });
         }
     });
 }
 
-function findUserLogin(err, user, password, done) {
-    if (err) {
-        return done(err);
-    }
+function findUserLogin(req, username, password, done) {
+    "use strict";
 
-    // if no user is found, return the message
-    if (!user) {
-        return done(null, false, req.flash("loginMessage",
-                                           "No user found."));
-    }
+    models.User.find({
+        where: {
+            'username': username
+        }
+    }).then(function (err, user) {
+        if (err) {
+            return done(err);
+        }
 
-    // if the user is found but the password is wrong
-    if (!user.validPassword(password)) {
-        return done(null, false,
-            req.flash("loginMessage", "Oops! Wrong password."));
-    }
+        // if no user is found, return the message
+        if (!user) {
+            return done(null, false, req.flash("loginMessage",
+                                               "No user found."));
+        }
 
-    // all is well, return successful user
-    return done(null, user);
+        // if the user is found but the password is wrong
+        if (!user.validPassword(password)) {
+            return done(null, false,
+                req.flash("loginMessage", "Oops! Wrong password."));
+        }
+
+        // all is well, return successful user
+        return done(null, user);
+    });
 }
 
 // Expose this function to our app using module.exports
 module.exports = function (passport) {
+    "use strict";
     // Passport session setup
     // Required for persistent login sessions
     // Passport needs ability to serialize and unserialize users out of session
 
     // Used to serialize the user for the session
     passport.serializeUser(function (user, done) {
-        done(null, user.id);
+        done(null, user);
     });
 
     // Used to deserialize the user
-    passport.deserializeUser(function (id, done) {
-        User.find({
+    passport.deserializeUser(function (user, done) {
+        models.User.find({
             where: {
                 id: user.id
             }
@@ -92,9 +96,11 @@ module.exports = function (passport) {
             // Allows us to pass back the entire request to the callback
             passReqToCallback: true
         }, function (req, username, password, done) {
-            // Asynchronous
-            // User.findOne wont fire unless data is sent back
-            process.nextTick(findUser.bind(null, username, password, done));
+                // Asynchronous
+                // User.findOne wont fire unless data is sent back
+            process.nextTick(
+                findUser.bind(null, req, username, password, done)
+            );
         })
     );
 
@@ -108,13 +114,7 @@ module.exports = function (passport) {
             // Allows us to pass back the entire request to the callback
             passReqToCallback: true
         }, function (req, username, password, done) {
-            User.find({
-                where: {
-                    'username': username
-                }
-            }).then(function (err, user) {
-                findUserLogin(err, user, password, done);
-            });
+            findUserLogin(req, username, password, done);
         })
     );
 };

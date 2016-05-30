@@ -1,15 +1,18 @@
 var express = require("express");
 var passport = require("passport");
 var flash = require("connect-flash");
-var pg = require("pg");
+var pg = require("pg").native;
+var models = require("./app/models");
 
 var app = express();
 
 var configDB = require('./config/database');
 
+// Connect to our database
+pg.defaults.ssl = true;
 pg.connect(configDB.url, function () {
     console.log("Connected to the database");
-}); // connect to our database
+});
 
 var morgan = require("morgan");
 var cookieParser = require("cookie-parser");
@@ -25,7 +28,8 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 // Get information from HTML forms
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
 // pass passport for configuration
 require('./config/passport')(passport);
@@ -36,7 +40,9 @@ app.set('view engine', 'ejs');
 // -- Required for passport --
 // Session secret
 app.use(session({
-    secret: "weshouldputarealkeyhereatsomepoint"
+    secret: "weshouldprobablyaddapropersecrethere",
+    resave: true,
+    saveUninitialized: true
 }));
 
 app.use(passport.initialize());
@@ -51,6 +57,8 @@ app.use(flash());
 var route = require("./app/routes");
 route(app, passport);
 
-app.listen(PORT, function () {
-    console.log('The magic happens on port ' + PORT);
+models.sequelize.sync().then(function () {
+    app.listen(PORT, function () {
+        console.log('The magic happens on port ' + PORT);
+    });
 });

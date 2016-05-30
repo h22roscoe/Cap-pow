@@ -1,10 +1,6 @@
-// Load the things we need
 var bcrypt = require("bcrypt-nodejs");
-var configDB = require("../../config/database");
-var Sequelize = require("sequelize");
-var sequelize = new Sequelize(configDB.url);
 
-function user(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
     var User = sequelize.define('User', {
         username: {
             type: DataTypes.STRING,
@@ -38,11 +34,10 @@ function user(sequelize, DataTypes) {
             }
         },
         hooks: {
-            beforeCreate: function (user, fn) {
+            beforeCreate: function (user) {
                 user.password = bcrypt.hashSync(user.password,
                                              bcrypt.genSaltSync(8),
                                              null);
-                return fn(null, user);
             }
         }
     }, {
@@ -51,5 +46,3 @@ function user(sequelize, DataTypes) {
 
     return User;
 }
-
-module.exports = user;
