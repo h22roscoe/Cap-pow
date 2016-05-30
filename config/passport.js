@@ -78,8 +78,10 @@ module.exports = function (passport) {
             where: {
                 id: user.id
             }
-        }).then(function (err, user) {
-            done(err, user);
+        }).success(function (user) {
+            done(null, user);
+        }).error(function (err) {
+            done(err, null);
         });
     });
 

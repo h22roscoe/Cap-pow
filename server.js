@@ -6,11 +6,16 @@ var models = require("./app/models");
 
 var app = express();
 
-var configDB = require('./config/database');
+var connString = process.env.DATABASE_URL ||
+    "fbqlonrijrmpwe:" + "irYdc-vj42ES0_GO6WXZfOIxTd@"
+    + "ec2-54-228-226-93.eu-west-1.compute.amazonaws.com:"
+    + "5432/" + "d9cipg8t3q8pu2";
 
 // Connect to our database
 pg.defaults.ssl = true;
-pg.connect(configDB.url, function () {
+pg.connect(connString, function () {
+    "use strict";
+
     console.log("Connected to the database");
 });
 
@@ -21,6 +26,8 @@ var session = require("express-session");
 
 var PORT = process.env.PORT || 8080;
 
+app.set('views', __dirname + '/views');
+
 // Log every request to the console
 app.use(morgan("dev"));
 
@@ -29,7 +36,7 @@ app.use(cookieParser());
 
 // Get information from HTML forms
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // pass passport for configuration
 require('./config/passport')(passport);
@@ -58,6 +65,8 @@ var route = require("./app/routes");
 route(app, passport);
 
 models.sequelize.sync().then(function () {
+    "use strict";
+
     app.listen(PORT, function () {
         console.log('The magic happens on port ' + PORT);
     });
