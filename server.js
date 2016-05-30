@@ -1,13 +1,15 @@
 var express = require("express");
-var app = express();
 var passport = require("passport");
-var mongoose = require("mongoose");
 var flash = require("connect-flash");
-// var pg = require("pg");
+var pg = require("pg");
 
-var configDB = require('./config/database.js');
+var app = express();
 
-mongoose.connect(configDB.url); // connect to our database
+var configDB = require('./config/database');
+
+pg.connect(configDB.url, function () {
+    console.log("Connected to the database");
+}); // connect to our database
 
 var morgan = require("morgan");
 var cookieParser = require("cookie-parser");
@@ -46,7 +48,7 @@ app.use(passport.session());
 app.use(flash());
 
 // TODO: May not use this guy's directory structure so check this.
-var route = require("./app/routes.js");
+var route = require("./app/routes");
 route(app, passport);
 
 app.listen(PORT, function () {

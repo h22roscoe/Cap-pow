@@ -1,24 +1,55 @@
 // Load the things we need
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt = require("bcrypt-nodejs");
+var configDB = require("../../config/database");
+var Sequelize = require("sequelize");
+var sequelize = new Sequelize(configDB.url);
 
-// Define the schema for our user model
-var userSchema = mongoose.Schema({
-    local: {
-        email: String,
-        password: String
-    }
-});
+function user(sequelize, DataTypes) {
+    var User = sequelize.define('User', {
+        username: {
+            type: DataTypes.STRING,
+            unique: true,
+            validate: {
+                notNull: true,
+                notEmpty: true
+            }
+        },
+        password: {
+            type: DataTypes.STRING,
+            validate: {
+                notNull: true,
+                notEmpty: true
+            }
+        }
+    }, {
+        classMethods: {
+            validPassword: function (password, passwd, done, user) {
+                bcrypt.compare(password, passwd, function (err, isMatch) {
+                    if (err) {
+                        console.log(err);
+                    }
 
-// Generating a hash
-userSchema.methods.generateHash = function (password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
+                    if (isMatch) {
+                        return done(null, user);
+                    } else {
+                        return done(null, false);
+                    }
+                })
+            }
+        },
+        hooks: {
+            beforeCreate: function (user, fn) {
+                user.password = bcrypt.hashSync(user.password,
+                                             bcrypt.genSaltSync(8),
+                                             null);
+                return fn(null, user);
+            }
+        }
+    }, {
+        dialect: 'postgres'
+    });
 
-// Checking if password is valid
-userSchema.methods.validPassword = function (password) {
-    return bcrypt.compareSync(password, this.local.password);
-};
+    return User;
+}
 
-// Create the model for users and expose it to our app
-module.exports = mongoose.model('User', userSchema);
+module.exports = user;
