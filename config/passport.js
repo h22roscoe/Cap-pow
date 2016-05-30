@@ -45,6 +45,29 @@ function findUser(email, password, done) {
     });
 }
 
+function findUserLogin(err, user, password, done) {
+    // if there are any errors, return the error before anything else
+    if (err) {
+        return done(err);
+    }
+
+    // if no user is found, return the message
+    if (!user) {
+        return done(null, false, req.flash('loginMessage',
+            'No user found.'));
+    }
+
+    // if the user is found but the password is wrong
+    if (!user.validPassword(password)) {
+        return done(null, false,
+            req.flash('loginMessage',
+                'Oops! Wrong password.'));
+    }
+
+    // all is well, return successful user
+    return done(null, user);
+}
+
 // Expose this function to our app using module.exports
 module.exports = function (passport) {
     // Passport session setup
@@ -58,7 +81,7 @@ module.exports = function (passport) {
 
     // used to deserialize the user
     passport.deserializeUser(function (id, done) {
-        User.findById(id, function(err, user) {
+        User.findById(id, function (err, user) {
             done(err, user);
         });
     });
@@ -73,6 +96,7 @@ module.exports = function (passport) {
             // we will override with email
             usernameField: 'email',
             passwordField: 'password',
+
             // allows us to pass back the entire request to the callback
             passReqToCallback: true
         }, function (req, email, password, done) {
@@ -92,35 +116,13 @@ module.exports = function (passport) {
             // allows us to pass back the entire request to the callback
             passReqToCallback: true
         }, function (req, email, password, done) {
-            // Callback with email and password from our form
-
             // Find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
             User.findOne({
                 'local.email': email
             }, function (err, user) {
-                // if there are any errors, return the error before anything else
-                if (err) {
-                    return done(err);
-                }
-
-                // if no user is found, return the message
-                if (!user) {
-                    return done(null, false, req.flash('loginMessage',
-                                                       'No user found.'));
-                }
-
-                // if the user is found but the password is wrong
-                if (!user.validPassword(password)) {
-                    return done(null, false,
-                                req.flash('loginMessage',
-                                          'Oops! Wrong password.'));
-                }
-
-                // all is well, return successful user
-                return done(null, user);
-            });
-
-        })
+                findUserLogin.bind(null, err, user, password, done);
+            })
+        });
     );
 };

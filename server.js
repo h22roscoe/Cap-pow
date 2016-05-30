@@ -9,9 +9,6 @@ var configDB = require('./config/database.js');
 
 mongoose.connect(configDB.url); // connect to our database
 
-// TODO: May not use this guy's directory structure so check this.
-var route = require("./app/routes.js");
-
 var morgan = require("morgan");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
@@ -48,6 +45,8 @@ app.use(passport.session());
 // Use connect-flash for flash messages stored in session
 app.use(flash());
 
+// TODO: May not use this guy's directory structure so check this.
+var route = require("./app/routes.js");
 route(app, passport);
 
 app.listen(PORT, function () {

@@ -13,8 +13,9 @@ app.get('/', function (req, res) {
 // Tracks number of players and gives each player a unique id
 var playerCount = 0;
 var id = 0;
+
 //Port is 3000 by default
-var PORT = process.env["PORT"] || 3000;
+var PORT = process.env.PORT || 3000;
 
 // Whenever a user connects...
 io.on("connection", function (socket) {
