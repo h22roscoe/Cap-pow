@@ -28,9 +28,9 @@ module.exports = function (app, passport) {
 
     // Process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+        successRedirect : '/profile',
+        failureRedirect : '/login',
+        failureFlash : true
     }));
 
     // SIGNUP
@@ -44,13 +44,8 @@ module.exports = function (app, passport) {
 
     // Process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        // Redirect to the secure profile section
         successRedirect : '/profile',
-
-        // Redirect back to the signup page if there is an error
         failureRedirect : '/signup',
-
-        // Allow flash messages
         failureFlash : true
     }));
 
@@ -59,7 +54,7 @@ module.exports = function (app, passport) {
     // We will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function (req, res) {
         res.render('profile.ejs', {
-            user: req.user // get the user out of session and pass to template
+            user: req.user
         });
     });
 

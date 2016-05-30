@@ -7,15 +7,15 @@ module.exports = function (sequelize, DataTypes) {
         username: {
             type: DataTypes.STRING,
             unique: true,
+            allowNull: false,
             validate: {
-                notNull: true,
                 notEmpty: true
             }
         },
         password: {
             type: DataTypes.STRING,
+            allowNull: false,
             validate: {
-                notNull: true,
                 notEmpty: true
             }
         }
@@ -29,9 +29,12 @@ module.exports = function (sequelize, DataTypes) {
         freezeTableName: true
     });
 
-    User.beforeCreate(function (user, options) {
-        var hash = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null)
-        user.password = hash;
+    User.beforeCreate(function (user) {
+        user.password = bcrypt.hashSync(
+            user.password,
+            bcrypt.genSaltSync(8),
+            null
+        );
     });
 
     return User;

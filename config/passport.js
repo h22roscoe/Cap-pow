@@ -18,10 +18,8 @@ function findUser(req, username, password, done) {
         } else {
             // If there is no user with that username create the user
             models.user.create({
-                where: {
                     "username": username,
                     "password": password
-                }
             });
         }
     }).error(function (err) {
