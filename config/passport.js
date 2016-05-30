@@ -20,6 +20,10 @@ function findUser(req, username, password, done) {
             models.user.create({
                     "username": username,
                     "password": password
+            }).then(function (user) {
+                return done(null, user);
+            }).error(function (err) {
+                return done(err);
             });
         }
     }).error(function (err) {
