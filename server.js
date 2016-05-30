@@ -6,18 +6,7 @@ var models = require("./app/models");
 
 var app = express();
 
-var connString = process.env.DATABASE_URL ||
-    "fbqlonrijrmpwe:" + "irYdc-vj42ES0_GO6WXZfOIxTd@"
-    + "ec2-54-228-226-93.eu-west-1.compute.amazonaws.com:"
-    + "5432/" + "d9cipg8t3q8pu2";
-
-// Connect to our database
 pg.defaults.ssl = true;
-pg.connect(connString, function () {
-    "use strict";
-
-    console.log("Connected to the database");
-});
 
 var morgan = require("morgan");
 var cookieParser = require("cookie-parser");

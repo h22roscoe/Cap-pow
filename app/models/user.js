@@ -1,7 +1,9 @@
 var bcrypt = require("bcrypt-nodejs");
 
 module.exports = function (sequelize, DataTypes) {
-    var User = sequelize.define('User', {
+    "use strict";
+
+    var User = sequelize.define('user', {
         username: {
             type: DataTypes.STRING,
             unique: true,
@@ -19,30 +21,18 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         classMethods: {
-            validPassword: function (password, passwd, done, user) {
-                bcrypt.compare(password, passwd, function (err, isMatch) {
-                    if (err) {
-                        console.log(err);
-                    }
-
-                    if (isMatch) {
-                        return done(null, user);
-                    } else {
-                        return done(null, false);
-                    }
-                })
+            validPassword: function (password, dbpassword) {
+                return bcrypt.compareSync(password, dbpassword);
             }
         },
-        hooks: {
-            beforeCreate: function (user) {
-                user.password = bcrypt.hashSync(user.password,
-                                             bcrypt.genSaltSync(8),
-                                             null);
-            }
-        }
-    }, {
-        dialect: 'postgres'
+        dialect: "postgres",
+        freezeTableName: true
+    });
+
+    User.beforeCreate(function (user, options) {
+        var hash = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null)
+        user.password = hash;
     });
 
     return User;
-}
+};
