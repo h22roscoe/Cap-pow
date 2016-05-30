@@ -2,7 +2,7 @@ var express = require("express");
 var app = express();
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
-var rooms = require("./serverRoom.js");
+var rooms = require("./serverRoom");
 
 //TODO: Could be /web or /group_directory, etc.
 app.use(express.static(__dirname));
