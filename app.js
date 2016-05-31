@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 //Port is 3000 by default
 var PORT = process.env["PORT"] || 3000;
 
-// Whenever a user connects set up event listeners.
+// Whenever a user connects set up default event listeners.
 io.on("connection", function (socket) {
     console.log("A user connected");
     rooms.startApp(io, socket);
