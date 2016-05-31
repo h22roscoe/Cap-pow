@@ -46,7 +46,7 @@ function leaveRoom(data) {
 
     // Tell all players someone has left
     this.broadcast.to(data.gameId).emit("playerLeftRoom", {
-        playerId: data.socketId;
+        playerId: data.socketId
     });
 
     // Render the lobby screen again
@@ -96,8 +96,6 @@ function startGame(gameId) {
     // For each player the quintus engine is created, a player object
     // is created and added to other players actor in room.
 }
-
-function stopNewJoins()
 
 module.exports = function (socketio, socket) {
     io = socketio;
