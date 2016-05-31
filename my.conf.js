@@ -14,19 +14,19 @@ module.exports = function (config) {
         files: [
             'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js',
             {
-                pattern: 'images/*.png',
+                pattern: 'public/images/*.png',
                 watched: false,
                 included: false,
                 served: true
             },
             {
-                pattern: 'data/*.json',
+                pattern: 'public/data/*.json',
                 watched: false,
                 included: false,
                 served: true
             },
-            'build/alltest.min.js',
-            'build/tests.min.js'
+            'public/build/alltest.min.js',
+            'public/build/tests.min.js'
         ],
 
         proxies: {

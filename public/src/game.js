@@ -8,7 +8,6 @@
 //Turns on default controls and allows touch input with mouse/touch screen.
 //Giving control() a parameter of true will use a joypad instead.
 //Enables sound.
-
 var Q = window.Q = Quintus({
         audioSupported: ["mp3", "ogg"],
         development: true
@@ -47,11 +46,8 @@ Q.load(files.join(','), function () {
 // actors will hold all Player objects currently in game
 var actors = [];
 // Create socket object that connects to our server (CloudStack VM IP address)
-//var socket = TEST ? null : io.connect("https://cap-pow.herokuapp.com");
-var gameId = 0;
-var socket = io.connect("http://localhost:8080/game", {
-    query: "gameId=" + gameId
-});
+var socket = TEST ? null : io.connect("https://cap-pow.herokuapp.com");
+//var socket = io.connect("http://localhost:8080/game");
 //var socket = io.connect("http://146.169.45.144");
 
 // UiPlayers is element in index.html with id "players"

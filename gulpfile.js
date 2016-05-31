@@ -5,10 +5,10 @@ var concat = require('gulp-concat');
 
 gulp.task('default', function () {
     return gulp.src(['./public/lib/quintus-all.js',
-                     './src/game.js',
-                     '!./src/test.js',
-                     '!./src/lobby.js',
-                     './src/*.js'])
+                     './public/src/game.js',
+                     '!./public/src/test.js',
+                     '!./public/src/lobby.js',
+                     './public/src/*.js'])
         .pipe(concat('all.min.js'))
         //.pipe(streamify(uglify()))
         .pipe(gulp.dest('./public/build/'));
@@ -23,9 +23,9 @@ gulp.task('tests', function () {
 
 gulp.task('testing', function () {
     return gulp.src(['./public/lib/quintus-all.js',
-                     './src/test.js',
-                     './src/game.js',
-                     './src/*.js'])
+                     './public/src/test.js',
+                     './public/src/game.js',
+                     './public/src/*.js'])
         .pipe(concat('alltest.min.js'))
         //.pipe(streamify(uglify()))
         .pipe(gulp.dest('./public/build/'));
