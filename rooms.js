@@ -1,7 +1,9 @@
 var io;
 var gameSocket;
 var id = 0;
-var playerCount; //per room, think it will be moved to client side
+
+// Per room, think it will be moved to client side
+var playerCount;
 var MAX_PLAYERS = 4;
 var MIN_PLAYERS = 2;
 
@@ -120,7 +122,7 @@ function startGame(gameId) {
 }
 
 
-module.exports.startApp = function (socketio, socket) {
+module.exports = function (socketio, socket) {
     io = socketio;
     gameSocket = socket;
 
