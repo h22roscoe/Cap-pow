@@ -17,13 +17,8 @@ function joinRoom(data) {
         data.socketId = sock.id;
         sock.join(data.gameId.toString());
 
-        // Subscribe to get updates from other players when game starts
-        sock.on("update", function (data) {
-            sock.broadcast.to(data.gameId).emit("updated", data);
-        });
-
         //tell player we have joined and show on their screen
-        io.sockets.to(data.gameId).emit("playerJoinedRoom", data);
+        gameSocket.to(data.gameId).emit("playerJoinedRoom", data);
 
         setTimeout(function () {
             sock.emit("connected", {
@@ -89,12 +84,29 @@ function startGame(gameId) {
 
     // Will create quintus engine for each player and render their screen
     // to the game screen html
-    io.sockets.to(gameId).emit("loadGame", data);
+    gameSocket.to(gameId).emit("loadGame", data);
 
-    // Game html rendered in here
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // IF WE MOVE THIS TO SERVER.JS THEN WE HAVE GAME SHOWING AGAIN
+    var game = io.of("/game");
 
-    // For each player the quintus engine is created, a player object
-    // is created and added to other players actor in room.
+    game.on("connection", function (socket) {
+        console.log("A user connected");
+        var gameId = socket.handshake.query.gameId;
+        console.log(gameId);
+
+        socket.to(gameId).emit("connected", {
+            playerId: socket.id
+        });
+
+        // Change as we will not update everyone but only those in our room
+        socket.on("update", function (data) {
+            socket.broadcast.to(gameId).emit("updated", data);
+        });
+    });
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    // Render game.ejs
 }
 
 module.exports = function (socketio, socket) {

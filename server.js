@@ -5,9 +5,7 @@ var pg = require("pg").native;
 var models = require("./app/models");
 var app = express();
 var server = require("http").Server(app);
-var io = require("socket.io")(server, {
-    serveClient: true
-});
+var io = require("socket.io")(server);
 var rooms = require("./rooms");
 
 pg.defaults.ssl = true;
@@ -32,7 +30,9 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 // Get information from HTML forms
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 
 // set up ejs for templating

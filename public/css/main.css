@@ -994,7 +994,7 @@ body {
 
 body {
     background: #252122;
-    background-image: url("images/bg.png");
+    background-image: url("./images/bg.png");
     font-family: 'Source Sans Pro';
     font-weight: 300;
     color: #5d5d5d;
@@ -1542,7 +1542,7 @@ ol.default li {
 }
 #main-wrapper {
     position: relative;
-    background: #f7f7f7 url("images/bg.png");
+    background: #f7f7f7 url("./images/bg.png");
 }
 #main-wrapper:before {
     content: '';
@@ -1550,13 +1550,13 @@ ol.default li {
     top: 0;
     left: 0;
     width: 100%;
-    background: url("images/bg.png");
+    background: url("./images/bg.png");
     background-size: 100% 100%;
     z-index: 0;
     opacity: 0.1;
 }
 #main-wrapper .major h2 {
-    background: #f7f7f7 url("images/bg.png");
+    background: #f7f7f7 url("./images/bg.png");
 }
 #footer-wrapper {
     position: relative;
@@ -1568,7 +1568,7 @@ ol.default li {
     top: 0;
     left: 0;
     width: 100%;
-    background: url("images/bg.png");
+    background: url("./images/bg.png");
     background-size: 100% 100%;
     z-index: 0;
     opacity: 0.5;
@@ -2139,7 +2139,7 @@ ol.default li {
         width: 275px;
         z-index: 10002;
         color: #858484;
-        background-image: url("images/bg.png");
+        background-image: url("./images/bg.png");
         box-shadow: inset -3px 0px 5px 0px rgba(0, 0, 0, 0.35);
     }
     #navPanel .link {

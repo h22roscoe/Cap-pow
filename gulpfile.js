@@ -6,6 +6,8 @@ var concat = require('gulp-concat');
 gulp.task('default', function () {
     return gulp.src(['./public/lib/quintus-all.js',
                      './src/game.js',
+                     '!./src/test.js',
+                     '!./src/lobby.js',
                      './src/*.js'])
         .pipe(concat('all.min.js'))
         //.pipe(streamify(uglify()))
