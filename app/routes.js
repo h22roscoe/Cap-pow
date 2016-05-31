@@ -28,7 +28,7 @@ module.exports = function (app, passport) {
 
     // Process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile',
+        successRedirect : '/lobby',
         failureRedirect : '/login',
         failureFlash : true
     }));
@@ -44,7 +44,7 @@ module.exports = function (app, passport) {
 
     // Process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile',
+        successRedirect : '/lobby',
         failureRedirect : '/signup',
         failureFlash : true
     }));
@@ -52,8 +52,8 @@ module.exports = function (app, passport) {
     // PROFILE SECTION -- POSSIBLY TEMPORARY ONLY
     // We will want this protected so you have to be logged in to visit
     // We will use route middleware to verify this (the isLoggedIn function)
-    app.get('/profile', isLoggedIn, function (req, res) {
-        res.render('profile.ejs', {
+    app.get('/lobby', isLoggedIn, function (req, res) {
+        res.render('lobby.ejs', {
             user: req.user
         });
     });

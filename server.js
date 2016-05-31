@@ -3,8 +3,10 @@ var passport = require("passport");
 var flash = require("connect-flash");
 var pg = require("pg").native;
 var models = require("./app/models");
-
 var app = express();
+var server = require("http").Server(app);
+var io = require("socket.io")(server);
+var rooms = require("./rooms");
 
 pg.defaults.ssl = true;
 
@@ -52,6 +54,12 @@ app.use(flash());
 // TODO: May not use this guy's directory structure so check this.
 var route = require("./app/routes");
 route(app, passport);
+
+// Whenever a user connects set up default event listeners.
+io.on("connection", function (socket) {
+    console.log("A user connected");
+    rooms(io, socket);
+});
 
 models.sequelize.sync().then(function () {
     "use strict";
