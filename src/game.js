@@ -20,9 +20,9 @@ var Q = window.Q = Quintus({
     .controls().touch()
     .enableSound();
 
-Q.SPRITE_PLAYER = 1;
-Q.SPRITE_FLAG = 2;
-Q.SPRITE_POWERUP = 4;
+Q.SPRITE_PLAYER = 64;
+Q.SPRITE_FLAG = 128;
+Q.SPRITE_POWERUP = 256;
 
 // actors will hold all Player objects currently in game
 var actors = [];
@@ -61,13 +61,15 @@ setUpObject.addNewPlayer = function (data) {
         socket: socket
     });
 
-    // Insert this player into the stage
-    setUpObject.stage.insert(setUpObject.player);
+    if (setUpObject.stage) {
+        // Insert this player into the stage
+        setUpObject.stage.insert(setUpObject.player);
 
-    // Add a camera  for this player
-    // TODO: Change to view the whole screen? Or keep like this?
-    //  Is this different for mobile/web?
-    setUpObject.stage.add("viewport").follow(setUpObject.player);
+        // Add a camera  for this player
+        // TODO: Change to view the whole screen? Or keep like this?
+        //  Is this different for mobile/web?
+        setUpObject.stage.add("viewport").follow(setUpObject.player);
+    }
 
     setUpObject.flag.p.player = setUpObject.player;
 

@@ -42,7 +42,8 @@ Q.Sprite.extend("Player", {
 Q.Sprite.extend("Actor", {
     init: function (p) {
         this._super(p, {
-            update: true
+            update: true,
+            collisionMask: Q.SPRITE_DEFAULT
         });
 
         var temp = this;
