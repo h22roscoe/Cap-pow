@@ -17,7 +17,7 @@ var session = require("express-session");
 
 var PORT = process.env.PORT || 8080;
 
-app.set('views', __dirname + '/views');
+app.set("views", __dirname + "/views");
 
 // Log every request to the console
 app.use(morgan("dev"));
@@ -30,10 +30,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // pass passport for configuration
-require('./config/passport')(passport);
+require("./config/passport")(passport);
 
 // set up ejs for templating
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 // -- Required for passport --
 // Session secret
