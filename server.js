@@ -60,7 +60,7 @@ route(app, passport);
 
 // Whenever a user connects set up default event listeners.
 io.on("connection", function (socket) {
-    console.log("A user connected");
+    console.log("Setup: A user connected");
     rooms(io, socket);
 });
 

@@ -1,7 +1,7 @@
 var IO = {
     init: function () {
         // Connecting locally but will connect to herokuapp eventually
-        IO.socket = io.connect("http:localhost:8080")
+        IO.socket = io.connect("http://localhost:8080")
         IO.setupListeners();
 
         IO.MAX_PLAYERS = 4;
@@ -15,7 +15,7 @@ var IO = {
         IO.socket.on("playerJoinedRoom", IO.playerJoinedRoom);
         IO.socket.on("loadGame", IO.loadGame);
 
-        IO.socket.emit("startGame");
+        IO.socket.broadcast.emit("startGame");
     },
 
     newGameCreated: function () {

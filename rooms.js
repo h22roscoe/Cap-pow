@@ -91,9 +91,7 @@ function startGame(gameId) {
     var game = io.of("/game");
 
     game.on("connection", function (socket) {
-        console.log("A user connected");
-        var gameId = socket.handshake.query.gameId;
-        console.log(gameId);
+        console.log("Game: A user connected");
 
         socket.to(gameId).emit("connected", {
             playerId: socket.id
