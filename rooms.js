@@ -4,6 +4,7 @@ var id = 0;
 
 // Per room, think it will be moved to client side
 var playerCount;
+
 var MAX_PLAYERS = 4;
 var MIN_PLAYERS = 2;
 
@@ -11,8 +12,8 @@ var MIN_PLAYERS = 2;
     PLAYER ACTIONS
 */
 
-// Called when a player clicks on a room to join it
-// takes that player to the lobby screen
+// Called when a player clicks on a room to join it takes that player
+// to the lobby screen
 function joinRoom(data) {
     var sock = this;
 
@@ -79,13 +80,13 @@ function createNewGame() {
     // Join the Room and wait for the players
     this.join(gameId.toString());
 
-    //maybe render lobby screen for the host
+    // Maybe render lobby screen for the host
 
-    //set listener for disconnection from this game
+    // Set listener for disconnection from this game
     io.sockets.to(gameId).on('leaveGame', leaveRoom);
 
-    //will check if count is one less then call prepare game
-    //stops functionally for joining game if too many players.
+    // Will check if count is one less then call prepare game.
+    // Stops functionally for joining game if too many players.
     gameSocket.emit("countUp", {});
 }
 
@@ -115,10 +116,10 @@ function startGame(gameId) {
     // to the game screen html
     io.sockets.to(gameId).emit('playGame', data);
 
-    //game html rendered in here
-    //for each player the quintus engine is
-    //created, a player object is create and
-    //added to other players actor in room.
+    // Game html rendered in here
+
+    // For each player the quintus engine is created, a player object
+    // is created and added to other players actor in room.
 }
 
 
@@ -134,39 +135,3 @@ module.exports = function (socketio, socket) {
     // Player Events
     gameSocket.on('joinRoom', joinRoom);
 };
-
-//// Increment number of players as a new player connected
-//playerCount++;
-//id++;
-//
-//// 1.5 second delay before sending the user their id and emit the player
-//// count to every player, allowing the player count to be updated in the
-//// game, to ensure that the user has time to load the proper javascript
-//// files first
-//setTimeout(function () {
-//    socket.emit("connected", {
-//        playerId: id
-//    });
-//
-//    io.emit("count", {
-//        playerCount: playerCount
-//    });
-//
-//}, 1500);
-//
-//
-//}
-//
-//// On a disconnect we just tell every player that the player
-//// count has decreased
-//socket.on("disconnect", function () {
-//    console.log("A user disconnected");
-//
-//    playerCount--;
-//
-
-//});
-//
-//socket.on("update", function (data) {
-//    socket.broadcast.emit("updated", data);
-//});

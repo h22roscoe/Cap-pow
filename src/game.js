@@ -27,9 +27,8 @@ Q.SPRITE_POWERUP = 4;
 // actors will hold all Player objects currently in game
 var actors = [];
 // Create socket object that connects to our server (CloudStack VM IP address)
-var socket = TEST ? null : io.connect("https://cap-pow.herokuapp.com");
-//var socket = io.connect("localhost");
-//var socket = io.connect("http://localhost:3000");
+//var socket = TEST ? null : io.connect("https://cap-pow.herokuapp.com");
+var socket = io.connect("http://localhost:3000");
 //var socket = io.connect("http://146.169.45.144");
 
 // UiPlayers is element in index.html with id "players"

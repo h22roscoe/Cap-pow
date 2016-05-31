@@ -7,8 +7,6 @@ var rooms = require("./rooms");
 //Port is 3000 by default
 var PORT = process.env.PORT || 3000;
 
-io.serveClient(true);
-
 //TODO: Could be /web or /group_directory, etc.
 app.use(express.static(__dirname));
 
