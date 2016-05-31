@@ -1,13 +1,6 @@
 var io;
 var gameSocket;
-var id = 0;
 var gameId = 0;
-
-// Per room, think it will be moved to client side
-var playerCount;
-
-var MAX_PLAYERS = 4;
-var MIN_PLAYERS = 2;
 
 /*
     PLAYER ACTIONS
@@ -18,11 +11,11 @@ var MIN_PLAYERS = 2;
 function joinRoom(data) {
     var sock = this; //socket for the player joining
 
-    var room = gameSocket.manager.rooms["/" + data.gameId];
+    var room = gameSocket.manager.rooms['/' + data.gameId];
 
     if (room !== undefined) {
         data.socketId = sock.id;
-        sock.join(data.gameId);
+        sock.join(data.gameId.toString());
 
         // Subscribe to get updates from other players when game starts
         sock.on("update", function (data) {
@@ -32,12 +25,9 @@ function joinRoom(data) {
         //tell player we have joined and show on their screen
         io.sockets.to(data.gameId).emit("playerJoinedRoom", data);
 
-        //can do this in player joined game function
-        //        io.sockets.to(data.gameId).emit("countUp", {});
-
         setTimeout(function () {
             sock.emit("connected", {
-                playerId: id++
+                playerId: data.socketId
             });
         }, 1500);
 
@@ -55,12 +45,11 @@ function leaveRoom(data) {
     this.leave(data.gameId.toString());
 
     // Tell all players someone has left
-    io.sockets.to(data.gameId).emit("playerLeftRoom", {});
+    this.broadcast.to(data.gameId).emit("playerLeftRoom", {
+        playerId: data.socketId;
+    });
 
-    //can be done in player left room
-    //io.sockets.to(data.gameId).emit("countDown", {});
-
-    // Render the choosing rooms screen again
+    // Render the lobby screen again
 }
 
 /*
@@ -75,7 +64,7 @@ function createNewGame() {
 
     // Return the Room ID (gameId) and the socket ID (mySocketId)
     // to the browser client
-    this.emit('newGameCreated', {
+    this.emit("newGameCreated", {
         gameId: gameId++,
         socketId: this.id
     });
@@ -83,14 +72,7 @@ function createNewGame() {
     // Join the Room and wait for the players
     this.join(gameId.toString());
 
-    // Maybe render lobby screen for the host
-
-    // Set listener for disconnection from this game
-    io.sockets.to(gameId).on('leaveGame', leaveRoom);
-
-    // Will check if count is one less then call prepare game.
-    // Stops functionally for joining game if too many players.
-    gameSocket.emit("countUp", {});
+    // Maybe render game waiting screen for the host
 }
 
 // Called when there are between 2 and 4 players present.
@@ -98,26 +80,16 @@ function createNewGame() {
 // is removed from the list of available rooms.
 // Started by button press to start game.
 // Starts countdown.
-function prepareGame(gameId) {
-    var data = {
-        socketId: this.id,
-        gameId: gameId
-    };
-
-    io.sockets.to(gameId).emit('startCountdown', data);
-}
-
-// Called when the countdown finishes on the client side.
 // Subscribe to get updates from other players when game starts
 function startGame(gameId) {
     var data = {
         socketId: this.id,
         gameId: gameId
-    };var gameId = 0
+    };
 
     // Will create quintus engine for each player and render their screen
     // to the game screen html
-    io.sockets.to(gameId).emit('playGame', data);
+    io.sockets.to(gameId).emit("loadGame", data);
 
     // Game html rendered in here
 
@@ -125,16 +97,17 @@ function startGame(gameId) {
     // is created and added to other players actor in room.
 }
 
+function stopNewJoins()
 
 module.exports = function (socketio, socket) {
     io = socketio;
     gameSocket = socket;
 
     // Host Events
-    gameSocket.on('createNewGame', createNewGame);
-    gameSocket.on('roomFull', prepareGame);
-    gameSocket.on('countdownFinished', startGame);
+    gameSocket.on("createNewGame", createNewGame);
+    gameSocket.on("startGame", startGame);
 
     // Player Events
-    gameSocket.on('joinRoom', joinRoom);
+    gameSocket.on("joinRoom", joinRoom);
+    gameSocket.on("leaveRoom", leaveRoom);
 };
