@@ -5,7 +5,9 @@ var pg = require("pg").native;
 var models = require("./app/models");
 var app = express();
 var server = require("http").Server(app);
-var io = require("socket.io")(server);
+var io = require("socket.io")(server, {
+    serveClient: true
+});
 var rooms = require("./rooms");
 
 pg.defaults.ssl = true;
@@ -15,9 +17,13 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var session = require("express-session");
 
+// pass passport for configuration
+require("./config/passport")(passport);
+
 var PORT = process.env.PORT || 8080;
 
-app.set("views", __dirname + "/views");
+app.use(express.static(__dirname + "/public"));
+app.set("views", __dirname + "/public/views");
 
 // Log every request to the console
 app.use(morgan("dev"));
@@ -28,9 +34,6 @@ app.use(cookieParser());
 // Get information from HTML forms
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// pass passport for configuration
-require("./config/passport")(passport);
 
 // set up ejs for templating
 app.set("view engine", "ejs");
@@ -64,7 +67,7 @@ io.on("connection", function (socket) {
 models.sequelize.sync().then(function () {
     "use strict";
 
-    app.listen(PORT, function () {
+    server.listen(PORT, function () {
         console.log('The magic happens on port ' + PORT);
     });
 });
