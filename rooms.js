@@ -1,6 +1,9 @@
 var io;
 var gameSocket;
-var gameId = 0;
+var playerCount = 0;
+var MAX_PLAYERS = 4;
+var MIN_PLAYERS = 2;
+
 
 /*
     PLAYER ACTIONS
@@ -8,23 +11,26 @@ var gameId = 0;
 
 // Called when a player clicks on a room to join it takes that player
 // to the lobby screen
+// Roomname queried from the database and in data
+// Maybe pass in the player name to render on the screen.
 function joinRoom(data) {
-    var sock = this; //socket for the player joining
+    // Socket for the player joining
+    var sock = this;
 
-    var room = gameSocket.manager.rooms['/' + data.gameId];
+    var room = gameSocket.manager.rooms['/' + data.roomName];
 
+    // probably will never have the case where room is undefined
     if (room !== undefined) {
-        data.socketId = sock.id;
-        sock.join(data.gameId.toString());
 
-        //tell player we have joined and show on their screen
-        gameSocket.to(data.gameId).emit("playerJoinedRoom", data);
-
-        setTimeout(function () {
-            sock.emit("connected", {
-                playerId: data.socketId
-            });
-        }, 1500);
+        if (playerCount < MAX_PLAYERS) {
+            data.playerCount = ++playerCount;
+            data.playerName;
+            sock.join(data.roomName);
+            //tell host a player has joined so it can
+            io.sockets.in(data.roomName).emit("playerJoinedRoom", data);
+        } else {
+            //stop being allowed to add players
+        }
 
     } else {
         sock.emit("error", {
@@ -35,15 +41,17 @@ function joinRoom(data) {
 
 // Will remove them from the room and render the list of
 // available rooms again.
+// If last player calls this then remove this room from database.
 function leaveRoom(data) {
     // Leave from room
-    this.leave(data.gameId.toString());
+    this.leave(data.roomName);
 
     // Tell all players someone has left
-    this.broadcast.to(data.gameId).emit("playerLeftRoom", {
-        playerId: data.socketId
-    });
-
+    if (playerCount === 1) {
+        this.broadcast.to(data.roomName).emit("playerLeftRoom", {
+            playerCount: --playerCount
+        });
+    }
     // Render the lobby screen again
 }
 
@@ -52,20 +60,19 @@ function leaveRoom(data) {
 */
 
 // Host creates a new room which people can join
-// Called when create game button is pressed
-function createNewGame() {
+// Called when we have checked the room name doesn't exist.
+function createNewRoom(data) {
     // Create a unique Socket.IO Room
-    // TODO: Increment the gameId instead of random ID/ bitmap?
 
-    // Return the Room ID (gameId) and the socket ID (mySocketId)
+    // Return the Room ID (gameId)
     // to the browser client
-    this.emit("newGameCreated", {
-        gameId: gameId++,
-        socketId: this.id
+    this.emit("joinedRoom", {
+        //The HTML will check that the roomName entered is unique, we don't worry about that here
+        roomName: data.roomName
     });
 
-    // Join the Room and wait for the players
-    this.join(gameId.toString());
+    // Creates room, joins the room and wait for the players
+    this.join(data.roomName);
 
     // Maybe render game waiting screen for the host
 }
@@ -73,38 +80,22 @@ function createNewGame() {
 // Called when there are between 2 and 4 players present.
 // Stops people being able to connect to this room as it
 // is removed from the list of available rooms.
-// Started by button press to start game.
-// Starts countdown.
-// Subscribe to get updates from other players when game starts
-function startGame(gameId) {
-    var data = {
-        socketId: this.id,
-        gameId: gameId
+// Started by button press to start countdown.
+function startCountDown(data) {
+
+    //this function may be able to be put straight into the button event
+    var time = 5;
+    while (time >= 0) {
+
+        var id = setTimeout(function () {
+            io.sockets.in(data.roomName).emit.("countDown", {
+                time: time--
+            });
+        }, 1000);
     };
 
     // Will create quintus engine for each player and render their screen
-    // to the game screen html
-    gameSocket.to(gameId).emit("loadGame", data);
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // IF WE MOVE THIS TO SERVER.JS THEN WE HAVE GAME SHOWING AGAIN
-    var game = io.of("/game");
-
-    game.on("connection", function (socket) {
-        console.log("Game: A user connected");
-
-        socket.to(gameId).emit("connected", {
-            playerId: socket.id
-        });
-
-        // Change as we will not update everyone but only those in our room
-        socket.on("update", function (data) {
-            socket.broadcast.to(gameId).emit("updated", data);
-        });
-    });
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    // Render game.ejs
+    // to the game screen html or put a start game button which links to game
 }
 
 module.exports = function (socketio, socket) {
@@ -112,7 +103,9 @@ module.exports = function (socketio, socket) {
     gameSocket = socket;
 
     // Host Events
-    gameSocket.on("createNewGame", createNewGame);
+    //Emitted when the create button is pressed, will call this function and then redirect to 'in lobby' page
+    gameSocket.on("createNewRoom", createNewRoom);
+    //Emitted when start button pressed (this only shows to host when they are in lobby), calls function and then redirects to game
     gameSocket.on("startGame", startGame);
 
     // Player Events

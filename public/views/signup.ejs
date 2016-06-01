@@ -1,52 +1,135 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon -->
+    <link rel="icon" href="../images/logo.ico">
+
     <title>Cap-pow! Sign up</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body {
-            padding-top: 80px;
-        }
-    </style>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
+
+    <!-- Custom styles for this template -->
+    <link href="../css/login.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>-->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 
 <body>
+
+
     <div class="container">
-        <div class="col-sm-6 col-sm-offset-3">
-            <h1>
-                <span class="fa fa-sign-in"></span> Signup
-            </h1>
 
-            <!-- show any messages that come back with authentication -->
-            <!-- TODO: REPLACE WITH HULK (CURRENTLY EJS) -->
-            <% if (message.length > 0) { %>
-                <div class="alert alert-danger">
-                    <%= message %>
-                </div>
-            <% } %>
-
-            <!-- LOGIN FORM -->
-            <form action="/signup" method="post">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" class="form-control" name="username">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" name="password">
-                </div>
-
-                <button type="submit" class="btn btn-warning btn-lg">Signup</button>
-            </form>
-
-            <hr>
-
-            <p>Already have an account? <a href="/login">Login</a></p>
-            <p>Or go <a href="/">home</a>.</p>
+        <div id="logo">
+            <img src="../css/images/logo.png" />
         </div>
+
+        <script type="text/javascript">
+            function checkForm(form) {
+                if (form.username.value === "") {
+                    writeMessage("Username must not be blank.")
+                    return false;
+                }
+                re = /^\w+$/;
+                if (!re.test(form.username.value)) {
+                    writeMessage("Username must contain only letters, numbers and underscores.");
+                    return false;
+                }
+                length = form.password.value.length;
+                if (length < 6 || length > 18) {
+                    //alert("Password must be between 6 and 18 characters.");
+                    writeMessage("Password must be between 6 and 18 characters.");
+                    return false;
+                }
+                if (form.username.value === form.password.value) {
+                    writeMessage("Username and password must not be the same.")
+                    return false;
+                }
+                re = /[0-9]/;
+                if (!re.test(form.password.value)) {
+                    writeMessage("Password must contain at least one number.");
+                    return false;
+                }
+                re = /[a-z]/;
+                if (!re.test(form.password.value)) {
+                    writeMessage("Password must contain at least one lowercase letter.");
+                    return false;
+                }
+                re = /[A-Z]/;
+                if (!re.test(form.password.value)) {
+                    writeMessage("Password must contain at least one uppercase letter.");
+                    return false;
+                }
+                if (form.password.value != form.pwdCheck.value) {
+                    writeMessage("Passwords must match.");
+                    return false;
+                }
+                return true;
+            }
+
+            function writeMessage(message) {
+                console.log($("#alert"));
+                $("#alert").addClass("alert alert-danger");
+                $("#alert").html(message);
+            }
+        </script>
+
+        <div id="alert">
+        </div>
+
+
+
+        <form class="form-signin" onsubmit='return checkForm(this);' action="/signup" method="post">
+            <h2 class="form-signin-heading">Sign Up</h2>
+            <p>Password must:</p>
+            <ul>
+                <li>Be between 6 and 18 characters</li>
+                <li>Have at least one number</li>
+                <li>Have at least one lowercase letter</li>
+                <li>Have at least one uppercase letter</li>
+                <li>Be different to your username</li>
+                <li>Not be blank</li>
+                <li>Only contain letters, numbers and underscores</li>
+            </ul>
+            <label for="inputUsername" class="sr-only">Username</label>
+            <input type="username" id="inputUsername" class="form-control" name="username" placeholder="Username" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+            <input type="password" id="inputPassword" class="form-control" name="pwdCheck" placeholder="Confirm Password" required>
+            <!--<div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>-->
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Regsiter</button>
+        </form>
+
     </div>
+    <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
 </body>
 
 </html>
