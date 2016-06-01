@@ -21,6 +21,8 @@
 
     <!-- Custom styles for this template -->
     <link href="../css/login.css" rel="stylesheet">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]
@@ -45,47 +47,57 @@
         <script type="text/javascript">
             function checkForm(form) {
                 if (form.username.value === "") {
-                    alert("Username must not be blank.")
+                    writeMessage("Username must not be blank.")
                     return false;
                 }
                 re = /^\w+$/;
                 if (!re.test(form.username.value)) {
-                    alert("Username must contain only letters, numbers and underscores.");
-                    form.username.focus();
+                    writeMessage("Username must contain only letters, numbers and underscores.");
                     return false;
                 }
                 length = form.password.value.length;
                 if (length < 6 || length > 18) {
-                    alert("Password must be between 6 and 18 characters.");
+                    //alert("Password must be between 6 and 18 characters.");
+                    writeMessage("Password must be between 6 and 18 characters.");
                     return false;
                 }
                 if (form.username.value === form.password.value) {
-                    alert("Username and password must not be the same.")
+                    writeMessage("Username and password must not be the same.")
                     return false;
                 }
                 re = /[0-9]/;
                 if (!re.test(form.password.value)) {
-                    alert("Password must contain at least one number.");
+                    writeMessage("Password must contain at least one number.");
                     return false;
                 }
                 re = /[a-z]/;
                 if (!re.test(form.password.value)) {
-                    alert("Password must contain at least one lowercase letter.");
+                    writeMessage("Password must contain at least one lowercase letter.");
                     return false;
                 }
                 re = /[A-Z]/;
                 if (!re.test(form.password.value)) {
-                    alert("Password must contain at least one uppercase letter.");
+                    writeMessage("Password must contain at least one uppercase letter.");
                     return false;
                 }
                 if (form.password.value != form.pwdCheck.value) {
-                    alert("Passwords must match.");
+                    writeMessage("Passwords must match.");
                     return false;
                 }
                 return true;
             }
-
+            
+            function writeMessage(message) {
+                console.log($("#alert"));
+                $("#alert").addClass("alert alert-danger");
+                $("#alert").html(message);
+            }
         </script>
+        
+        <div id="alert">
+        </div>
+        
+        
 
         <form class="form-signin" onsubmit='return checkForm(this);' action="/signup" method="post">
             <h2 class="form-signin-heading">Sign Up</h2>
