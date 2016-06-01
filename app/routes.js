@@ -72,6 +72,12 @@ module.exports = function (app, passport) {
         });
     });
 
+    app.get("/lobby/data", isLoggedIn, function (req, res) {
+        models.room.findAll().then(function (rooms) {
+            res.json(rooms);
+        });
+    });
+
     app.post("/lobby", isLoggedIn, function (req, res) {
         if (req.body.roomname) {
             models.room.find({

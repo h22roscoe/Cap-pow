@@ -61,25 +61,31 @@
                 <h4>The rooms will display here.</h4>
 
                 <!-- IF WE WERE DOING EJS HERE -->
-                <ul>
-                    <% for (var i = 0; i < rooms.length; i++) { %>
-                        <li>
-                            <a class="btn btn-default btn-sm" href="/room/<%= rooms[i].name %>">
-                                <%= rooms[i].name %>: <%= rooms[i].players %> <i>players</i>
-                            </a>
-                        </li>
-                    <% } %>
-                </ul>
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <th>Room Name</th>
+                        <th># Players</th>
+                    </thead>
+                    <tbody>
+                        <% for (var i = 0; i < rooms.length; i++) { %>
+                            <tr class="clickable-row" data-url="/room/<%= rooms[i].name %>">
+                                <td><%= rooms[i].name %></td>
+                                <td><%= rooms[i].players %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
     <script>
         $(document).ready(function() {
             $.ajax({
-                url: "http://localhost:8080/lobby",
+                host: "http://localhost",
+                port: 8080,
+                path: "/lobby/data",
                 type: "GET",
                 dataType: "json",
-                data: { objectData: someObject },
                 cache: false,
                 timeout: 5000,
                 success: function(data) {
@@ -90,11 +96,13 @@
                 }
             });
 
-            $("li").click(function () {
+            $(".clickable-row").click(function () {
                 io.to(sessionStorage.getItem("socketId")).emit("joinRoom", {
                     roomName: rooms[i].name,
                     playerName: user.username
                 });
+
+                window.document.location = $(this).data("url");
             });
         });
     </script>
