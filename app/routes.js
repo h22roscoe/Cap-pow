@@ -1,3 +1,5 @@
+var models = require('../app/models');
+
 // Route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
 
@@ -53,9 +55,56 @@ module.exports = function (app, passport) {
     // We will want this protected so you have to be logged in to visit
     // We will use route middleware to verify this (the isLoggedIn function)
     app.get("/lobby", isLoggedIn, function (req, res) {
-        res.render("lobby.ejs", {
-            user: req.user
+        models.room.findAll().then(function (rooms) {
+            if (rooms) {
+                res.render("lobby.ejs", {
+                    message: "",
+                    user: req.user,
+                    rooms: rooms
+                });
+            } else {
+                res.render("lobby.ejs", {
+                    message: "",
+                    user: req.user,
+                    rooms: []
+                });
+            }
         });
+    });
+
+    app.post("/lobby", isLoggedIn, function (req, res) {
+        if (req.body.roomname) {
+            models.room.find({
+                where: {
+                    name: req.body.roomname
+                }
+            }).then(function (rooms) {
+                if (rooms) {
+                    res.render("lobby.ejs", {
+                        message: "Room is already taken",
+                        user: req.user,
+                        rooms: rooms
+                    });
+                } else {
+                    models.room.create({
+                        name: req.body.roomname,
+                        players: 0
+                    });
+
+                    // Be put into the room (get room.ejs)
+                }
+            });
+        }
+    });
+
+    app.delete("/lobby", function (req, res) {
+        models.room.destroy({
+            where: {
+                name: req.body.roomname
+            }
+        });
+
+        // Refresh rooms (May be done by AJAX)
     });
 
     // LOGOUT
