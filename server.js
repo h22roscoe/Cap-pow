@@ -8,6 +8,8 @@ var server = require("http").Server(app);
 var io = require("socket.io")(server);
 var rooms = require("./rooms");
 
+io.serveClient(true);
+
 pg.defaults.ssl = true;
 
 var morgan = require("morgan");

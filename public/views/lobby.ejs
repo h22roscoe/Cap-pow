@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <style>
         body {
             padding-top: 80px;
@@ -16,7 +17,6 @@
 </head>
 
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js"></script>
     <script src="../src/lobby.js"></script>
     <div class="container">
         <div class="page-header text-center">
@@ -53,7 +53,7 @@
                     <label>Create your own</label>
                     <input type="text" class="form-control" name="roomname">
                     <br>
-                    <button type="submit" class="btn btn-warning btn-lg">Create Room</button>
+                    <button id="create" type="submit" class="btn btn-warning btn-lg">Create Room</button>
                 </form>
 
                 <br>
@@ -91,16 +91,22 @@
                 timeout: 5000,
                 success: function(data) {
                     $("#test").append(data);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("error " + textStatus + " " + errorThrown);
-                }
+                }//,
+                //error: function(jqXHR, textStatus, errorThrown) {
+                //    alert("error " + textStatus + " " + errorThrown);
+                //}
+            });
+
+            $("#create").click(function () {
+                Lobby.socket.emit("createNewRoom", {
+
+                });
             });
 
             $(".clickable-row").click(function () {
-                io.to(sessionStorage.getItem("socketId")).emit("joinRoom", {
-                    roomName: rooms[i].name,
-                    playerName: user.username
+                Lobby.socket.emit("joinRoom", {
+                    roomName: $(this).data("url").substring(6),
+                    playerName: "<%= user.username %>"
                 });
 
                 window.document.location = $(this).data("url");

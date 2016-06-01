@@ -1,6 +1,6 @@
 var Room = {
     init: function () {
-        Room.socket = io.sockets.connected[sessionStorage.getItem("socketId")];
+        Room.socket = JSON.parse(sessionStorage.getItem("socket"));
         Room.setupListeners();
     },
 

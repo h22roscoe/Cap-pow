@@ -16,26 +16,17 @@ var MIN_PLAYERS = 2;
 function joinRoom(data) {
     // Socket for the player joining
     var sock = this;
-
-    var room = gameSocket.manager.rooms['/' + data.roomName];
-
     // probably will never have the case where room is undefined
-    if (room !== undefined) {
 
-        if (playerCount < MAX_PLAYERS) {
-            data.playerCount = ++playerCount;
-            data.playerName;
-            sock.join(data.roomName);
-            //tell host a player has joined so it can
-            io.sockets.in(data.roomName).emit("playerJoinedRoom", data);
-        } else {
-            //stop being allowed to add players
-        }
+    if (playerCount < MAX_PLAYERS) {
+        data.playerCount = ++playerCount;
+        data.playerName;
+        sock.join(data.roomName);
 
+        //tell host a player has joined so it can
+        io.sockets.in(data.roomName).emit("playerJoinedRoom", data);
     } else {
-        sock.emit("error", {
-            message: "This room does not exist."
-        });
+        //stop being allowed to add players
     }
 }
 
@@ -88,7 +79,7 @@ function startCountDown(data) {
     while (time >= 0) {
 
         var id = setTimeout(function () {
-            io.sockets.in(data.roomName).emit.("countDown", {
+            io.sockets.in(data.roomName).emit("countDown", {
                 time: time--
             });
         }, 1000);
@@ -106,7 +97,7 @@ module.exports = function (socketio, socket) {
     //Emitted when the create button is pressed, will call this function and then redirect to 'in lobby' page
     gameSocket.on("createNewRoom", createNewRoom);
     //Emitted when start button pressed (this only shows to host when they are in lobby), calls function and then redirects to game
-    gameSocket.on("startGame", startGame);
+    gameSocket.on("startCountDown", startCountDown);
 
     // Player Events
     gameSocket.on("joinRoom", joinRoom);
