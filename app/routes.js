@@ -107,6 +107,7 @@ module.exports = function (app, passport) {
         // Refresh rooms (May be done by AJAX)
     });
 
+    // ROOM
     app.get("/room/:roomname", function (req, res) {
         res.render("room", {
             roomname: req.params.roomname

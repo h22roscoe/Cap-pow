@@ -1,0 +1,12 @@
+#logo {
+    position: relative;
+    padding-bottom: 150px;
+}
+
+#logo img {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    top: 10px;
+    right: 0px;
+}
