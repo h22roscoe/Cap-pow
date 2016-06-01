@@ -50,6 +50,10 @@
 
                     ajaxRequest.open("GET", "http://localhost:8080/rooms", true);
                 });
+
+                //$(".room").click(function (i) {
+
+                //});
             });
 
         </script>
@@ -75,9 +79,9 @@
                 <!-- IF WE WERE DOING EJS HERE -->
                 <ul>
                     <% for (var i = 0; i < rooms.length; i++) { %>
-
-                            <%= rooms[i].name %>: <%= rooms[i].players %> <i>players</i> <br>
-
+                        <li>
+                            <p class="room"><%= rooms[i].name %></p>: <%= rooms[i].players %> <i>players</i>
+                        </li>
                     <% } %>
                 </ul>
             </div>
