@@ -8,7 +8,6 @@
 //Turns on default controls and allows touch input with mouse/touch screen.
 //Giving control() a parameter of true will use a joypad instead.
 //Enables sound.
-
 var Q = window.Q = Quintus({
         audioSupported: ["mp3", "ogg"],
         development: true
@@ -24,11 +23,31 @@ Q.SPRITE_PLAYER = 64;
 Q.SPRITE_FLAG = 128;
 Q.SPRITE_POWERUP = 256;
 
+// TODO: May not need background in files here
+var files = [
+    "../images/tmptiles.png",
+    "../data/tmplevel.json",
+    "../images/tmpsprites.png",
+    "../data/tmpsprites.json",
+    "../images/tmpbackground.png"
+];
+
+// Split up the blocks and sprites from being one long PNG.
+// Load the actual level and run the game.
+Q.load(files.join(','), function () {
+    Q.sheet("tmptiles", "../images/tmptiles.png", {
+        tilew: 32,
+        tileh: 32
+    });
+    Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
+    Q.stageScene("tmplevel");
+});
+
 // actors will hold all Player objects currently in game
 var actors = [];
 // Create socket object that connects to our server (CloudStack VM IP address)
 //var socket = TEST ? null : io.connect("https://cap-pow.herokuapp.com");
-var socket = io.connect("http://localhost:3000");
+var socket = io.connect("http://localhost:8080/game");
 //var socket = io.connect("http://146.169.45.144");
 
 // UiPlayers is element in index.html with id "players"
@@ -157,25 +176,4 @@ Q.scene("tmplevel", function (stage) {
 
     // Set up the socket connections.
     setUp(stage);
-});
-
-
-// TODO: May not need background in files here
-var files = [
-        "../images/tmptiles.png",
-        "../data/tmplevel.json",
-        "../images/tmpsprites.png",
-        "../data/tmpsprites.json",
-        "../images/tmpbackground.png"
-    ];
-
-// Split up the blocks and sprites from being one long PNG.
-// Load the actual level and run the game.
-Q.load(files.join(','), function () {
-    Q.sheet("tmptiles", "../images/tmptiles.png", {
-        tilew: 32,
-        tileh: 32
-    });
-    Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
-    Q.stageScene("tmplevel");
 });

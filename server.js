@@ -15,9 +15,13 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var session = require("express-session");
 
+// pass passport for configuration
+require("./config/passport")(passport);
+
 var PORT = process.env.PORT || 8080;
 
-app.set("views", __dirname + "/views");
+app.use(express.static(__dirname + "/public"));
+app.set("views", __dirname + "/public/views");
 
 // Log every request to the console
 app.use(morgan("dev"));
@@ -26,11 +30,10 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 // Get information from HTML forms
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
-
-// pass passport for configuration
-require("./config/passport")(passport);
 
 // set up ejs for templating
 app.set("view engine", "ejs");
@@ -57,14 +60,14 @@ route(app, passport);
 
 // Whenever a user connects set up default event listeners.
 io.on("connection", function (socket) {
-    console.log("A user connected");
+    console.log("Setup: A user connected");
     rooms(io, socket);
 });
 
 models.sequelize.sync().then(function () {
     "use strict";
 
-    app.listen(PORT, function () {
+    server.listen(PORT, function () {
         console.log('The magic happens on port ' + PORT);
     });
 });
