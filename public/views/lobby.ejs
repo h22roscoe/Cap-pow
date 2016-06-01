@@ -19,25 +19,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js"></script>
     <div class="container">
         <div class="page-header text-center">
-            <h1><span class="fa fa-anchor"></span> Lobby Page</h1>
+            <h1><span class="fa fa-anchor"></span> Lobby</h1>
             <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-        </div>
-        <div class="row">
-            <!-- LOCAL INFORMATION -->
-            <div class="col-sm-12">
-                <div class="well">
-                    <h3>
-                        <span class="fa fa-user"></span> Local
-                    </h3>
-                    <p>
-                        <strong>id</strong>: <%= user._id %>
-                        <br>
-                        <strong>email</strong>: <%= user.username %>
-                        <br>
-                        <strong>password</strong>: <%= user.password %>
-                    </p>
-                </div>
-            </div>
         </div>
 
         <!-- GAME ROOMS LIST -->
@@ -92,9 +75,9 @@
                 <!-- IF WE WERE DOING EJS HERE -->
                 <ul>
                     <% for (var i = 0; i < rooms.length; i++) { %>
-                        <li>
-                            <%= rooms[i].name %>: <%= rooms[i].players %> <i>players</i>
-                        </li>
+
+                            <%= rooms[i].name %>: <%= rooms[i].players %> <i>players</i> <br>
+
                     <% } %>
                 </ul>
             </div>

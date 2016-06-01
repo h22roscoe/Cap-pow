@@ -107,6 +107,13 @@ module.exports = function (app, passport) {
         // Refresh rooms (May be done by AJAX)
     });
 
+    // ROOM
+    app.get("/room/:roomname", function (req, res) {
+        res.render("room.ejs", {
+            rooomname: roomname
+        });
+    });
+
     // LOGOUT
     app.get("/logout", function (req, res) {
         req.logout();
@@ -115,8 +122,6 @@ module.exports = function (app, passport) {
 
     // GAME
     app.get("/game", function (req, res) {
-        res.render("game.ejs", {
-            player: "abc"
-        });
+        res.render("game.ejs", {});
     });
 };
