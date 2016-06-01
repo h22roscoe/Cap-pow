@@ -16,14 +16,14 @@ module.exports = function (app, passport) {
     // HOME
     app.get('/', function (req, res) {
         // load the index.ejs file
-        res.render("index.ejs");
+        res.render("index");
     });
 
     // LOGIN
     // Show the login form
     app.get("/login", function (req, res) {
         // render the page and pass in any flash data if it exists
-        res.render("login.ejs", {
+        res.render("login", {
             message: req.flash("loginMessage")
         });
     });
@@ -39,7 +39,7 @@ module.exports = function (app, passport) {
     // Show the signup form
     app.get("/signup", function (req, res) {
         // Render the page and pass in any flash data if it exists
-        res.render("signup.ejs", {
+        res.render("signup", {
             message: req.flash("signupMessage")
         });
     });
@@ -57,13 +57,13 @@ module.exports = function (app, passport) {
     app.get("/lobby", isLoggedIn, function (req, res) {
         models.room.findAll().then(function (rooms) {
             if (rooms) {
-                res.render("lobby.ejs", {
+                res.render("lobby", {
                     message: "",
                     user: req.user,
                     rooms: rooms
                 });
             } else {
-                res.render("lobby.ejs", {
+                res.render("lobby", {
                     message: "",
                     user: req.user,
                     rooms: []
@@ -109,8 +109,8 @@ module.exports = function (app, passport) {
 
     // ROOM
     app.get("/room/:roomname", function (req, res) {
-        res.render("room.ejs", {
-            rooomname: roomname
+        res.render("room", {
+            roomname: req.params.roomname
         });
     });
 
@@ -122,6 +122,6 @@ module.exports = function (app, passport) {
 
     // GAME
     app.get("/game", function (req, res) {
-        res.render("game.ejs", {});
+        res.render("game", {});
     });
 };

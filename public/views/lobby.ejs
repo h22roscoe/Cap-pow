@@ -22,46 +22,26 @@
             <h1><span class="fa fa-anchor"></span> Lobby</h1>
             <a href="/logout" class="btn btn-default btn-sm">Logout</a>
         </div>
+        <div class="row">
+            <!-- LOCAL INFORMATION -->
+            <div class="col-sm-12">
+                <div class="well">
+                    <h3>
+                        <span class="fa fa-user"></span> Local
+                    </h3>
+                    <p>
+                        <strong>username</strong>: <%= user.username %>
+                        <br>
+                        <strong>password</strong>: <%= user.password %>
+                    </p>
+                </div>
+            </div>
+        </div>
 
         <!-- GAME ROOMS LIST -->
-        <script>
-            $(document).ready(function() {
-                $("#refresh").click(function() {
-                    // The variable that makes Ajax possible!
-                    var ajaxRequest;
-
-                    try {
-                        // Opera 8.0+, Firefox, Safari
-                        ajaxRequest = new XMLHttpRequest();
-                    } catch (e) {
-                        // Internet Explorer Browsers
-                        try {
-                            ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
-                        } catch (e) {
-                            try {
-                                ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
-                            } catch (e) {
-                                // Something went wrong
-                                alert("Your browser broke!");
-                                return false;
-                            }
-                        }
-                    }
-
-                    ajaxRequest.open("GET", "http://localhost:8080/rooms", true);
-                });
-
-                //$(".room").click(function (i) {
-
-                //});
-            });
-
-        </script>
         <div class="row">
-            <div class="col-md-12 text-center" id="ajaxDiv">
-                <a href="/lobby" class="btn btn-default btn-sm">Refresh</a>
-
-                <br>
+            <p id="test"></p>
+            <div class="col-md-12 text-center">
                 <% if (message) { %>
                     <div class="alert alert-danger">
                         <%= message %>
@@ -71,22 +51,53 @@
                 <form action="/lobby" method="post">
                     <label>Create your own</label>
                     <input type="text" class="form-control" name="roomname">
+                    <br>
                     <button type="submit" class="btn btn-warning btn-lg">Create Room</button>
                 </form>
 
+                <br>
+
+                <a href="/lobby" class="btn btn-default btn-sm">Refresh</a>
                 <h4>The rooms will display here.</h4>
 
                 <!-- IF WE WERE DOING EJS HERE -->
                 <ul>
                     <% for (var i = 0; i < rooms.length; i++) { %>
                         <li>
-                            <p class="room"><%= rooms[i].name %></p>: <%= rooms[i].players %> <i>players</i>
+                            <a class="btn btn-default btn-sm" href="/room/<%= rooms[i].name %>">
+                                <%= rooms[i].name %>: <%= rooms[i].players %> <i>players</i>
+                            </a>
                         </li>
                     <% } %>
                 </ul>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "http://localhost:8080/lobby",
+                type: "GET",
+                dataType: "json",
+                data: { objectData: someObject },
+                cache: false,
+                timeout: 5000,
+                success: function(data) {
+                    $("#test").append(data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("error " + textStatus + " " + errorThrown);
+                }
+            });
+
+            $("li").click(function () {
+                io.to(sessionStorage.getItem("socketId")).emit("joinRoom", {
+                    roomName: rooms[i].name,
+                    playerName: user.username
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
