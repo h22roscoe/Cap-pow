@@ -3,50 +3,21 @@ var IO = {
     //MAY PUT BUTTON CLICK LISTENERS IN HERE
 
     init: function () {
-
-        IO.room;
         // Connecting locally but will connect to herokuapp eventually
+        // Store socket Id for other client files to access
         IO.socket = io.connect("http://localhost:8080");
-        IO.setupListeners();
+        sessionStorage.setItem("socketId", IO.socket.id).
 
-        IO.MAX_PLAYERS = 4;
-        IO.MIN_PLAYERS = 2;
-        IO.players = 0;
     },
 
     setupListeners: function () {
-        IO.socket.on("newRoomCreated", IO.createNewRoom);
-        IO.socket.on("playerLeftRoom", IO.playerLeftRoom);
-        IO.socket.on("playerJoinedRoom", IO.playerJoinedRoom);
-
-
-        //For Testing
-        IO.socket.broadcast.emit("startGame");
+        IO.socket.on("joinedRoom", IO.joinRoom);
     },
 
-    createNewRoom: function (data) {
-        IO.players++;
-        IO.room = data.room;
-    },
-
-    playerJoinedRoom: function (data) {
-        if (IO.players < IO.MAX_PLAYERS) {
-            data.playerCount = ++IO.players;
-            //Change player count on screen
-            io.sockets.in(data.room).emit("updateWaitingScreen", data);
-        } else {
-
-        }
-    },
-
-    playerLeftRoom: function (data) {
-        // Change player count on screen
-        // Player who left: data.playerId;
-        // Change player count on screen
-        data.playerCount = --IO.players;
-        // Change player count on screen
-        io.sockets.in(data.room).emit("updateWaitingScreen", data);
-    },
+    joinRoom: function (data) {
+        sessionStorage.setItem(room, data.room);
+        //will render the waiting screen
+    }
 }
 
 IO.init();
