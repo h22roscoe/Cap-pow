@@ -1,6 +1,5 @@
 var io;
 var gameSocket;
-var gameId = 0;
 
 /*
     PLAYER ACTIONS
@@ -8,23 +7,19 @@ var gameId = 0;
 
 // Called when a player clicks on a room to join it takes that player
 // to the lobby screen
+// Roomname queried from the database and in data
 function joinRoom(data) {
     var sock = this; //socket for the player joining
 
-    var room = gameSocket.manager.rooms['/' + data.gameId];
+    var room = gameSocket.manager.rooms['/' + data.roomName];
 
     if (room !== undefined) {
         data.socketId = sock.id;
-        sock.join(data.gameId.toString());
+        data.playCount = playerCount++;
+        sock.join(data.roomName);
 
-        //tell player we have joined and show on their screen
-        gameSocket.to(data.gameId).emit("playerJoinedRoom", data);
-
-        setTimeout(function () {
-            sock.emit("connected", {
-                playerId: data.socketId
-            });
-        }, 1500);
+        //tell host a player has joined so it can
+        gameSocket.emit("playerJoinedRoom", data);
 
     } else {
         sock.emit("error", {
@@ -35,12 +30,13 @@ function joinRoom(data) {
 
 // Will remove them from the room and render the list of
 // available rooms again.
+// If last player calls this then remove this room from database.
 function leaveRoom(data) {
     // Leave from room
-    this.leave(data.gameId.toString());
+    this.leave(data.roomName);
 
     // Tell all players someone has left
-    this.broadcast.to(data.gameId).emit("playerLeftRoom", {
+    this.broadcast.to(data.roomName).emit("playerLeftRoom", {
         playerId: data.socketId
     });
 
@@ -52,20 +48,20 @@ function leaveRoom(data) {
 */
 
 // Host creates a new room which people can join
-// Called when create game button is pressed
-function createNewGame() {
+// Called when we have checked the room name doesn't exist.
+function createNewRoom(data) {
     // Create a unique Socket.IO Room
-    // TODO: Increment the gameId instead of random ID/ bitmap?
 
     // Return the Room ID (gameId) and the socket ID (mySocketId)
     // to the browser client
-    this.emit("newGameCreated", {
-        gameId: gameId++,
+    this.emit("newRoomCreated", {
+        //The HTML will check that the roomName entered is unique, we don't worry about that here
+        roomName: data.roomName,
         socketId: this.id
     });
 
-    // Join the Room and wait for the players
-    this.join(gameId.toString());
+    // Creates room, joins the room and wait for the players
+    this.join(data.roomName);
 
     // Maybe render game waiting screen for the host
 }
@@ -76,35 +72,17 @@ function createNewGame() {
 // Started by button press to start game.
 // Starts countdown.
 // Subscribe to get updates from other players when game starts
-function startGame(gameId) {
+function startGame(data) {
+
     var data = {
-        socketId: this.id,
-        gameId: gameId
+        roomName: data.roomName,
+        socketId: this.id
     };
 
     // Will create quintus engine for each player and render their screen
     // to the game screen html
-    gameSocket.to(gameId).emit("loadGame", data);
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // IF WE MOVE THIS TO SERVER.JS THEN WE HAVE GAME SHOWING AGAIN
-    var game = io.of("/game");
-
-    game.on("connection", function (socket) {
-        console.log("Game: A user connected");
-
-        socket.to(gameId).emit("connected", {
-            playerId: socket.id
-        });
-
-        // Change as we will not update everyone but only those in our room
-        socket.on("update", function (data) {
-            socket.broadcast.to(gameId).emit("updated", data);
-        });
-    });
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    // Render game.ejs
+    io.sockets.in(data.roomName).emit("loadGame", data);
+    // Render game.ejs from the hyperlink
 }
 
 module.exports = function (socketio, socket) {
@@ -112,7 +90,9 @@ module.exports = function (socketio, socket) {
     gameSocket = socket;
 
     // Host Events
-    gameSocket.on("createNewGame", createNewGame);
+    //Emitted when the create button is pressed, will call this function and then redirect to 'in lobby' page
+    gameSocket.on("createNewRoom", createNewRoom);
+    //Emitted when start button pressed (this only shows to host when they are in lobby), calls function and then redirects to game
     gameSocket.on("startGame", startGame);
 
     // Player Events
