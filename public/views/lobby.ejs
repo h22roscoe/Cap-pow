@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <link href="../css/login.css" rel="stylesheet">
+    <link rel="icon" href="../images/logo.ico">
 </head>
 
 <body>
@@ -52,7 +53,7 @@
                 <% } %>
 
                 <form action="/lobby" method="post">
-                    <label>Create your own</label>
+                    <label>Make your own room!</label>
                     <input type="text" class="form-control" name="roomname">
                     <br>
                     <button type="submit" class="btn btn-warning btn-md">Create Room</button>
@@ -64,10 +65,10 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="span12 text-center">
-                <p><span class="fa fa-blind"></span> Cap-pow 2016</p>
+                <footer><span class="fa fa-blind"></span> Cap-pow 2016</footer>
             </div>
         </div>
     </div>
