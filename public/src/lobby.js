@@ -1,3 +1,6 @@
+//potentilally dont need this
+
+
 var IO = {
 
     //MAY PUT BUTTON CLICK LISTENERS IN HERE
@@ -6,7 +9,7 @@ var IO = {
         // Connecting locally but will connect to herokuapp eventually
         // Store socket Id for other client files to access
         IO.socket = io.connect("http://localhost:8080");
-        sessionStorage.setItem("socketId", IO.socket.id).
+        sessionStorage.setItem("socketId", IO.socket.id)
 
     },
 

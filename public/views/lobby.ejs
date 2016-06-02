@@ -17,6 +17,7 @@
 
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js"></script>
+    
     <div class="container">
         <div class="page-header text-center">
             <h1><span class="fa fa-anchor"></span> Lobby</h1>
@@ -30,9 +31,11 @@
                         <span class="fa fa-user"></span> Local
                     </h3>
                     <p>
-                        <strong>username</strong>: <%= user.username %>
-                        <br>
-                        <strong>password</strong>: <%= user.password %>
+                        <strong>username</strong>:
+                        <%= user.username %>
+                            <br>
+                            <strong>password</strong>:
+                            <%= user.password %>
                     </p>
                 </div>
             </div>
@@ -46,30 +49,31 @@
                     <div class="alert alert-danger">
                         <%= message %>
                     </div>
-                <% } %>
-
-                <form action="/lobby" method="post">
-                    <label>Create your own</label>
-                    <input type="text" class="form-control" name="roomname">
-                    <br>
-                    <button type="submit" class="btn btn-warning btn-lg">Create Room</button>
-                </form>
-
-                <br>
-
-                <a href="/lobby" class="btn btn-default btn-sm">Refresh</a>
-                <h4>The rooms will display here.</h4>
-
-                <!-- IF WE WERE DOING EJS HERE -->
-                <ul>
-                    <% for (var i = 0; i < rooms.length; i++) { %>
-                        <li>
-                            <a class="btn btn-default btn-sm" href="/room/<%= rooms[i].name %>">
-                                <%= rooms[i].name %>: <%= rooms[i].players %> <i>players</i>
-                            </a>
-                        </li>
                     <% } %>
-                </ul>
+
+                        <form action="/lobby" method="post">
+                            <label>Create your own</label>
+                            <input type="text" class="form-control" name="roomname">
+                            <br>
+                            <button type="submit" class="btn btn-warning btn-lg">Create Room</button>
+                        </form>
+
+                        <br>
+
+                        <a href="/lobby" class="btn btn-default btn-sm">Refresh</a>
+                        <h4>The rooms will display here.</h4>
+
+                        <!-- IF WE WERE DOING EJS HERE -->
+                        <ul>
+                            <% for (var i = 0; i < rooms.length; i++) { %>
+                                <li>
+                                    <a class="btn btn-default btn-sm" href="/room/<%= rooms[i].name %>">
+                                        <%= rooms[i].name %>:
+                                            <%= rooms[i].players %> <i>players</i>
+                                    </a>
+                                </li>
+                                <% } %>
+                        </ul>
             </div>
         </div>
     </div>
@@ -79,7 +83,9 @@
                 url: "http://localhost:8080/lobby",
                 type: "GET",
                 dataType: "json",
-                data: { objectData: someObject },
+                data: {
+                    objectData: someObject
+                },
                 cache: false,
                 timeout: 5000,
                 success: function(data) {
@@ -90,13 +96,15 @@
                 }
             });
 
-            $("li").click(function () {
-                io.to(sessionStorage.getItem("socketId")).emit("joinRoom", {
-                    roomName: rooms[i].name,
-                    playerName: user.username
-                });
+      //need too make this correct syntax
+            $("li").click(function() {
+                   sessionStorage.set(roomName, rooms[i].name)
+            });
+            $("form-control").click(function() {
+                   sessionStorage.set(roomName, roomname)
             });
         });
+
     </script>
 </body>
 

@@ -15,6 +15,8 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var session = require("express-session");
 
+var gameNsp = io.of('/game')
+var roomNsp = io.of('/room')
 // pass passport for configuration
 require("./config/passport")(passport);
 

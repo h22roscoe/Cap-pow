@@ -17,7 +17,7 @@ setUpObject = {
     stage: null
 };
 
-var socket = io.sockets.connected[sessionStorage.getItem("socketId")];
+var socket = io.connect(https://localhost:8080);
 var roomName = sessionStorage.getItem("roomName")
 
 setUpObject.updateCount = function (data) {
