@@ -36,7 +36,8 @@ function findUserLogin(req, username, password, done) {
 
     models.user.find({
         where: {
-            "username": username
+            "username": username,
+            "roomId": null
         }
     }).then(function (user) {
         // If no user is found, return the message

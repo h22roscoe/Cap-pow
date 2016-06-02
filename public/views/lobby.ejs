@@ -67,12 +67,14 @@
                         <th>Room Name</th>
                         <th># Players</th>
                     </thead>
-                    <tbody>
-                        <% for (var i = 0; i < rooms.length; i++) { %>
-                            <tr class="clickable-row" data-url="/room/<%= rooms[i].name %>">
-                                <td><%= rooms[i].name %></td>
-                                <td><%= rooms[i].players %></td>
-                            </tr>
+                    <tbody id="rooms">
+                        <% if (rooms) { %>
+                            <% for (var i = 0; i < rooms.length; i++) { %>
+                                <tr class="clickable-row" data-url="/room/<%= rooms[i].name %>">
+                                    <td><%= rooms[i].name %></td>
+                                    <td><%= rooms[i].players %></td>
+                                </tr>
+                            <% } %>
                         <% } %>
                     </tbody>
                 </table>
@@ -81,36 +83,44 @@
     </div>
     <script>
         $(document).ready(function() {
-            $.ajax({
-                host: "http://localhost",
-                port: 8080,
-                path: "/lobby/data",
-                type: "GET",
-                dataType: "json",
-                cache: false,
-                timeout: 5000,
-                success: function(data) {
-                    $("#test").append(data);
-                }//,
-                //error: function(jqXHR, textStatus, errorThrown) {
-                //    alert("error " + textStatus + " " + errorThrown);
-                //}
-            });
+            setInterval(function () {
+                $.ajax({
+                    url: "http://localhost:8080/lobby/data",
+                    dataType: "json",
+                    cache: false,
+                    timeout: 5000,
+                    success: function(rooms) {
+                        var str = "";
 
-            $("#create").click(function () {
-                Lobby.socket.emit("createNewRoom", {
+                        for (var i = 0; i < rooms.length; i++) {
+                            str += "<tr>";
+                            str += "<td>" + rooms[i].name + "</td>";
+                            str += "<td>" + rooms[i].players + "</td>";
+                            str += "</tr>";
+                        }
 
+                        $("#rooms").html(str);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("error " + textStatus + " " + errorThrown);
+                        console.log(jqXHR);
+                    }
                 });
+            }, 15000);
+        });
+
+        $("#create").click(function () {
+            Lobby.socket.emit("createNewRoom", {
+            });
+        });
+
+        $(".clickable-row").click(function () {
+            Lobby.socket.emit("joinRoom", {
+                roomName: $(this).data("url").substring(6),
+                playerName: "<%= user.username %>"
             });
 
-            $(".clickable-row").click(function () {
-                Lobby.socket.emit("joinRoom", {
-                    roomName: $(this).data("url").substring(6),
-                    playerName: "<%= user.username %>"
-                });
-
-                window.document.location = $(this).data("url");
-            });
+            window.document.location = $(this).data("url");
         });
     </script>
 </body>

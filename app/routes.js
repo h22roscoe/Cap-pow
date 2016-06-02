@@ -1,8 +1,7 @@
-var models = require('../app/models');
+var models = require("../app/models");
 
 // Route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
-
     // If user is authenticated in the session, carry on
     if (req.isAuthenticated()) {
         return next();
@@ -54,27 +53,19 @@ module.exports = function (app, passport) {
     // PROFILE SECTION -- POSSIBLY TEMPORARY ONLY
     // We will want this protected so you have to be logged in to visit
     // We will use route middleware to verify this (the isLoggedIn function)
-    app.get("/lobby", isLoggedIn, function (req, res) {
-        models.room.findAll().then(function (rooms) {
-            if (rooms) {
-                res.render("lobby", {
-                    message: "",
-                    user: req.user,
-                    rooms: rooms
-                });
-            } else {
-                res.render("lobby", {
-                    message: "",
-                    user: req.user,
-                    rooms: []
-                });
-            }
-        });
-    });
-
     app.get("/lobby/data", isLoggedIn, function (req, res) {
         models.room.findAll().then(function (rooms) {
             res.json(rooms);
+        });
+    });
+
+    app.get("/lobby", isLoggedIn, function (req, res) {
+        models.room.findAll().then(function (rooms) {
+            res.render("lobby", {
+                message: "",
+                user: req.user,
+                rooms: rooms
+            });
         });
     });
 
@@ -86,19 +77,20 @@ module.exports = function (app, passport) {
                 }
             }).then(function (rooms) {
                 if (rooms) {
-                    res.render("lobby.ejs", {
+                    res.render("lobby", {
                         message: "Room is already taken",
                         user: req.user,
                         rooms: rooms
                     });
                 } else {
                     models.room.create({
+                        id: req.body.roomname,
                         name: req.body.roomname,
                         players: 0
                     });
 
                     // Be put into the room (get room.ejs)
-                    res.redirect("/room/" + req.body.roomname);
+                    //res.redirect("/room/" + req.body.roomname);
                 }
             });
         }
@@ -115,7 +107,7 @@ module.exports = function (app, passport) {
     });
 
     // ROOM
-    app.get("/room/:roomname", function (req, res) {
+    app.get("/room/:roomname", isLoggedIn, function (req, res) {
         res.render("room", {
             roomname: req.params.roomname
         });

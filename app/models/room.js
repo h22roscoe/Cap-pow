@@ -4,6 +4,15 @@ module.exports = function (sequelize, DataTypes) {
     "use strict"
 
     var Room = sequelize.define("room", {
+        id: {
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            },
+            primaryKey: true
+        },
         name: {
             type: DataTypes.STRING,
             unique: true,
@@ -24,6 +33,9 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         classMethods: {
+            associate: function (models) {
+                Room.hasMany(models.user);
+            },
             validPassword: function (password, dbpassword) {
                 return bcrypt.compareSync(password, dbpassword);
             }
