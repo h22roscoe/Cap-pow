@@ -90,7 +90,7 @@ module.exports = function (app, passport) {
                     });
 
                     // Be put into the room (get room.ejs)
-                    //res.redirect("/room/" + req.body.roomname);
+                    res.redirect("/room/" + req.body.roomname);
                 }
             });
         }

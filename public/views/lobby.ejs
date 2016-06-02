@@ -17,7 +17,6 @@
 </head>
 
 <body>
-    <script src="../src/lobby.js"></script>
     <div class="container">
         <div class="page-header text-center">
             <h1><span class="fa fa-list-ul"></span> Lobby</h1>
@@ -113,12 +112,14 @@
             }, 15000);
 
             $(".clickable-row").css('cursor', 'pointer').click(function () {
+                sessionStorage.setItem("roomName", $(this).data("url").substring(6));
                 window.document.location = $(this).data("url");
             });
         });
 
         $(document).ajaxSuccess(function () {
             $(".clickable-row").css('cursor', 'pointer').click(function () {
+                sessionStorage.setItem("roomName", $(this).data("url").substring(6));
                 window.document.location = $(this).data("url");
             });
         });
