@@ -106,30 +106,25 @@ module.exports = function (app, passport) {
 
     // ROOM
     app.get("/room/:roomname", isLoggedIn, function (req, res) {
+        models.users.update({
+            roomId: req.params.roomname
+        }, {
+            where: {
+                username: req.user.username
+            }
+        });
+
         models.room.update({
-            players: models.sequelize.literal('players + 1')
+            players: models.sequelize.literal("players + 1")
         }, {
             where: {
                 id: req.params.roomname
             }
-        })
-
+        });
         res.render("room", {
             roomname: req.params.roomname
         });
     });
-
-    app.get("/leave/:roomname", isLoggedIn, function (req, res) {
-        models.room.update({
-            players: models.sequelize.literal('players - 1')
-        }, {
-            where: {
-                id: req.params.roomname
-            }
-        });
-
-        res.redirect("/lobby");
-    })
 
     // LOGOUT
     app.get("/logout", function (req, res) {

@@ -1,10 +1,10 @@
 var roomSocket;
+var currentRoom;
 var playerCount = 0;
 var MAX_PLAYERS = 4;
 var MIN_PLAYERS = 2;
 
 //splits these both into rooms using roomName
-
 
 /*
     PLAYER ACTIONS
@@ -21,6 +21,7 @@ function joinRoom(data) {
     if (playerCount < MAX_PLAYERS) {
         playerCount++;
         sock.join(data.roomName);
+        currentRoom = data.roomName;
         //tell host a player has joined so it can
         roomNsp.in(data.roomName).emit("playerJoinedRoom", {});
     } else {
@@ -72,7 +73,7 @@ function startCountDown(data) {
     // to the game screen html or put a start game button which links to game
 }
 
-module.exports = function (roomio, roomSocket) {
+module.exports = function (username, roomio, models, roomSocket) {
     roomNsp = roomio;
     roomSocket = roomSocket;
 
@@ -84,4 +85,22 @@ module.exports = function (roomio, roomSocket) {
     roomSocket.on("joinRoom", joinRoom);
     roomSocket.on("leaveRoom", leaveRoom);
 
+    roomSocket.on("disconnect", function () {
+        console.log("Setup: A user disconnected");
+        models.users.update({
+            roomId: null
+        }, {
+            where: {
+                username: username
+            }
+        });
+
+        models.room.update({
+            players: models.sequelize.literal("players - 1")
+        }, {
+            where: {
+                id: currentRoom
+            }
+        });
+    });
 };

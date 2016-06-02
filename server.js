@@ -59,6 +59,15 @@ app.use(passport.session());
 // Use connect-flash for flash messages stored in session
 app.use(flash());
 
+var username;
+app.use(function (req, res, next) {
+    if (req.user) {
+        username = req.user.username;
+    }
+
+    next();
+});
+
 // TODO: May not use this guy's directory structure so check this.
 var route = require("./app/routes");
 route(app, passport);
@@ -66,7 +75,7 @@ route(app, passport);
 // Whenever a user connects set up default event listeners.
 roomNsp.on("connection", function (socket) {
     console.log("Setup: A user connected");
-    rooms(roomNsp, socket);
+    rooms(username, roomNsp, models, socket);
 });
 
 gameNsp.on("connection", function (socket) {
@@ -83,8 +92,9 @@ gameNsp.on("connection", function (socket) {
         }, 1000);
 
         socket.on("update", function (updateInfo) {
-            socket.broadcast.to(gameData.roomName).emit("updated", updateInfo);
-        })
+            socket.broadcast.to(gameData.roomName).emit(
+                "updated", updateInfo);
+        });
     });
 });
 
