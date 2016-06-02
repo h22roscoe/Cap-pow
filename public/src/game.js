@@ -1,3 +1,10 @@
+// Set up instance of the Quintus engine.
+// Supports .mp3 and .ogg audio files.
+// Add in all the modules we may need using include().
+// Maximise the game to the size of the browser.
+// Turns on default controls and allows touch input with mouse/touch screen.
+// Giving covar roomName = sessionStorage.getItem("roomName")ntrol() a parameter of true will use a joypad instead.
+// Enables sound.
 var Q = window.Q = Quintus({
         audioSupported: ["mp3", "ogg"],
         development: true
@@ -18,23 +25,47 @@ setUpObject = {
     stage: null
 };
 
-var socket = TEST? null : io.connect("cap-pow.herokuapp.com");
-var roomName = sessionStorage.getItem("roomName")
+var files = [
+    "../images/tmptiles.png",
+    "../data/tmplevel.json",
+    "../images/tmpsprites.png",
+    "../data/tmpsprites.json",
+    "../images/tmpbackground.png"
+];
 
-setUpObject.updateCount = function (data) {
-    UiPlayers.innerHTML = "Players: " + data.playerCount;
-};
+// Split up the blocks and sprites from being one long PNG.
+// Load the actual level and run the game.
+Q.load(files.join(','), function () {
+    Q.sheet("tmptiles", "../images/tmptiles.png", {
+        tilew: 32,
+        tileh: 32
+    });
+
+    Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
+    Q.stageScene("tmplevel");
+}, {
+    progressCallback: function(loaded, total) {
+        var element = document.getElementById("loading_progress");
+        element.style.width = Math.floor(loaded / total * 100) + "%";
+    }
+});
+
+// var socket = TEST? null : io.connect("cap-pow.herokuapp.com");
+var roomName = sessionStorage.getItem("roomName")
+var socket = io.connect("/game");
+socket.emit("joinGame", {
+    roomName: roomName
+});
 
 setUpObject.addNewPlayer = function (data) {
     // Set this players unique id
-    setUpObject.selfId = socket.id;
+    setUpObject.selfId = data.playerId;
 
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
         playerId: setUpObject.selfId,
         x: 500,
-        y: 400,
-        socket: socket
+        y: 400
     });
 
     if (setUpObject.stage) {
@@ -88,44 +119,14 @@ setUpObject.updateSpecificPlayerId = function (data) {
     return actor;
 };
 
-// UiPlayers is element in index.html with id "players"
-var UiPlayers = document.getElementById("players");
 var UiScore = document.getElementById("score");
-
-
-//Set up instance of the Quintus engine.
-//Supports .mp3 and .ogg audio files.
-//Add in all the modules we may need using include().
-//Maximise the game to the size of the browser.
-//Turns on default controls and allows touch input with mouse/touch screen.
-//Giving control() a parameter of true will use a joypad instead.
-//Enables sound.
-
-
-console.log("Game: A user connected");
-
-// May not need to wait 1.5 seconds to ensure all js files are loaded,
-// because we are not using a socket.emit here anymore
-setTimeout(function () {
-    setUpObject.addNewPlayer({
-        playerId: IO.socket.id
-    });
-}, 1500);
-
-var files = [
-          "../images/tmptiles.png",
-          "../data/tmplevel.json",
-          "../images/tmpsprites.png",
-          "../data/tmpsprites.json",
-          "../images/tmpbackground.png"
-        ];
 
 //Creating the stage for tmplevel
 Q.scene("tmplevel", function (stage) {
     //Parallax (Background moves as player moves)
     //TODO: Not sure if parallax works with multiple players
     //TODO: Might need foldername/file for each of these assets
-    stage.insert(new Game.Q.Repeater({
+    stage.insert(new Q.Repeater({
         asset: "../images/tmpbackground.png",
         speedX: 0.5,
         speedY: 0.5,
@@ -152,18 +153,6 @@ Q.scene("tmplevel", function (stage) {
     setUp(stage);
 });
 
-// Split up the blocks and sprites from being one long PNG.
-// Load the actual level and run the game.
-Q.load(files.join(','), function () {
-    Q.sheet("tmptiles", "../images/tmptiles.png", {
-        tilew: 32,
-        tileh: 32
-    });
-
-    Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
-    Q.stageScene("tmplevel");
-});
-
 function updatePoints() {
     if (setUpObject.flag.p.shouldUpdatePoints) {
         setUpObject.player.p.gamePoints++;
@@ -174,10 +163,7 @@ function updatePoints() {
 function setUp(stage) {
     setUpObject.stage = stage;
 
-    // Update the playerCount displayed (in index.html) when
-    // the playerCount changes
-    socket.on("count", setUpObject.updateCount);
-
+    socket.on("connected", setUpObject.addNewPlayer);
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
 }

@@ -1,16 +1,16 @@
 var Room = {
     init: function () {
-        Room.socket = JSON.parse(sessionStorage.getItem("socket"));
+        Room.socket = io.connect("/room");
         Room.setupListeners();
+        Room.socket.emit("joinRoom", {
+            roomName: sessionStorage.getItem("roomName")
+        });
     },
 
     setupListeners: function () {
         Room.socket.on("playerLeftRoom", Room.playerLeftRoom);
         Room.socket.on("playerJoinedRoom", Room.playerJoinedRoom);
-        Room.socket.on("countDown".Room.countDown);
-
-        //For Testing
-        Room.socket.broadcast.emit("startGame");
+        Room.socket.on("countDown", Room.countDown);
     },
 
 
@@ -28,6 +28,7 @@ var Room = {
         //Change timer value on document using data.timerValue
 
     }
+
 }
 
 Room.init();

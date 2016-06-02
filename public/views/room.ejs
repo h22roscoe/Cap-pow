@@ -24,10 +24,27 @@
             <a href="/lobby" class="btn btn-default btn-sm">Exit</a>
         </div>
         <div class="col-lg-12 text-center">
-            <button>
+            <button id="countdown">
                 START THE GAME!
             </button>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 id="count"></h1>
+                </div>
+            </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $("#countdown").click(function () {
+                Room.socket.emit("countDown", {
+                    roomName: sessionStorage.getItem("roomName")
+                });
+
+                window.document.location = "/game";
+            });
+        });
+    </script>
 </body>
 </html>

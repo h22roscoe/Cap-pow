@@ -27,7 +27,7 @@ Q.Sprite.extend("Player", {
 
     //TODO: Add event driven stuff (Collisions, down to go through door, etc)
     step: function (dt) {
-        this.p.socket.emit("update", {
+        socket.emit("update", {
             playerId: this.p.playerId,
             x: this.p.x,
             y: this.p.y,

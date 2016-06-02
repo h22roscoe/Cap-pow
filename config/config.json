@@ -7,5 +7,14 @@
         "port": 5432,
         "dialect": "postgres",
         "ssl": true
+    },
+    "production": {
+        "database": "d9cipg8t3q8pu2",
+        "username": "fbqlonrijrmpwe",
+        "password": "irYdc-vj42ES0_GO6WXZfOIxTd",
+        "host": "ec2-54-228-226-93.eu-west-1.compute.amazonaws.com",
+        "port": 5432,
+        "dialect": "postgres",
+        "ssl": true
     }
 }
