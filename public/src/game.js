@@ -17,8 +17,13 @@ setUpObject = {
     stage: null
 };
 
-var socket = io.connect(https://localhost:8080);
+//
 var roomName = sessionStorage.getItem("roomName")
+var socket = io.connect("http://localhost:8080/game");
+socket.emit("joinGame", {
+    roomName: roomName
+});
+
 
 setUpObject.updateCount = function (data) {
     UiPlayers.innerHTML = "Players: " + data.playerCount;
@@ -97,19 +102,8 @@ var UiScore = document.getElementById("score");
 //Add in all the modules we may need using include().
 //Maximise the game to the size of the browser.
 //Turns on default controls and allows touch input with mouse/touch screen.
-//Giving control() a parameter of true will use a joypad instead.
+//Giving covar roomName = sessionStorage.getItem("roomName")ntrol() a parameter of true will use a joypad instead.
 //Enables sound.
-
-
-console.log("Game: A user connected");
-
-// May not need to wait 1.5 seconds to ensure all js files are loaded,
-// because we are not using a socket.emit here anymore
-setTimeout(function () {
-    setUpObject.addNewPlayer({
-        playerId: IO.socket.id
-    });
-}, 1500);
 
 var files = [
           "../images/tmptiles.png",
@@ -171,13 +165,14 @@ function updatePoints() {
 },
 
 // setUp deals with communication over the socket
-function updatePoints(stage) {
+function setUp(stage) {
     setUpObject.stage = stage;
 
     // Update the playerCount displayed (in index.html) when
     // the playerCount changes
     socket.on("count", setUpObject.updateCount);
 
+    socket.on("connected", setUpObject.addNewPlayer);
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
 }

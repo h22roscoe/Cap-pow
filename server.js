@@ -15,8 +15,9 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var session = require("express-session");
 
-var gameNsp = io.of('/game')
-var roomNsp = io.of('/room')
+var roomNsp = io.of("/room");
+var gameNsp = io.of("/game");
+
 // pass passport for configuration
 require("./config/passport")(passport);
 
@@ -61,9 +62,25 @@ var route = require("./app/routes");
 route(app, passport);
 
 // Whenever a user connects set up default event listeners.
-io.on("connection", function (socket) {
+roomNsp.on("connection", function (socket) {
     console.log("Setup: A user connected");
-    rooms(io, socket);
+    rooms(roomNsp, gameNsp, socket);
+});
+
+gameNsp.on("connection", function (socket) {
+    console.log("Game: A user connected");
+
+    socket.on("joinGame", function (gameData) {
+        socket.join(gameData.roomName);
+
+        setInterval(function () {
+            socket.emit("connected");
+        }, 1500);
+
+        socket.on("update", function (updateInfo) {
+            socket.broadcast.to(gameData.roomName).emit("updated", updateInfo);
+        })
+    });
 });
 
 models.sequelize.sync().then(function () {

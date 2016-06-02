@@ -1,10 +1,10 @@
-var io;
-var gameSocket;
+var roomSocket;
 var playerCount = 0;
 var MAX_PLAYERS = 4;
 var MIN_PLAYERS = 2;
-var roomNsp = io.of('/room');
-var gameNsp = io.of('/game');
+
+//splits these both into rooms using roomName
+
 
 /*
     PLAYER ACTIONS
@@ -19,10 +19,10 @@ function joinRoom(data) {
     var sock = this;
 
     if (playerCount < MAX_PLAYERS) {
-        data.playerCount = ++playerCount;
+        playerCount++;
         sock.join(data.roomName);
         //tell host a player has joined so it can
-        roomNsp.in(data.roomName).emit("playerJoinedRoom", data);
+        roomNsp.in(data.roomName).emit("playerJoinedRoom", {});
     } else {
         //stop being allowed to add players
     }
@@ -37,10 +37,10 @@ function leaveRoom(data) {
     this.leave(data.roomName);
 
     // Tell all players someone has left
-    if (playerCount === 1) {
-        this.broadcast.to(data.roomName).emit("playerLeftRoom", {
-            playerCount: --playerCount
-        });
+    if (playerCount !== 1) {
+        this.broadcast.to(data.roomName).emit("playerLeftRoom", {});
+    } else {
+        //don't need to broadcast as no one in room, remove room from db
     }
     // Render the lobby screen again
 }
@@ -78,29 +78,29 @@ function startCountDown(data) {
     while (time >= 0) {
 
         var id = setTimeout(function () {
-            io.sockets.in(data.roomName).emit("countDown", {
+            roomSocket.to.(data.roomName).emit("countDown", {
                 time: time--
             });
         }, 1000);
     };
 
-    
-    gameNsp.in()
+
         // Will create quintus engine for each player and render their screen
         // to the game screen html or put a start game button which links to game
 }
 
-module.exports = function (socketio, socket) {
-    io = socketio;
-    gameSocket = socket;
+module.exports = function (roomio, roomSocket) {
+    roomNsp = roomio;
+    roomSocket = roomSocket;
 
     // Host Events
     //Emitted when the create button is pressed, will call this function and then redirect to 'in lobby' page
-    gameSocket.on("createNewRoom", createNewRoom);
+    roomSocket.on("createNewRoom", createNewRoom);
     //Emitted when start button pressed (this only shows to host when they are in lobby), calls function and then redirects to game
-    gameSocket.on("countDownNow", startCountDown);
+    roomSocket.on("countDownNow", startCountDown);
 
     // Player Events
-    gameSocket.on("joinRoom", joinRoom);
-    gameSocket.on("leaveRoom", leaveRoom);
+    roomSocket.on("joinRoom", joinRoom);
+    roomSocket.on("leaveRoom", leaveRoom);
+
 };
