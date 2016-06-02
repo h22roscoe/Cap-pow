@@ -1,6 +1,6 @@
 var Room = {
     init: function () {
-        Room.socket = io.connect("https://localhost/8080/room");
+        Room.socket = io.connect("/room");
         Room.setupListeners();
         Room.socket.emit("joinRoom", {
             roomName: sessionStorage.getItem("roomName")
@@ -10,7 +10,7 @@ var Room = {
     setupListeners: function () {
         Room.socket.on("playerLeftRoom", Room.playerLeftRoom);
         Room.socket.on("playerJoinedRoom", Room.playerJoinedRoom);
-        Room.socket.on("countDown".Room.countDown);
+        Room.socket.on("countDown", Room.countDown);
     },
 
 

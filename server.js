@@ -66,7 +66,7 @@ route(app, passport);
 // Whenever a user connects set up default event listeners.
 roomNsp.on("connection", function (socket) {
     console.log("Setup: A user connected");
-    rooms(roomNsp, gameNsp, socket);
+    rooms(roomNsp, socket);
 });
 
 gameNsp.on("connection", function (socket) {
@@ -75,9 +75,9 @@ gameNsp.on("connection", function (socket) {
     socket.on("joinGame", function (gameData) {
         socket.join(gameData.roomName);
 
-        setInterval(function () {
-            socket.emit("connected");
-        }, 1500);
+        socket.emit("connected", {
+            playerId: socket.id
+        });
 
         socket.on("update", function (updateInfo) {
             socket.broadcast.to(gameData.roomName).emit("updated", updateInfo);

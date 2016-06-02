@@ -27,21 +27,20 @@ setUpObject = {
 
 // var socket = TEST? null : io.connect("cap-pow.herokuapp.com");
 var roomName = sessionStorage.getItem("roomName")
-var socket = io.connect("http://localhost:8080/game");
+var socket = io.connect("/game");
 socket.emit("joinGame", {
     roomName: roomName
 });
 
 setUpObject.addNewPlayer = function (data) {
     // Set this players unique id
-    setUpObject.selfId = socket.id;
+    setUpObject.selfId = data.playerId;
 
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
         playerId: setUpObject.selfId,
         x: 500,
-        y: 400,
-        socket: socket
+        y: 400
     });
 
     if (setUpObject.stage) {
@@ -102,7 +101,7 @@ Q.scene("tmplevel", function (stage) {
     //Parallax (Background moves as player moves)
     //TODO: Not sure if parallax works with multiple players
     //TODO: Might need foldername/file for each of these assets
-    stage.insert(new Game.Q.Repeater({
+    stage.insert(new Q.Repeater({
         asset: "../images/tmpbackground.png",
         speedX: 0.5,
         speedY: 0.5,

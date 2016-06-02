@@ -57,15 +57,15 @@ function startCountDown(data) {
 
     //this function may be able to be put straight into the button event
     var time = 5;
-    while (time >= 0) {
+    var id = setInterval(function () {
+        roomNsp.to(data.roomName).emit("countDown", {
+            time: time--
+        });
 
-        var id = setTimeout(function () {
-            roomSocket.to.(data.roomName).emit("countDown", {
-                time: time--
-            });
-        }, 1000);
-    };
-
+        if (time <= 0) {
+            clearInterval(id);
+        }
+    }, 1000);
 
     // Will create quintus engine for each player and render their screen
     // to the game screen html or put a start game button which links to game
@@ -76,9 +76,7 @@ module.exports = function (roomio, roomSocket) {
     roomSocket = roomSocket;
 
     // Host Events
-    //Emitted when the create button is pressed, will call this function and then redirect to 'in lobby' page
-    roomSocket.on("createNewRoom", createNewRoom);
-    //Emitted when start button pressed (this only shows to host when they are in lobby), calls function and then redirects to game
+    // Emitted when start button pressed (this only shows to host when they are in lobby), calls function and then redirects to game
     roomSocket.on("countDown", startCountDown);
 
     // Player Events
