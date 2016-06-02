@@ -9,7 +9,6 @@
         "ssl": true
     },
     "production": {
-        "development": {
         "database": "d9cipg8t3q8pu2",
         "username": "fbqlonrijrmpwe",
         "password": "irYdc-vj42ES0_GO6WXZfOIxTd",
