@@ -45,7 +45,7 @@
                     </tbody>
                 </table>
                 <hr>
-                <a href="/lobby" style="color:black"> <span class="fa fa-refresh"></span> Refresh</a>
+                <a href="/lobby" style="color: black"> <span class="fa fa-refresh"></span> Refresh</a>
             </div>
 
             <br>
@@ -93,13 +93,18 @@
                         var str = "";
 
                         for (var i = 0; i < rooms.length; i++) {
-                            str += "<tr class='clickable-row' data-url='/room/" + rooms[i].name + "'>";
+                            str += "<tr>";
                             str += "<td>" + rooms[i].name + "</td>";
                             str += "<td>" + rooms[i].players + "</td>";
                             str += "</tr>";
                         }
 
                         $("#rooms").html(str);
+
+                        for (var i = 1; i < rooms.length + 1; i++) {
+                            $("tr").eq(i).addClass("clickable-row")
+                                .attr("data-url", "/room/" + rooms[i - 1].name);
+                        }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("error " + textStatus + " " + errorThrown);
@@ -107,10 +112,15 @@
                 });
             }, 15000);
 
-            $(".clickable-row").click(function () {
+            $(".clickable-row").css('cursor', 'pointer').click(function () {
                 window.document.location = $(this).data("url");
             });
-            $('.clickable-row').css('cursor', 'pointer');
+        });
+
+        $(document).ajaxSuccess(function () {
+            $(".clickable-row").css('cursor', 'pointer').click(function () {
+                window.document.location = $(this).data("url");
+            });
         });
     </script>
 </body>
