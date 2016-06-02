@@ -29,9 +29,9 @@ module.exports = function (app, passport) {
 
     // Process the login form
     app.post("/login", passport.authenticate("local-login", {
-        successRedirect : "/lobby",
-        failureRedirect : "/login",
-        failureFlash : true
+        successRedirect: "/lobby",
+        failureRedirect: "/login",
+        failureFlash: true
     }));
 
     // SIGNUP
@@ -45,9 +45,9 @@ module.exports = function (app, passport) {
 
     // Process the signup form
     app.post("/signup", passport.authenticate("local-signup", {
-        successRedirect : "/lobby",
-        failureRedirect : "/signup",
-        failureFlash : true
+        successRedirect: "/lobby",
+        failureRedirect: "/signup",
+        failureFlash: true
     }));
 
     // PROFILE SECTION -- POSSIBLY TEMPORARY ONLY
@@ -112,17 +112,35 @@ module.exports = function (app, passport) {
             where: {
                 username: req.user.username
             }
+        }).then(function () {
+            models.room.update({
+                players: models.sequelize.literal("players + 1")
+            }, {
+                where: {
+                    id: req.params.roomname
+                }
+            });
+        }).then(function () {
+            models.users.findAll({
+                where: {
+                    roomId: req.params.roomname
+                }
+            }).then(function (users) {
+                res.render("room", {
+                    roomname: req.params.roomname,
+                    players: users
+                });
+            });
         });
+    });
 
-        models.room.update({
-            players: models.sequelize.literal("players + 1")
-        }, {
+    app.get("/room/:roomname/data", function (req, res) {
+        models.users.findAll({
             where: {
-                id: req.params.roomname
+                roomId: req.params.roomname
             }
-        });
-        res.render("room", {
-            roomname: req.params.roomname
+        }).then(function (users) {
+            res.json(users);
         });
     });
 

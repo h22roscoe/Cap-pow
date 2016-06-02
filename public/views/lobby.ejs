@@ -50,11 +50,11 @@
                         <%= message %>
                     </div>
                 <% } %>
-                <form action="/lobby" method="post">
+                <form id="roomform" action="/lobby" method="post">
                     <label>Create your own</label>
                     <input type="text" class="form-control" name="roomname">
                     <br>
-                    <button type="submit" class="btn btn-warning btn-md">Create Room</button>
+                    <button id="create" type="submit" class="btn btn-warning btn-md">Create Room</button>
                 </form>
 
                 <hr>
@@ -74,7 +74,7 @@
         $(document).ready(function() {
             setInterval(function () {
                 $.ajax({
-                    url: "http://localhost:8080/lobby/data",
+                    url: "/lobby/data",
                     dataType: "json",
                     cache: false,
                     timeout: 5000,
@@ -99,11 +99,15 @@
                         alert("error " + textStatus + " " + errorThrown);
                     }
                 });
-            }, 15000);
+            }, 2000);
 
             $(".clickable-row").css('cursor', 'pointer').click(function () {
                 sessionStorage.setItem("roomName", $(this).data("url").substring(6));
                 window.document.location = $(this).data("url");
+            });
+
+            $("#create").click(function () {
+                sessionStorage.setItem("roomName", $('input[name="roomname"]').val());
             });
         });
 
