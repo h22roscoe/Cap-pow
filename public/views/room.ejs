@@ -29,7 +29,7 @@
 
             <div class="col-sm-8 text-center">
                 <!-- IF WE WERE DOING EJS HERE -->
-                <table class="table table-hover table-responsive">
+                <table class="table table-responsive">
                     <thead>
                         <th align="center">Players</th>
                         <th align="center">Total score</th>
@@ -59,14 +59,7 @@
     </div>
     <script>
         $(document).ready(function () {
-            $("#countdown").click(function () {
-                Room.socket.emit("countDown", {
-                    roomName: sessionStorage.getItem("roomName")
-                });
-
-                // Should not do until countdown finished (could happen server side)
-                window.document.location = "/game";
-            });
+            $("#countdown").prop("disabled", true);
 
             setInterval(function () {
                 $.ajax({
@@ -85,6 +78,16 @@
                         }
 
                         $("#rooms").html(str);
+
+                        // MAX_PLAYERS = 4
+                        if (players.length === 4) {
+                            $("#countdown").prop("disabled", false)
+                                .click(function () {
+                                    Room.socket.emit("countDown", {
+                                        roomName: sessionStorage.getItem("roomName")
+                                    });
+                                });
+                        }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("error " + textStatus + " " + errorThrown);

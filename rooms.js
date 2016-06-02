@@ -48,7 +48,7 @@ function startCountDown(data) {
             time: time--
         });
 
-        if (time <= 0) {
+        if (time < 0) {
             clearInterval(id);
         }
     }, 1000);

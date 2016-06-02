@@ -1,36 +1,21 @@
 var Room = {
     init: function () {
         Room.socket = io.connect("/room");
-        Room.setupListeners();
+        Room.socket.on("countDown", Room.countDown);
         Room.socket.emit("joinRoom", {
             roomName: sessionStorage.getItem("roomName")
         });
     },
 
-    setupListeners: function () {
-        Room.socket.on("playerLeftRoom", Room.playerLeftRoom);
-        Room.socket.on("playerJoinedRoom", Room.playerJoinedRoom);
-        Room.socket.on("countDown", Room.countDown);
-    },
-
-
-    playerJoinedRoom: function (data) {
-        //update the room screen with the new number of players
-        //update the room screen with another username
-    },
-
-    leaveRoom: function (data) {
-        //update the room screen with the new number of players
-        //update the room screen with another username
-    },
-
     countDown: function (data) {
-        //Change timer value on document using data.timerValue
-
+        //Change timer value on document using data.time
+        if (data.time) {
+            // Prefer this to be a pop up box at some point
+            $("#count").text(data.time + " seconds to go!");
+        } else {
+            window.document.location = "/game";
+        }
     }
-
 }
 
 Room.init();
-
-
