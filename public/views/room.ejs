@@ -7,18 +7,17 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <style>
-        body {
-            padding-top: 80px;
-            word-wrap: break-word;
-        }
-
-    </style>
+    <link href="../css/login.css" rel="stylesheet">
 </head>
 
 <body>
     <script src="../src/room.js"></script>
     <div class="container">
+
+        <div id="logo">
+                <img src="../css/images/logo.png"/>
+        </div>
+
         <div class="page-header text-center">
             <h1><span class="fa fa-anchor"></span> Room: <%= roomname %></h1>
             <a href="/lobby" class="btn btn-default btn-sm">Exit</a>
