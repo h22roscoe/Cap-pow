@@ -1,3 +1,10 @@
+// Set up instance of the Quintus engine.
+// Supports .mp3 and .ogg audio files.
+// Add in all the modules we may need using include().
+// Maximise the game to the size of the browser.
+// Turns on default controls and allows touch input with mouse/touch screen.
+// Giving covar roomName = sessionStorage.getItem("roomName")ntrol() a parameter of true will use a joypad instead.
+// Enables sound.
 var Q = window.Q = Quintus({
         audioSupported: ["mp3", "ogg"],
         development: true
@@ -24,11 +31,6 @@ var socket = io.connect("http://localhost:8080/game");
 socket.emit("joinGame", {
     roomName: roomName
 });
-
-
-setUpObject.updateCount = function (data) {
-    UiPlayers.innerHTML = "Players: " + data.playerCount;
-};
 
 setUpObject.addNewPlayer = function (data) {
     // Set this players unique id
@@ -93,26 +95,7 @@ setUpObject.updateSpecificPlayerId = function (data) {
     return actor;
 };
 
-// UiPlayers is element in index.html with id "players"
-var UiPlayers = document.getElementById("players");
 var UiScore = document.getElementById("score");
-
-
-//Set up instance of the Quintus engine.
-//Supports .mp3 and .ogg audio files.
-//Add in all the modules we may need using include().
-//Maximise the game to the size of the browser.
-//Turns on default controls and allows touch input with mouse/touch screen.
-//Giving covar roomName = sessionStorage.getItem("roomName")ntrol() a parameter of true will use a joypad instead.
-//Enables sound.
-
-var files = [
-          "../images/tmptiles.png",
-          "../data/tmplevel.json",
-          "../images/tmpsprites.png",
-          "../data/tmpsprites.json",
-          "../images/tmpbackground.png"
-        ];
 
 //Creating the stage for tmplevel
 Q.scene("tmplevel", function (stage) {
@@ -146,6 +129,14 @@ Q.scene("tmplevel", function (stage) {
     setUp(stage);
 });
 
+var files = [
+    "../images/tmptiles.png",
+    "../data/tmplevel.json",
+    "../images/tmpsprites.png",
+    "../data/tmpsprites.json",
+    "../images/tmpbackground.png"
+];
+
 // Split up the blocks and sprites from being one long PNG.
 // Load the actual level and run the game.
 Q.load(files.join(','), function () {
@@ -167,10 +158,6 @@ function updatePoints() {
 // setUp deals with communication over the socket
 function setUp(stage) {
     setUpObject.stage = stage;
-
-    // Update the playerCount displayed (in index.html) when
-    // the playerCount changes
-    socket.on("count", setUpObject.updateCount);
 
     socket.on("connected", setUpObject.addNewPlayer);
     // Updates the player (actor) w/ playerId who just asked to be updated
