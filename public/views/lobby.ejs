@@ -2,10 +2,11 @@
 <html>
 
 <head>
-    <title>Node Authentication</title>
+    <title>Cap-pow! Lobby</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <style>
         body {
             padding-top: 80px;
@@ -16,95 +17,105 @@
 </head>
 
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js"></script>
-    
     <div class="container">
         <div class="page-header text-center">
-            <h1><span class="fa fa-anchor"></span> Lobby</h1>
-            <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-        </div>
-        <div class="row">
-            <!-- LOCAL INFORMATION -->
-            <div class="col-sm-12">
-                <div class="well">
-                    <h3>
-                        <span class="fa fa-user"></span> Local
-                    </h3>
-                    <p>
-                        <strong>username</strong>:
-                        <%= user.username %>
-                            <br>
-                            <strong>password</strong>:
-                            <%= user.password %>
-                    </p>
-                </div>
-            </div>
+            <h1><span class="fa fa-list-ul"></span> Lobby</h1>
         </div>
 
-        <!-- GAME ROOMS LIST -->
         <div class="row">
-            <p id="test"></p>
-            <div class="col-md-12 text-center">
+            <!-- GAME ROOMS LIST -->
+
+            <div class="col-sm-8 text-center">
+                <!-- IF WE WERE DOING EJS HERE -->
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <th align="center">Room Name</th>
+                        <th align="center"># Players</th>
+                    </thead>
+                    <tbody id="rooms">
+                        <% if (rooms) { %>
+                            <% for (var i = 0; i < rooms.length; i++) { %>
+                                <tr class="clickable-row" data-url="/room/<%= rooms[i].name %>">
+                                    <td><%= rooms[i].name %></td>
+                                    <td><%= rooms[i].players %></td>
+                                </tr>
+                            <% } %>
+                        <% } %>
+                    </tbody>
+                </table>
+                <hr>
+                <a href="/lobby" style="color: black"> <span class="fa fa-refresh"></span> Refresh</a>
+            </div>
+
+            <div class="col-sm-4 text-center">
                 <% if (message) { %>
                     <div class="alert alert-danger">
                         <%= message %>
                     </div>
-                    <% } %>
+                <% } %>
+                <form action="/lobby" method="post">
+                    <label>Create your own</label>
+                    <input type="text" class="form-control" name="roomname">
+                    <br>
+                    <button type="submit" class="btn btn-warning btn-md">Create Room</button>
+                </form>
 
-                        <form action="/lobby" method="post">
-                            <label>Create your own</label>
-                            <input type="text" class="form-control" name="roomname">
-                            <br>
-                            <button type="submit" class="btn btn-warning btn-lg">Create Room</button>
-                        </form>
+                <hr>
 
-                        <br>
-
-                        <a href="/lobby" class="btn btn-default btn-sm">Refresh</a>
-                        <h4>The rooms will display here.</h4>
-
-                        <!-- IF WE WERE DOING EJS HERE -->
-                        <ul>
-                            <% for (var i = 0; i < rooms.length; i++) { %>
-                                <li>
-                                    <a class="btn btn-default btn-sm" href="/room/<%= rooms[i].name %>">
-                                        <%= rooms[i].name %>:
-                                            <%= rooms[i].players %> <i>players</i>
-                                    </a>
-                                </li>
-                                <% } %>
-                        </ul>
+                <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="span12 text-center">
+                <p><span class="fa fa-blind"></span> Cap-pow 2016</p>
             </div>
         </div>
     </div>
     <script>
         $(document).ready(function() {
-            $.ajax({
-                url: "http://localhost:8080/lobby",
-                type: "GET",
-                dataType: "json",
-                data: {
-                    objectData: someObject
-                },
-                cache: false,
-                timeout: 5000,
-                success: function(data) {
-                    $("#test").append(data);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("error " + textStatus + " " + errorThrown);
-                }
-            });
+            setInterval(function () {
+                $.ajax({
+                    url: "http://localhost:8080/lobby/data",
+                    dataType: "json",
+                    cache: false,
+                    timeout: 5000,
+                    success: function(rooms) {
+                        var str = "";
 
-      //need too make this correct syntax
-            $("li").click(function() {
-                   sessionStorage.set(roomName, rooms[i].name)
-            });
-            $("form-control").click(function() {
-                   sessionStorage.set(roomName, roomname)
+                        for (var i = 0; i < rooms.length; i++) {
+                            str += "<tr>";
+                            str += "<td>" + rooms[i].name + "</td>";
+                            str += "<td>" + rooms[i].players + "</td>";
+                            str += "</tr>";
+                        }
+
+                        $("#rooms").html(str);
+
+                        for (var i = 1; i < rooms.length + 1; i++) {
+                            $("tr").eq(i).addClass("clickable-row")
+                                .attr("data-url", "/room/" + rooms[i - 1].name);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("error " + textStatus + " " + errorThrown);
+                    }
+                });
+            }, 15000);
+
+            $(".clickable-row").css('cursor', 'pointer').click(function () {
+                sessionStorage.setItem("roomName", $(this).data("url").substring(6));
+                window.document.location = $(this).data("url");
             });
         });
 
+        $(document).ajaxSuccess(function () {
+            $(".clickable-row").css('cursor', 'pointer').click(function () {
+                sessionStorage.setItem("roomName", $(this).data("url").substring(6));
+                window.document.location = $(this).data("url");
+            });
+        });
     </script>
 </body>
 

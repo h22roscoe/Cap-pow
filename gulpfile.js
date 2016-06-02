@@ -8,6 +8,7 @@ gulp.task('default', function () {
                      './public/src/game.js',
                      '!./public/src/test.js',
                      '!./public/src/lobby.js',
+                     '!./public/src/room.js',
                      './public/src/*.js'])
         .pipe(concat('all.min.js'))
         //.pipe(streamify(uglify()))
@@ -25,6 +26,8 @@ gulp.task('testing', function () {
     return gulp.src(['./public/lib/quintus-all.js',
                      './public/src/test.js',
                      './public/src/game.js',
+                     '!./public/src/lobby.js',
+                     '!./public/src/room.js',
                      './public/src/*.js'])
         .pipe(concat('alltest.min.js'))
         //.pipe(streamify(uglify()))

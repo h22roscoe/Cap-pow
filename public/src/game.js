@@ -9,15 +9,16 @@ var Q = window.Q = Quintus({
     .controls().touch()
     .enableSound();
 
-var Q.SPRITE_PLAYER = 64;
-var Q.SPRITE_FLAG = 128;
-var Q.SPRITE_POWERUP = 256;
+Q.SPRITE_PLAYER = 64;
+Q.SPRITE_FLAG = 128;
+Q.SPRITE_POWERUP = 256;
+
 var actors = [];
 setUpObject = {
     stage: null
 };
 
-//
+// var socket = TEST? null : io.connect("cap-pow.herokuapp.com");
 var roomName = sessionStorage.getItem("roomName")
 var socket = io.connect("http://localhost:8080/game");
 socket.emit("joinGame", {
@@ -156,13 +157,12 @@ Q.load(files.join(','), function () {
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.stageScene("tmplevel");
 });
-},
 
 function updatePoints() {
     if (setUpObject.flag.p.shouldUpdatePoints) {
         setUpObject.player.p.gamePoints++;
     }
-},
+}
 
 // setUp deals with communication over the socket
 function setUp(stage) {

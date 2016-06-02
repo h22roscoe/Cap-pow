@@ -18,6 +18,10 @@ module.exports = function (sequelize, DataTypes) {
             validate: {
                 notEmpty: true
             }
+        },
+        roomId: {
+            type: DataTypes.STRING,
+            allowNull: true
         }
     }, {
         classMethods: {
