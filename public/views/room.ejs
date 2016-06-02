@@ -15,12 +15,12 @@
     <div class="container">
 
         <div id="logo">
-                <img src="../css/images/logo.png"/>
+            <img src="../css/images/logo.png"/>
         </div>
 
         <div class="page-header text-center">
-            <h1><span class="fa fa-anchor"></span> Room: <%= roomname %></h1>
-            <a href="/lobby" class="btn btn-default btn-sm">Exit</a>
+            <h1><span class="fa fa-users"></span> <%= roomname %></h1>
+            <a href="/leave/<%= roomname %>" class="btn btn-default btn-sm">Exit</a>
         </div>
         <div class="col-lg-12 text-center">
             <button id="countdown">

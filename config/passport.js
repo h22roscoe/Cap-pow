@@ -5,7 +5,7 @@ var models = require('../app/models');
 function findUser(req, username, password, done) {
     "use strict";
 
-    models.user.find({
+    models.users.find({
         where: {
             "username": username
         }
@@ -17,7 +17,7 @@ function findUser(req, username, password, done) {
                           "That username is already taken."));
         } else {
             // If there is no user with that username create the user
-            models.user.create({
+            models.users.create({
                     "username": username,
                     "password": password
             }).then(function (user) {
@@ -34,7 +34,7 @@ function findUser(req, username, password, done) {
 function findUserLogin(req, username, password, done) {
     "use strict";
 
-    models.user.find({
+    models.users.find({
         where: {
             "username": username,
             "roomId": null
@@ -47,7 +47,7 @@ function findUserLogin(req, username, password, done) {
         }
 
         // If the user is found but the password is wrong
-        if (!models.user.validPassword(password, user.password)) {
+        if (!models.users.validPassword(password, user.password)) {
             return done(null, false,
                 req.flash("loginMessage", "Oops! Wrong password."));
         }
@@ -73,7 +73,7 @@ module.exports = function (passport) {
 
     // Used to deserialize the user
     passport.deserializeUser(function (user, done) {
-        models.user.find({
+        models.users.find({
             where: {
                 "id": user.id
             }

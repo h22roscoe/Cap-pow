@@ -102,16 +102,34 @@ module.exports = function (app, passport) {
                 name: req.body.roomname
             }
         });
-
-        // Refresh rooms (May be done by AJAX)
     });
 
     // ROOM
     app.get("/room/:roomname", isLoggedIn, function (req, res) {
+        models.room.update({
+            players: models.sequelize.literal('players + 1')
+        }, {
+            where: {
+                id: req.params.roomname
+            }
+        })
+
         res.render("room", {
             roomname: req.params.roomname
         });
     });
+
+    app.get("/leave/:roomname", isLoggedIn, function (req, res) {
+        models.room.update({
+            players: models.sequelize.literal('players - 1')
+        }, {
+            where: {
+                id: req.params.roomname
+            }
+        });
+
+        res.redirect("/lobby");
+    })
 
     // LOGOUT
     app.get("/logout", function (req, res) {
@@ -120,7 +138,7 @@ module.exports = function (app, passport) {
     });
 
     // GAME
-    app.get("/game", function (req, res) {
+    app.get("/game", isLoggedIn, function (req, res) {
         res.render("game", {});
     });
 };
