@@ -40,8 +40,9 @@ function leaveRoom(data) {
     if (playerCount !== 1) {
         this.broadcast.to(data.roomName).emit("playerLeftRoom", {});
     } else {
-        //don't need to broadcast as no one in room, remove room from db
+        // Don't need to broadcast as no one in room, remove room from db
     }
+
     // Render the lobby screen again
 }
 

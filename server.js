@@ -75,9 +75,12 @@ gameNsp.on("connection", function (socket) {
     socket.on("joinGame", function (gameData) {
         socket.join(gameData.roomName);
 
-        socket.emit("connected", {
-            playerId: socket.id
-        });
+        // PUT A LOAD SCREEN HERE?
+        setTimeout(function () {
+            socket.emit("connected", {
+                playerId: socket.id
+            });
+        }, 1000);
 
         socket.on("update", function (updateInfo) {
             socket.broadcast.to(gameData.roomName).emit("updated", updateInfo);

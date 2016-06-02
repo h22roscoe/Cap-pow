@@ -43,6 +43,11 @@ Q.load(files.join(','), function () {
 
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.stageScene("tmplevel");
+}, {
+    progressCallback: function(loaded, total) {
+        var element = document.getElementById("loading_progress");
+        element.style.width = Math.floor(loaded / total * 100) + "%";
+    }
 });
 
 // var socket = TEST? null : io.connect("cap-pow.herokuapp.com");

@@ -8,8 +8,12 @@
                                    user-scalable=0,
                                    minimum-scale=1.0,
                                    maximum-scale=1.0" />
-    <link rel="stylesheet" href="../css/main.css"/>
     <meta name="viewport" content="width=device-width, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css"/>
+
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <title>Cap-pow!</title>
 </head>
@@ -41,12 +45,62 @@
         font-size: 1.5em;
         font-family: inherit;
     }
+
+    #loading {
+      margin: 50px auto;
+      max-width: 1024px;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+
+    div {
+        width: 100px;
+        height; 100px;
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        margin: auto;
+    }
+
+    #loading_container {
+      position: relative;
+      margin: 0 auto;
+      width: 50%;
+      height: 20px;
+      text-align: center;
+      padding-top: 10px;
+    }
+
+    #loading_progress {
+      width: 0%;
+      background-color: red;
+      position: absolute;
+      height: 30px;
+      top: 0px;
+      left: 0px;
+      opacity: 0.4;
+    }
 </style>
 
 <body>
     <!--The current player count displayed inside this span will be changed
         by the javascript when a player connects or disconnects-->
     <span id="score" class="score"></span>
+
+    <div id='loading' style="top: 50%;margin-top: -50px;">
+        <div id='loading_container'>
+            <div id='loading_progress'></div>
+        </div>
+        <br>
+        Loading...
+    </div>
+
     <script src='../build/all.min.js'></script>
 </body>
 
