@@ -39,28 +39,10 @@
             </div>
         </div>
 
-        <!-- GAME ROOMS LIST -->
         <div class="row">
-            <p id="test"></p>
-            <div class="col-md-12 text-center">
-                <% if (message) { %>
-                    <div class="alert alert-danger">
-                        <%= message %>
-                    </div>
-                <% } %>
+            <!-- GAME ROOMS LIST -->
 
-                <form action="/lobby" method="post">
-                    <label>Create your own</label>
-                    <input type="text" class="form-control" name="roomname">
-                    <br>
-                    <button id="create" type="submit" class="btn btn-warning btn-lg">Create Room</button>
-                </form>
-
-                <br>
-
-                <a href="/lobby" class="btn btn-default btn-sm">Refresh</a>
-                <h4>The rooms will display here.</h4>
-
+            <div class="col-sm-8 text-center">
                 <!-- IF WE WERE DOING EJS HERE -->
                 <table class="table table-hover table-responsive">
                     <thead>
@@ -78,6 +60,32 @@
                         <% } %>
                     </tbody>
                 </table>
+
+                <a href="/lobby" class="fa fa-refresh"> Refresh</a>
+            </div>
+
+            <br>
+
+            <div class="col-sm-4 text-center">
+                <% if (message) { %>
+                    <div class="alert alert-danger">
+                        <%= message %>
+                    </div>
+                <% } %>
+
+                <form action="/lobby" method="post">
+                    <label>Create your own</label>
+                    <input type="text" class="form-control" name="roomname">
+                    <br>
+                    <button type="submit" class="btn btn-warning btn-md">Create Room</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <footer>Copyright footer</footer>
             </div>
         </div>
     </div>
@@ -103,24 +111,9 @@
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("error " + textStatus + " " + errorThrown);
-                        console.log(jqXHR);
                     }
                 });
             }, 15000);
-        });
-
-        $("#create").click(function () {
-            Lobby.socket.emit("createNewRoom", {
-            });
-        });
-
-        $(".clickable-row").click(function () {
-            Lobby.socket.emit("joinRoom", {
-                roomName: $(this).data("url").substring(6),
-                playerName: "<%= user.username %>"
-            });
-
-            window.document.location = $(this).data("url");
         });
     </script>
 </body>
