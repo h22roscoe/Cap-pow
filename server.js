@@ -5,7 +5,10 @@ var pg = require("pg");
 var models = require("./app/models");
 var app = express();
 var server = require("http").Server(app);
-var io = require("socket.io")(server);
+var io = require("socket.io")(server, {
+    "pingTimeout": 300000,
+    "pingInterval": 25000
+});
 var rooms = require("./rooms");
 
 io.serveClient(true);
