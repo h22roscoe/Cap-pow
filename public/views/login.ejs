@@ -15,6 +15,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
@@ -37,33 +38,35 @@
 
 
     <div class="container">
-
-        <div id="logo">
-            <img src="../css/images/logo.png" />
-        </div>
-
-        <!-- show any messages that come back with authentication -->
-        <% if (message.length > 0) { %>
-            <div class="alert alert-danger">
-                <%= message %>
+            <div id="logo">
+                <img src="../css/images/logo.png"/>
             </div>
-        <% } %>
 
-        <!-- Change /index to /lobby -->
-        <form class="form-signin" action="/login" method="post">
-            <h2 class="form-signin-heading">Please sign in</h2>
-            <label for="inputUsername" class="sr-only">Username</label>
-            <input type="username" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
-            <!--<div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
-        </div>-->
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        </form>
+            <div class="col-sm-6 col-sm-offset-3">
+            <!-- show any messages that come back with authentication -->
+            <% if (message.length > 0) { %>
+                <div class="alert alert-danger">
+                    <%= message %>
+                </div>
+            <% } %>
 
+            <!-- Change /index to /lobby -->
+            <form class="form-signin" action="/login" method="post">
+                <label for="inputUsername" class="sr-only">Username</label>
+                <input type="username" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+                <br>
+                <!--<div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>-->
+                <button class="btn btn-lg btn-primary btn-block" type="submit"><span class="fa fa-sign-in"></span> Sign in</button>
+                <hr>
+                <p> Don't have an account? <a href="/signup">Sign up here!</a> </p>
+            </form>
+        </div>
     </div>
     <!-- /container -->
 

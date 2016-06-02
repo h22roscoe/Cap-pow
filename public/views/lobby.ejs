@@ -20,23 +20,7 @@
     <script src="../src/lobby.js"></script>
     <div class="container">
         <div class="page-header text-center">
-            <h1><span class="fa fa-anchor"></span> Lobby</h1>
-            <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-        </div>
-        <div class="row">
-            <!-- LOCAL INFORMATION -->
-            <div class="col-sm-12">
-                <div class="well">
-                    <h3>
-                        <span class="fa fa-user"></span> Local
-                    </h3>
-                    <p>
-                        <strong>username</strong>: <%= user.username %>
-                        <br>
-                        <strong>password</strong>: <%= user.password %>
-                    </p>
-                </div>
-            </div>
+            <h1><span class="fa fa-list-ul"></span> Lobby</h1>
         </div>
 
         <div class="row">
@@ -46,8 +30,8 @@
                 <!-- IF WE WERE DOING EJS HERE -->
                 <table class="table table-hover table-responsive">
                     <thead>
-                        <th>Room Name</th>
-                        <th># Players</th>
+                        <th align="center">Room Name</th>
+                        <th align="center"># Players</th>
                     </thead>
                     <tbody id="rooms">
                         <% if (rooms) { %>
@@ -60,8 +44,8 @@
                         <% } %>
                     </tbody>
                 </table>
-
-                <a href="/lobby" class="fa fa-refresh"> Refresh</a>
+                <hr>
+                <a href="/lobby" style="color:black"> <span class="fa fa-refresh"></span> Refresh</a>
             </div>
 
             <br>
@@ -81,11 +65,19 @@
                 </form>
             </div>
         </div>
+        <div class="row text-center">
+            <div class="col-sm-8">
+
+            </div>
+            <div class="col-sm-4">
+                <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+            </div>
+        </div>
     </div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 text-center">
-                <footer>Copyright footer</footer>
+                <footer class="fa fa-blind"> Cap-pow 2016</footer>
             </div>
         </div>
     </div>
@@ -101,7 +93,7 @@
                         var str = "";
 
                         for (var i = 0; i < rooms.length; i++) {
-                            str += "<tr>";
+                            str += "<tr class='clickable-row' data-url='/room/" + rooms[i].name + "'>";
                             str += "<td>" + rooms[i].name + "</td>";
                             str += "<td>" + rooms[i].players + "</td>";
                             str += "</tr>";
@@ -114,6 +106,11 @@
                     }
                 });
             }, 15000);
+
+            $(".clickable-row").click(function () {
+                window.document.location = $(this).data("url");
+            });
+            $('.clickable-row').css('cursor', 'pointer');
         });
     </script>
 </body>
