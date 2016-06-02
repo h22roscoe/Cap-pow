@@ -25,6 +25,26 @@ setUpObject = {
     stage: null
 };
 
+var files = [
+    "../images/tmptiles.png",
+    "../data/tmplevel.json",
+    "../images/tmpsprites.png",
+    "../data/tmpsprites.json",
+    "../images/tmpbackground.png"
+];
+
+// Split up the blocks and sprites from being one long PNG.
+// Load the actual level and run the game.
+Q.load(files.join(','), function () {
+    Q.sheet("tmptiles", "../images/tmptiles.png", {
+        tilew: 32,
+        tileh: 32
+    });
+
+    Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
+    Q.stageScene("tmplevel");
+});
+
 // var socket = TEST? null : io.connect("cap-pow.herokuapp.com");
 var roomName = sessionStorage.getItem("roomName")
 var socket = io.connect("/game");
@@ -126,26 +146,6 @@ Q.scene("tmplevel", function (stage) {
 
     // Set up the socket connections.
     setUp(stage);
-});
-
-var files = [
-    "../images/tmptiles.png",
-    "../data/tmplevel.json",
-    "../images/tmpsprites.png",
-    "../data/tmpsprites.json",
-    "../images/tmpbackground.png"
-];
-
-// Split up the blocks and sprites from being one long PNG.
-// Load the actual level and run the game.
-Q.load(files.join(','), function () {
-    Q.sheet("tmptiles", "../images/tmptiles.png", {
-        tilew: 32,
-        tileh: 32
-    });
-
-    Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
-    Q.stageScene("tmplevel");
 });
 
 function updatePoints() {
