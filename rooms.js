@@ -1,10 +1,12 @@
+// Global variables set at the bottom
 var roomSocket;
+var currentRoom;
+
 var playerCount = 0;
 var MAX_PLAYERS = 4;
 var MIN_PLAYERS = 2;
 
 //splits these both into rooms using roomName
-
 
 /*
     PLAYER ACTIONS
@@ -21,29 +23,12 @@ function joinRoom(data) {
     if (playerCount < MAX_PLAYERS) {
         playerCount++;
         sock.join(data.roomName);
+        currentRoom = data.roomName;
         //tell host a player has joined so it can
-        roomNsp.in(data.roomName).emit("playerJoinedRoom", {});
     } else {
         //stop being allowed to add players
     }
 
-}
-
-// Will remove them from the room and render the list of
-// available rooms again.
-// If last player calls this then remove this room from database.
-function leaveRoom(data) {
-    // Leave from room
-    this.leave(data.roomName);
-
-    // Tell all players someone has left
-    if (playerCount !== 1) {
-        this.broadcast.to(data.roomName).emit("playerLeftRoom", {});
-    } else {
-        // Don't need to broadcast as no one in room, remove room from db
-    }
-
-    // Render the lobby screen again
 }
 
 /*
@@ -63,7 +48,7 @@ function startCountDown(data) {
             time: time--
         });
 
-        if (time <= 0) {
+        if (time < 0) {
             clearInterval(id);
         }
     }, 1000);
@@ -72,7 +57,7 @@ function startCountDown(data) {
     // to the game screen html or put a start game button which links to game
 }
 
-module.exports = function (roomio, roomSocket) {
+module.exports = function (username, roomio, models, roomSocket) {
     roomNsp = roomio;
     roomSocket = roomSocket;
 
@@ -82,6 +67,35 @@ module.exports = function (roomio, roomSocket) {
 
     // Player Events
     roomSocket.on("joinRoom", joinRoom);
-    roomSocket.on("leaveRoom", leaveRoom);
 
+    roomSocket.on("disconnect", function () {
+        console.log("Setup: A user disconnected");
+
+        roomSocket.leave(currentRoom);
+        playerCount--;
+
+        if (playerCount <= 0) {
+            models.room.destroy({
+                where: {
+                    id: currentRoom
+                }
+            });
+        } else {
+            models.users.update({
+                roomId: null
+            }, {
+                where: {
+                    username: username
+                }
+            }).then(function () {
+                models.room.update({
+                    players: models.sequelize.literal("players - 1")
+                }, {
+                    where: {
+                        id: currentRoom
+                    }
+                });
+            });
+        }
+    });
 };

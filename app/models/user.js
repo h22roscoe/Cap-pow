@@ -3,7 +3,7 @@ var bcrypt = require("bcrypt-nodejs");
 module.exports = function (sequelize, DataTypes) {
     "use strict";
 
-    var User = sequelize.define("user", {
+    var User = sequelize.define("users", {
         username: {
             type: DataTypes.STRING,
             unique: true,

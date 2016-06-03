@@ -16,17 +16,40 @@
     <div class="container">
 
         <div id="logo">
-                <img src="../css/images/logo.png"/>
+            <img src="../css/images/logo.png"/>
         </div>
 
         <div class="page-header text-center">
-            <h1><span class="fa fa-anchor"></span> Room: <%= roomname %></h1>
+            <h1><span class="fa fa-users"></span> <%= roomname %></h1>
             <a href="/lobby" class="btn btn-default btn-sm">Exit</a>
         </div>
         <div class="col-lg-12 text-center">
             <button id="countdown">
                 START THE GAME!
             </button>
+
+            <div class="col-sm-8 text-center">
+                <!-- IF WE WERE DOING EJS HERE -->
+                <table class="table table-responsive">
+                    <thead>
+                        <th align="center">Players</th>
+                        <th align="center">Total score</th>
+                    </thead>
+                    <tbody id="players">
+                        <% if (players) { %>
+                            <% for (var i = 0; i < players.length; i++) { %>
+                                <tr>
+                                    <td><%= players[i].username %></td>
+                                    <!-- Should replace password with their total score -->
+                                    <td><%= players[i].pasword %></td>
+                                </tr>
+                            <% } %>
+                        <% } %>
+                    </tbody>
+                </table>
+                <hr>
+                <a href="/room/<%= roomname %>" style="color: black"><span class="fa fa-refresh"></span> Refresh</a>
+            </div>
 
             <div class="row">
                 <div class="col-lg-12">
@@ -37,13 +60,41 @@
     </div>
     <script>
         $(document).ready(function () {
-            $("#countdown").click(function () {
-                Room.socket.emit("countDown", {
-                    roomName: sessionStorage.getItem("roomName")
-                });
+            $("#countdown").prop("disabled", true);
 
-                window.document.location = "/game";
-            });
+            setInterval(function () {
+                $.ajax({
+                    url: "/room/" + sessionStorage.getItem("roomName") +  "/data",
+                    dataType: "json",
+                    cache: false,
+                    timeout: 5000,
+                    success: function(players) {
+                        var str = "";
+
+                        for (var i = 0; i < players.length; i++) {
+                            str += "<tr>";
+                            str += "<td>" + players[i].username + "</td>";
+                            str += "<td>" + players[i].password + "</td>";
+                            str += "</tr>";
+                        }
+
+                        $("#rooms").html(str);
+
+                        // MAX_PLAYERS = 4
+                        if (players.length === 4) {
+                            $("#countdown").prop("disabled", false)
+                                .click(function () {
+                                    Room.socket.emit("countDown", {
+                                        roomName: sessionStorage.getItem("roomName")
+                                    });
+                                });
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("error " + textStatus + " " + errorThrown);
+                    }
+                });
+            }, 2000);
         });
     </script>
 </body>

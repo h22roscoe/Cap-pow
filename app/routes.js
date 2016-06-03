@@ -29,9 +29,9 @@ module.exports = function (app, passport) {
 
     // Process the login form
     app.post("/login", passport.authenticate("local-login", {
-        successRedirect : "/lobby",
-        failureRedirect : "/login",
-        failureFlash : true
+        successRedirect: "/lobby",
+        failureRedirect: "/login",
+        failureFlash: true
     }));
 
     // SIGNUP
@@ -45,9 +45,9 @@ module.exports = function (app, passport) {
 
     // Process the signup form
     app.post("/signup", passport.authenticate("local-signup", {
-        successRedirect : "/lobby",
-        failureRedirect : "/signup",
-        failureFlash : true
+        successRedirect: "/lobby",
+        failureRedirect: "/signup",
+        failureFlash: true
     }));
 
     // PROFILE SECTION -- POSSIBLY TEMPORARY ONLY
@@ -102,14 +102,45 @@ module.exports = function (app, passport) {
                 name: req.body.roomname
             }
         });
-
-        // Refresh rooms (May be done by AJAX)
     });
 
     // ROOM
     app.get("/room/:roomname", isLoggedIn, function (req, res) {
-        res.render("room", {
-            roomname: req.params.roomname
+        models.users.update({
+            roomId: req.params.roomname
+        }, {
+            where: {
+                username: req.user.username
+            }
+        }).then(function () {
+            models.room.update({
+                players: models.sequelize.literal("players + 1")
+            }, {
+                where: {
+                    id: req.params.roomname
+                }
+            });
+        }).then(function () {
+            models.users.findAll({
+                where: {
+                    roomId: req.params.roomname
+                }
+            }).then(function (users) {
+                res.render("room", {
+                    roomname: req.params.roomname,
+                    players: users
+                });
+            });
+        });
+    });
+
+    app.get("/room/:roomname/data", function (req, res) {
+        models.users.findAll({
+            where: {
+                roomId: req.params.roomname
+            }
+        }).then(function (users) {
+            res.json(users);
         });
     });
 
@@ -120,7 +151,7 @@ module.exports = function (app, passport) {
     });
 
     // GAME
-    app.get("/game", function (req, res) {
+    app.get("/game", isLoggedIn, function (req, res) {
         res.render("game", {});
     });
 };

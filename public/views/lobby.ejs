@@ -53,9 +53,10 @@
                 <% } %>
                 <form action="/lobby" method="post">
                     <label>Make your own room!</label>
+
                     <input type="text" class="form-control" name="roomname">
                     <br>
-                    <button type="submit" class="btn btn-warning btn-md">Create Room</button>
+                    <button id="create" type="submit" class="btn btn-warning btn-md">Create Room</button>
                 </form>
 
                 <hr>
@@ -67,7 +68,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="span12 text-center">
-                <footer><span class="fa fa-blind"></span> Cap-pow 2016</footer>
+                <footer><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</footer>
             </div>
         </div>
     </div>
@@ -75,7 +76,7 @@
         $(document).ready(function() {
             setInterval(function () {
                 $.ajax({
-                    url: "http://localhost:8080/lobby/data",
+                    url: "/lobby/data",
                     dataType: "json",
                     cache: false,
                     timeout: 5000,
@@ -92,19 +93,28 @@
                         $("#rooms").html(str);
 
                         for (var i = 1; i < rooms.length + 1; i++) {
-                            $("tr").eq(i).addClass("clickable-row")
-                                .attr("data-url", "/room/" + rooms[i - 1].name);
+                            // MAX_PLAYERS = 4
+                            if (rooms[i - 1].players < 4) {
+                                $("tr").eq(i).addClass("clickable-row")
+                                    .attr("data-url", "/room/" + rooms[i - 1].name);
+                            } else {
+                                $("tr").eq(i).prop("disabled", true);
+                            }
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("error " + textStatus + " " + errorThrown);
                     }
                 });
-            }, 15000);
+            }, 2000);
 
             $(".clickable-row").css('cursor', 'pointer').click(function () {
                 sessionStorage.setItem("roomName", $(this).data("url").substring(6));
                 window.document.location = $(this).data("url");
+            });
+
+            $("#create").click(function () {
+                sessionStorage.setItem("roomName", $('input[name="roomname"]').val());
             });
         });
 
