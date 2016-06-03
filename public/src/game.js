@@ -41,8 +41,6 @@ Q.load(files.join(','), function () {
         tileh: 32
     });
 
-    console.log("hi");
-
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.stageScene("tmplevel");
 }, {
