@@ -122,6 +122,8 @@
             $("#create").click(function() {
                 sessionStorage.setItem("roomName", $('input[name="roomname"]').val());
             });
+
+            ajax();
         });
 
         $(document).ajaxSuccess(function() {
