@@ -2,7 +2,9 @@
 <html>
 
 <head>
-    <title>Cap-pow! <%= roomname %></title>
+    <title>Cap-pow!
+        <%= roomname %>
+    </title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
@@ -15,7 +17,7 @@
     <div class="container">
 
         <div id="logo">
-            <img src="../css/images/logo.png"/>
+            <img src="../css/images/logo.png" />
         </div>
 
         <div class="page-header text-center">
@@ -38,9 +40,13 @@
                         <% if (players) { %>
                             <% for (var i = 0; i < players.length; i++) { %>
                                 <tr>
-                                    <td><%= players[i].username %></td>
+                                    <td>
+                                        <%= players[i].username %>
+                                    </td>
                                     <!-- Should replace password with their total score -->
-                                    <td><%= players[i].pasword %></td>
+                                    <td>
+                                        <%= players[i].pasword %>
+                                    </td>
                                 </tr>
                             <% } %>
                         <% } %>
@@ -58,43 +64,50 @@
         </div>
     </div>
     <script>
-        $(document).ready(function () {
+        function ajax() {
+            $.ajax({
+                url: "/room/" + sessionStorage.getItem("roomName") + "/data",
+                dataType: "json",
+                cache: false,
+                timeout: 5000,
+                success: function(players) {
+                    var str = "";
+
+                    for (var i = 0; i < players.length; i++) {
+                        str += "<tr>";
+                        str += "<td>" + players[i].username + "</td>";
+                        str += "<td>" + players[i].password + "</td>";
+                        str += "</tr>";
+                    }
+
+                    $("#rooms").html(str);
+
+                    // MAX_PLAYERS = 4
+                    if (players.length === 4) {
+                        $("#countdown").prop("disabled", false).click(function() {
+                            Room.socket.emit("countDown", {
+                                roomName: sessionStorage.getItem("roomName")
+                            });
+                        });
+                    } else {
+                        $("#countdown").prop("disabled", true);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("error " + textStatus + " " + errorThrown);
+                }
+            });
+
+            setTimeout(ajax, 2000);
+        }
+
+        $(document).ready(function() {
             $("#countdown").prop("disabled", true);
 
-            setInterval(function () {
-                $.ajax({
-                    url: "/room/" + sessionStorage.getItem("roomName") +  "/data",
-                    dataType: "json",
-                    cache: false,
-                    timeout: 5000,
-                    success: function(players) {
-                        var str = "";
-
-                        for (var i = 0; i < players.length; i++) {
-                            str += "<tr>";
-                            str += "<td>" + players[i].username + "</td>";
-                            str += "<td>" + players[i].password + "</td>";
-                            str += "</tr>";
-                        }
-
-                        $("#rooms").html(str);
-
-                        // MAX_PLAYERS = 4
-                        if (players.length === 4) {
-                            $("#countdown").prop("disabled", false)
-                                .click(function () {
-                                    Room.socket.emit("countDown", {
-                                        roomName: sessionStorage.getItem("roomName")
-                                    });
-                                });
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert("error " + textStatus + " " + errorThrown);
-                    }
-                });
-            }, 2000);
+            ajax();
         });
+
     </script>
 </body>
+
 </html>

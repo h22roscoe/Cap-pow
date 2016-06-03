@@ -13,8 +13,8 @@
 <body>
     <div class="container">
         <div id="logo">
-                <a href="/"><img src="../css/images/logo.png" /></a>
-            </div>
+            <a href="/"><img src="../css/images/logo.png" /></a>
+        </div>
         <div class="page-header text-center">
             <h1><span class="fa fa-list-ul"></span> Lobby</h1>
         </div>
@@ -33,11 +33,15 @@
                         <% if (rooms) { %>
                             <% for (var i = 0; i < rooms.length; i++) { %>
                                 <tr class="clickable-row" data-url="/room/<%= rooms[i].name %>">
-                                    <td><%= rooms[i].name %></td>
-                                    <td><%= rooms[i].players %></td>
+                                    <td>
+                                        <%= rooms[i].name %>
+                                    </td>
+                                    <td>
+                                        <%= rooms[i].players %>
+                                    </td>
                                 </tr>
-                            <% } %>
-                        <% } %>
+                                <% } %>
+                                    <% } %>
                     </tbody>
                 </table>
                 <hr>
@@ -49,17 +53,17 @@
                     <div class="alert alert-danger">
                         <%= message %>
                     </div>
-                <% } %>
-                <form id="roomform" action="/lobby" method="post">
-                    <label>Create your own</label>
-                    <input type="text" class="form-control" name="roomname">
-                    <br>
-                    <button id="create" type="submit" class="btn btn-warning btn-md">Create Room</button>
-                </form>
+                    <% } %>
+                        <form id="roomform" action="/lobby" method="post">
+                            <label>Create your own</label>
+                            <input type="text" class="form-control" name="roomname">
+                            <br>
+                            <button id="create" type="submit" class="btn btn-warning btn-md">Create Room</button>
+                        </form>
 
-                <hr>
+                        <hr>
 
-                <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+                        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
             </div>
         </div>
     </div>
@@ -71,57 +75,60 @@
         </div>
     </div>
     <script>
-        $(document).ready(function() {
-            setInterval(function () {
-                $.ajax({
-                    url: "/lobby/data",
-                    dataType: "json",
-                    cache: false,
-                    timeout: 5000,
-                    success: function(rooms) {
-                        var str = "";
+        function ajax() {
+            $.ajax({
+                url: "/lobby/data",
+                dataType: "json",
+                cache: false,
+                timeout: 5000,
+                success: function(rooms) {
+                    var str = "";
 
-                        for (var i = 0; i < rooms.length; i++) {
-                            str += "<tr>";
-                            str += "<td>" + rooms[i].name + "</td>";
-                            str += "<td>" + rooms[i].players + "</td>";
-                            str += "</tr>";
-                        }
-
-                        $("#rooms").html(str);
-
-                        for (var i = 1; i < rooms.length + 1; i++) {
-                            // MAX_PLAYERS = 4
-                            if (rooms[i - 1].players < 4) {
-                                $("tr").eq(i).addClass("clickable-row")
-                                    .attr("data-url", "/room/" + rooms[i - 1].name);
-                            } else {
-                                $("tr").eq(i).prop("disabled", true);
-                            }
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert("error " + textStatus + " " + errorThrown);
+                    for (var i = 0; i < rooms.length; i++) {
+                        str += "<tr>";
+                        str += "<td>" + rooms[i].name + "</td>";
+                        str += "<td>" + rooms[i].players + "</td>";
+                        str += "</tr>";
                     }
-                });
-            }, 2000);
 
-            $(".clickable-row").css('cursor', 'pointer').click(function () {
+                    $("#rooms").html(str);
+
+                    for (var i = 1; i < rooms.length + 1; i++) {
+                        // MAX_PLAYERS = 4
+                        if (rooms[i - 1].players < 4) {
+                            $("tr").eq(i).addClass("clickable-row")
+                                .attr("data-url", "/room/" + rooms[i - 1].name);
+                        } else {
+                            $("tr").eq(i).prop("disabled", true);
+                        }
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("error " + textStatus + " " + errorThrown);
+                }
+            });
+
+            setTimeout(ajax, 2000);
+        }
+
+        $(document).ready(function() {
+            $(".clickable-row").css('cursor', 'pointer').click(function() {
                 sessionStorage.setItem("roomName", $(this).data("url").substring(6));
                 window.document.location = $(this).data("url");
             });
 
-            $("#create").click(function () {
+            $("#create").click(function() {
                 sessionStorage.setItem("roomName", $('input[name="roomname"]').val());
             });
         });
 
-        $(document).ajaxSuccess(function () {
-            $(".clickable-row").css('cursor', 'pointer').click(function () {
+        $(document).ajaxSuccess(function() {
+            $(".clickable-row").css('cursor', 'pointer').click(function() {
                 sessionStorage.setItem("roomName", $(this).data("url").substring(6));
                 window.document.location = $(this).data("url");
             });
         });
+
     </script>
 </body>
 
