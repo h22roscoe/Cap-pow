@@ -41,6 +41,8 @@ Q.load(files.join(','), function () {
         tileh: 32
     });
 
+    console.log("hi");
+
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.stageScene("tmplevel");
 }, {
@@ -64,7 +66,7 @@ setUpObject.addNewPlayer = function (data) {
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
         playerId: setUpObject.selfId,
-        x: 500,
+        x: 1100,
         y: 400
     });
 
@@ -142,8 +144,8 @@ Q.scene("tmplevel", function (stage) {
     }));
 
     setUpObject.flag = new Q.Flag({
-        x: 180,
-        y: 530
+        x: 1390,
+        y: 850
     });
 
     // TODO: Will need to add the flag
