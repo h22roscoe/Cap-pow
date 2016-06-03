@@ -60,12 +60,9 @@ module.exports = function (app, passport) {
     });
 
     app.get("/lobby", isLoggedIn, function (req, res) {
-        models.room.findAll().then(function (rooms) {
-            res.render("lobby", {
-                message: "",
-                user: req.user,
-                rooms: rooms
-            });
+        res.render("lobby", {
+            message: "",
+            user: req.user
         });
     });
 
@@ -88,24 +85,13 @@ module.exports = function (app, passport) {
                         name: req.body.roomname,
                         players: 0
                     });
-
-                    // Be put into the room (get room.ejs)
-                    res.redirect("/room/" + req.body.roomname);
                 }
             });
         }
     });
 
-    app.delete("/lobby", function (req, res) {
-        models.room.destroy({
-            where: {
-                name: req.body.roomname
-            }
-        });
-    });
-
     // ROOM
-    app.get("/room/:roomname", isLoggedIn, function (req, res) {
+    app.put("/room/:roomname", isLoggedIn, function (req, res) {
         models.users.update({
             roomId: req.params.roomname
         }, {
@@ -120,17 +106,12 @@ module.exports = function (app, passport) {
                     id: req.params.roomname
                 }
             });
-        }).then(function () {
-            models.users.findAll({
-                where: {
-                    roomId: req.params.roomname
-                }
-            }).then(function (users) {
-                res.render("room", {
-                    roomname: req.params.roomname,
-                    players: users
-                });
-            });
+        });
+    });
+
+    app.get("/room/:roomname", isLoggedIn, function (req, res, next) {
+        res.render("room", {
+            roomname: req.params.roomname
         });
     });
 

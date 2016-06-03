@@ -7,14 +7,14 @@
     </title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <link href="../css/login.css" rel="stylesheet">
 </head>
 
 <body>
     <script src="../src/room.js"></script>
-    <div class="container">
+    <div class="container" ng-app="room">
 
         <div id="logo">
             <img src="../css/images/logo.png" />
@@ -29,27 +29,17 @@
                 START THE GAME!
             </button>
 
-            <div class="col-sm-8 text-center">
-                <!-- IF WE WERE DOING EJS HERE -->
+            <div class="col-sm-8 text-center" ng-controller="players">
                 <table class="table table-responsive">
                     <thead>
                         <th align="center">Players</th>
                         <th align="center">Total score</th>
                     </thead>
-                    <tbody id="players">
-                        <% if (players) { %>
-                            <% for (var i = 0; i < players.length; i++) { %>
-                                <tr>
-                                    <td>
-                                        <%= players[i].username %>
-                                    </td>
-                                    <!-- Should replace password with their total score -->
-                                    <td>
-                                        <%= players[i].pasword %>
-                                    </td>
-                                </tr>
-                            <% } %>
-                        <% } %>
+                    <tbody>
+                        <tr ng-repeat="player in players | orderBy: 'username'">
+                            <td>{{ player.username }}</td>
+                            <td>{{ player.password }}</td>
+                        </tr>
                     </tbody>
                 </table>
                 <hr>
@@ -64,49 +54,19 @@
         </div>
     </div>
     <script>
-        function ajax() {
-            $.ajax({
-                url: "/room/" + sessionStorage.getItem("roomName") + "/data",
-                dataType: "json",
-                cache: false,
-                timeout: 5000,
-                success: function(players) {
-                    var str = "";
+        var app = angular.module("room", []);
 
-                    for (var i = 0; i < players.length; i++) {
-                        str += "<tr>";
-                        str += "<td>" + players[i].username + "</td>";
-                        str += "<td>" + players[i].password + "</td>";
-                        str += "</tr>";
-                    }
+        app.controller("players", function ($scope, $http, $timeout, $window) {
+            $scope.ajax = function () {
+                $http.get($window.location.href + "/data").then(function (players) {
+                    $scope.players = players.data;
+                });
 
-                    $("#rooms").html(str);
+                $timeout($scope.ajax, 2000);
+            }
 
-                    // MAX_PLAYERS = 4
-                    if (players.length === 4) {
-                        $("#countdown").prop("disabled", false).click(function() {
-                            Room.socket.emit("countDown", {
-                                roomName: sessionStorage.getItem("roomName")
-                            });
-                        });
-                    } else {
-                        $("#countdown").prop("disabled", true);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("error " + textStatus + " " + errorThrown);
-                }
-            });
-
-            setTimeout(ajax, 2000);
-        }
-
-        $(document).ready(function() {
-            $("#countdown").prop("disabled", true);
-
-            ajax();
+            $scope.ajax();
         });
-
     </script>
 </body>
 
