@@ -86,9 +86,9 @@
             $scope.ajax();
 
             $scope.loadRoom = function (room) {
-                $http.put("/room/" + room.name).then(function () {
-                    console.log("hi");
-                });
+                $http.put("/room/" + room.name).then(function () {});
+
+                sessionStorage.setItem("roomName", room.name);
 
                 $window.location.href = "/room/" + room.name;
             }

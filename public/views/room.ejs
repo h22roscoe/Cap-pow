@@ -13,7 +13,6 @@
 </head>
 
 <body>
-    <script src="../src/room.js"></script>
     <div class="container" ng-app="room">
 
         <div id="logo">
@@ -22,13 +21,19 @@
 
         <div class="page-header text-center">
             <h1><span class="fa fa-users"></span> <%= roomname %></h1>
-            <a href="/lobby" class="btn btn-default btn-sm">Exit</a>
+            <a href="/lobby" class="btn btn-default btn-sm"><span class="fa fa-reply"></span> Exit</a>
         </div>
-        <div class="col-lg-12 text-center">
-            <button id="countdown">
-                START THE GAME!
-            </button>
+        <div class="row text-center" ng-controller="start">
+            <h3 class="btn btn-default btn-lg" ng-click="startGame(<%= roomname %>)"><span class="fa fa-play"></span> Start the game!</h3>
 
+            <div class="col-sm-4">
+                <h1>{{ count }}</h1>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
             <div class="col-sm-8 text-center" ng-controller="players">
                 <table class="table table-responsive">
                     <thead>
@@ -45,12 +50,6 @@
                 <hr>
                 <a href="/room/<%= roomname %>" style="color: black"><span class="fa fa-refresh"></span> Refresh</a>
             </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 id="count"></h1>
-                </div>
-            </div>
         </div>
     </div>
     <script>
@@ -66,6 +65,30 @@
             }
 
             $scope.ajax();
+        });
+
+        app.controller("start", function ($scope, $window) {
+            $scope.socket = io.connect("/room");
+
+            $scope.socket.on("countDown", function (data) {
+                // Change timer value on document using data.time
+                if (data.time) {
+                    // Prefer this to be a pop up box at some point
+                    $scope.count = data.time + " seconds to go!";
+                } else {
+                    $window.location.href = "/game";
+                }
+            });
+
+            $scope.socket.emit("joinRoom", {
+                roomName: sessionStorage.getItem("roomName")
+            });
+
+            $scope.startGame = function (roomname) {
+                $scope.socket.emit('countDown', {
+                    roomName: sessionStorage.getItem("roomName")
+                });
+            }
         });
     </script>
 </body>
