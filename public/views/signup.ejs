@@ -88,6 +88,7 @@
 
 
         <div class="col-sm-6 col-sm-offset-3">
+<<<<<<< HEAD
             <form class="form-signin" onsubmit='return checkForm(this);' action="/signup" method="post">
                 <h2 class="form-signin-heading">Sign Up</h2>
                 <p>Password must:</p>
@@ -111,6 +112,36 @@
                 <hr>
                 <p>Already have an account? <a href="/login">Log in here!</a></p>
             </form>
+=======
+        <form class="form-signin" onsubmit='return checkForm(this);' action="/signup" method="post">
+            <h2 class="form-signin-heading">Sign Up</h2>
+            <p>Password must:</p>
+            <ul>
+                <li>Be between 6 and 18 characters</li>
+                <li>Have at least one number</li>
+                <li>Have at least one lowercase letter</li>
+                <li>Have at least one uppercase letter</li>
+                <li>Be different to your username</li>
+                <li>Not be blank</li>
+                <li>Only contain letters, numbers and underscores</li>
+            </ul>
+            <label for="inputUsername" class="sr-only">Username</label>
+            <br>
+            <input type="username" id="inputUsername" class="form-control" name="username" placeholder="Username" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+            <input type="password" id="inputPassword" class="form-control" name="pwdCheck" placeholder="Confirm Password" required>
+            <!--<div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>-->
+            <br>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+            <br>
+            <br>
+        </form>
+>>>>>>> origin/master
         </div>
     </div>
     <!-- /container -->

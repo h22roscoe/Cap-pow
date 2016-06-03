@@ -2,22 +2,10 @@
 var roomSocket;
 var currentRoom;
 
-var playerCount = 0;
-var MAX_PLAYERS = 4;
-var MIN_PLAYERS = 2;
-
-//splits these both into rooms using roomName
-
-/*
-    PLAYER ACTIONS
-*/
-
 // Called when a player clicks on a room to join it takes that player
 // to the lobby screen
-// Roomname queried from the database and in data
-// Maybe pass in the player name to render on the screen.
 function joinRoom(data) {
-    // Socket for the player joining room (would be in room nsp)
+    // Socket for the player joining room
     this.join(data.roomName);
     currentRoom = data.roomName;
 }
@@ -39,9 +27,11 @@ function startCountdown(data) {
             clearInterval(id);
         }
     }, 1000);
+}
 
-    // Will create quintus engine for each player and render their screen
-    // to the game screen html or put a start game button which links to game
+function sendHeartbeat(){
+    roomNsp.emit('ping', { beat : 1 });
+    setTimeout(sendHeartbeat, 8000);
 }
 
 module.exports = function (username, roomio, models, roomSocket) {
@@ -49,11 +39,19 @@ module.exports = function (username, roomio, models, roomSocket) {
     roomSocket = roomSocket;
 
     // Host Events
-    // Emitted when start button pressed (this only shows to host when they are in lobby), calls function and then redirects to game
+    // Emitted when start button pressed
+    //  (this only shows to host when they are in lobby),
+    //  calls function and then redirects to game
     roomSocket.on("countdown", startCountdown);
 
     // Player Events
     roomSocket.on("joinRoom", joinRoom);
+
+    roomSocket.on('pong', function(data){
+        console.log("Pong received from client");
+    });
+
+    setTimeout(sendHeartbeat, 8000);
 
     roomSocket.on("disconnect", function () {
         console.log("Setup: A user disconnected");

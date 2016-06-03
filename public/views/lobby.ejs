@@ -5,8 +5,9 @@
     <title>Cap-pow! Lobby</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <link rel="stylesheet" href="../css/login.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <link rel="icon" href="../images/logo.ico">
 </head>
 
 <body>
@@ -50,7 +51,7 @@
                 <% } %>
 
                 <form id="roomform" action="/lobby" method="post">
-                    <label>Create your own</label>
+                    <label>Make your own room!</label>
                     <input type="text" class="form-control" name="roomname">
                     <br>
                     <button id="create" type="submit" class="btn btn-warning btn-md">Create Room</button>

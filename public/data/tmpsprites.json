@@ -1,10 +1,10 @@
 {
     "player": {
-        "sx": 30,
+        "sx": 34,
         "sy": 0,
         "cols": 1,
-        "tilew": 30,
-        "tileh": 30,
+        "tilew": 22,
+        "tileh": 31,
         "frames": 1
     },
     "enemy": {

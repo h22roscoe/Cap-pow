@@ -52,10 +52,16 @@ Q.Sprite.extend("Actor", {
         // after 3 seconds
         setInterval(function () {
             if (!temp.p.update) {
+                for (i = 0 ; i < actors.length; i++) {
+                    if (actors[i].player.p.playerId === temp.p.playerId) {
+                        actors.splice(i, 1);
+                    }
+                }
+
                 temp.destroy();
             }
 
             temp.p.update = false;
-        }, 3000);
+        }, 30000);
     }
 });
