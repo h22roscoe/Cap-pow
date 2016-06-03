@@ -81,14 +81,14 @@
                         $("#rooms").html(str);
 
                         // MAX_PLAYERS = 4
-                        if (players.length === 4) {
+                        //if (players.length === 4) {
                             $("#countdown").prop("disabled", false)
                                 .click(function () {
                                     Room.socket.emit("countDown", {
                                         roomName: sessionStorage.getItem("roomName")
                                     });
                                 });
-                        }
+                        //}
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("error " + textStatus + " " + errorThrown);
