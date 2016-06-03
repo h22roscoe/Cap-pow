@@ -57,6 +57,11 @@ function startCountDown(data) {
     // to the game screen html or put a start game button which links to game
 }
 
+function sendHeartbeat(){
+    roomNsp.emit('ping', { beat : 1 });
+    setTimeout(sendHeartbeat, 8000);
+}
+
 module.exports = function (username, roomio, models, roomSocket) {
     roomNsp = roomio;
     roomSocket = roomSocket;
@@ -67,6 +72,12 @@ module.exports = function (username, roomio, models, roomSocket) {
 
     // Player Events
     roomSocket.on("joinRoom", joinRoom);
+
+    roomSocket.on('pong', function(data){
+        console.log("Pong received from client");
+    });
+
+    setTimeout(sendHeartbeat, 8000);
 
     roomSocket.on("disconnect", function () {
         console.log("Setup: A user disconnected");

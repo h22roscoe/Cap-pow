@@ -5,6 +5,12 @@ var Room = {
         Room.socket.emit("joinRoom", {
             roomName: sessionStorage.getItem("roomName")
         });
+
+        Room.socket.on('ping', function (data) {
+            Room.socket.emit('pong', {
+                beat: 1
+            });
+        });
     },
 
     countDown: function (data) {
