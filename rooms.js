@@ -1,12 +1,14 @@
 // Global variables set at the bottom
 var roomSocket;
 var currentRoom;
+var playerCount = 0;
 
 // Called when a player clicks on a room to join it takes that player
 // to the lobby screen
 function joinRoom(data) {
     // Socket for the player joining room
     this.join(data.roomName);
+    playerCount++;
     currentRoom = data.roomName;
 }
 
@@ -57,6 +59,7 @@ module.exports = function (username, roomio, models, roomSocket) {
         console.log("Setup: A user disconnected");
 
         roomSocket.leave(currentRoom);
+        playerCount--;
 
         if (playerCount <= 0) {
             models.room.destroy({
