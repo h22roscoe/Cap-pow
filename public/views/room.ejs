@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <link href="../css/login.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container" ng-app="room">
+    <div class="container" ng-app="room" ng-controller="roomCtrl">
 
         <div id="logo">
             <img src="../css/images/logo.png" />
@@ -23,18 +24,17 @@
             <h1><span class="fa fa-users"></span> <%= roomname %></h1>
             <a href="/lobby" class="btn btn-default btn-sm"><span class="fa fa-reply"></span> Exit</a>
         </div>
-        <div class="row text-center" ng-controller="start">
-            <h3 class="btn btn-default btn-lg" ng-click="startGame(<%= roomname %>)"><span class="fa fa-play"></span> Start the game!</h3>
+        <div class="row text-center">
+            <h3 class="btn btn-default btn-lg" ng-click="startGame()"><span class="fa fa-play"></span> Start the game!</h3>
 
-            <div class="col-sm-4">
-                <h1>{{ count }}</h1>
-            </div>
+            <h1 id="count">
+            </h1>
         </div>
 
         <br>
 
         <div class="row">
-            <div class="col-sm-8 text-center" ng-controller="players">
+            <div class="col-sm-8 text-center">
                 <table class="table table-responsive">
                     <thead>
                         <th align="center">Players</th>
@@ -55,7 +55,27 @@
     <script>
         var app = angular.module("room", []);
 
-        app.controller("players", function ($scope, $http, $timeout, $window) {
+        app.controller("roomCtrl", function ($scope, $http, $timeout, $window) {
+            $scope.socket = io.connect("/room");
+
+            $scope.socket.emit("joinRoom", {
+                roomName: sessionStorage.getItem("roomName")
+            });
+
+            $scope.socket.on("countdown", function (data) {
+                if (data.time) {
+                    $("#count").text(data.time + " seconds to go!");
+                } else {
+                    $window.location.href = "/game";
+                }
+            });
+
+            $scope.startGame = function () {
+                $scope.socket.emit('countdown', {
+                    roomName: sessionStorage.getItem("roomName")
+                });
+            }
+
             $scope.ajax = function () {
                 $http.get($window.location.href + "/data").then(function (players) {
                     $scope.players = players.data;
@@ -65,30 +85,6 @@
             }
 
             $scope.ajax();
-        });
-
-        app.controller("start", function ($scope, $window) {
-            $scope.socket = io.connect("/room");
-
-            $scope.socket.on("countDown", function (data) {
-                // Change timer value on document using data.time
-                if (data.time) {
-                    // Prefer this to be a pop up box at some point
-                    $scope.count = data.time + " seconds to go!";
-                } else {
-                    $window.location.href = "/game";
-                }
-            });
-
-            $scope.socket.emit("joinRoom", {
-                roomName: sessionStorage.getItem("roomName")
-            });
-
-            $scope.startGame = function (roomname) {
-                $scope.socket.emit('countDown', {
-                    roomName: sessionStorage.getItem("roomName")
-                });
-            }
         });
     </script>
 </body>

@@ -18,33 +18,20 @@ var MIN_PLAYERS = 2;
 // Maybe pass in the player name to render on the screen.
 function joinRoom(data) {
     // Socket for the player joining room (would be in room nsp)
-    var sock = this;
-
-    if (playerCount < MAX_PLAYERS) {
-        playerCount++;
-        sock.join(data.roomName);
-        currentRoom = data.roomName;
-        //tell host a player has joined so it can
-    } else {
-        //stop being allowed to add players
-    }
-
+    this.join(data.roomName);
+    currentRoom = data.roomName;
 }
-
-/*
-    HOST ACTIONS
-*/
 
 // Called when there are between 2 and 4 players present.
 // Stops people being able to connect to this room as it
 // is removed from the list of available rooms.
 // Started by button press to start countdown.
-function startCountDown(data) {
+function startCountdown(data) {
 
     //this function may be able to be put straight into the button event
     var time = 5;
     var id = setInterval(function () {
-        roomNsp.to(data.roomName).emit("countDown", {
+        roomNsp.to(data.roomName).emit("countdown", {
             time: time--
         });
 
@@ -63,7 +50,7 @@ module.exports = function (username, roomio, models, roomSocket) {
 
     // Host Events
     // Emitted when start button pressed (this only shows to host when they are in lobby), calls function and then redirects to game
-    roomSocket.on("countDown", startCountDown);
+    roomSocket.on("countdown", startCountdown);
 
     // Player Events
     roomSocket.on("joinRoom", joinRoom);
@@ -72,7 +59,6 @@ module.exports = function (username, roomio, models, roomSocket) {
         console.log("Setup: A user disconnected");
 
         roomSocket.leave(currentRoom);
-        playerCount--;
 
         if (playerCount <= 0) {
             models.room.destroy({
@@ -81,20 +67,12 @@ module.exports = function (username, roomio, models, roomSocket) {
                 }
             });
         } else {
-            models.users.update({
-                roomId: null
+            models.room.update({
+                players: models.sequelize.literal("players - 1")
             }, {
                 where: {
-                    username: username
+                    id: currentRoom
                 }
-            }).then(function () {
-                models.room.update({
-                    players: models.sequelize.literal("players - 1")
-                }, {
-                    where: {
-                        id: currentRoom
-                    }
-                });
             });
         }
     });

@@ -86,7 +86,7 @@
             $scope.ajax();
 
             $scope.loadRoom = function (room) {
-                $http.put("/room/" + room.name).then(function () {});
+                $http.put("/room/" + room.name).then(angular.noop);
 
                 sessionStorage.setItem("roomName", room.name);
 
