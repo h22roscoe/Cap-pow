@@ -17,6 +17,8 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
     <!-- Custom styles for this template -->
     <link href="../css/login.css" rel="stylesheet">
 </head>
@@ -31,9 +33,9 @@
             <div class="col-sm-6 col-sm-offset-3">
             <!-- show any messages that come back with authentication -->
             <% if (message.length > 0) { %>
-                <div class="alert alert-danger">
+                <div id="alert" class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">×</button>
-                    <%= message %>
+                    <strong>Error:</strong> <%= message %>
                 </div>
             <% } %>
 
@@ -60,6 +62,15 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        $(document).ready(function () {
+            $(".close").click(function () {
+                $("#alert").html("");
+                $("#alert").removeClass("alert alert-danger");
+            });
+        });
+    </script>
 </body>
 
 </html>
