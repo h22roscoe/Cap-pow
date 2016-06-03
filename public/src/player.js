@@ -62,6 +62,6 @@ Q.Sprite.extend("Actor", {
             }
 
             temp.p.update = false;
-        }, 3000);
+        }, 30000);
     }
 });
