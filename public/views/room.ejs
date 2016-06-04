@@ -18,7 +18,7 @@
     <div class="container" ng-app="room" ng-controller="roomCtrl">
 
         <div id="logo">
-            <img src="../css/images/logo.png" />
+            <img src="../images/cap-pow.png" />
         </div>
 
         <div class="page-header text-center">
@@ -69,13 +69,13 @@
                 } else {
                     $window.location.href = "/game";
                     // MAX_PLAYERS = 4
-                    //if (players.length === 4) {
-                    //    $("#countdown").prop("disabled", false).click(function () {
-                    //        Room.socket.emit("countDown", {
-                    //            roomName: sessionStorage.getItem("roomName")
-                    //        });
-                    //    });
-                    //}
+                    if (players.length === 4) {
+                        $("#countdown").prop("disabled", false).click(function () {
+                            $scope.socket.emit("countdown", {
+                                roomName: sessionStorage.getItem("roomName")
+                            });
+                        });
+                    }
                 }
             });
 

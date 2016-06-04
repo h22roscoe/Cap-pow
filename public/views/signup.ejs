@@ -25,69 +25,10 @@
 </head>
 
 <body>
-
-
     <div class="container">
-
         <div id="logo">
-            <a href="/"><img src="../css/images/logo.png" /></a>
+            <a href="/"><img src="../images/cap-pow.png" /></a>
         </div>
-
-        <script type="text/javascript">
-            function checkForm(form) {
-                if (form.username.value === "") {
-                    writeMessage("Username must not be blank.")
-                    return false;
-                }
-                re = /^\w+$/;
-                if (!re.test(form.username.value)) {
-                    writeMessage("Username must contain only letters, numbers and underscores.");
-                    return false;
-                }
-                length = form.password.value.length;
-                if (length < 6 || length > 18) {
-                    //alert("Password must be between 6 and 18 characters.");
-                    writeMessage("Password must be between 6 and 18 characters.");
-                    return false;
-                }
-                if (form.username.value === form.password.value) {
-                    writeMessage("Username and password must not be the same.")
-                    return false;
-                }
-                re = /[0-9]/;
-                if (!re.test(form.password.value)) {
-                    writeMessage("Password must contain at least one number.");
-                    return false;
-                }
-                re = /[a-z]/;
-                if (!re.test(form.password.value)) {
-                    writeMessage("Password must contain at least one lowercase letter.");
-                    return false;
-                }
-                re = /[A-Z]/;
-                if (!re.test(form.password.value)) {
-                    writeMessage("Password must contain at least one uppercase letter.");
-                    return false;
-                }
-                if (form.password.value != form.pwdCheck.value) {
-                    writeMessage("Passwords must match.");
-                    return false;
-                }
-                return true;
-            }
-
-            function writeMessage(message) {
-                $("#alert").addClass("alert alert-danger");
-                $("#alert").html("<button type='button'" +
-                                 "class='close'" + "data-dismiss='alert'"
-                                 + ">×</button>" + "<strong>Error:</strong> "
-                                 + message);
-                $(".close").click(function () {
-                    $("#alert").html("");
-                    $("#alert").removeClass("alert alert-danger");
-                });
-            }
-        </script>
 
         <div class="col-sm-6 col-sm-offset-3">
             <div id="alert">
@@ -97,10 +38,7 @@
                 <h2 class="form-signin-heading">Sign Up</h2>
                 <p>Password must:</p>
                 <ul>
-                    <li>Be between 6 and 18 characters</li>
-                    <li>Have at least one number</li>
-                    <li>Have at least one lowercase letter</li>
-                    <li>Have at least one uppercase letter</li>
+                    <li>Be between 3 and 18 characters</li>
                     <li>Be different to your username</li>
                     <li>Not be blank</li>
                     <li>Only contain letters, numbers and underscores</li>
@@ -128,6 +66,53 @@
             </div>
         </div>
     </footer>
+    <script type="text/javascript">
+        function checkForm(form) {
+            if (form.username.value === "") {
+                writeMessage("Username must not be blank.")
+                return false;
+            }
+
+            re = /^\w+$/;
+
+            if (!re.test(form.username.value)) {
+                writeMessage("Username must contain only letters, numbers and underscores.");
+                return false;
+            }
+
+            length = form.password.value.length;
+
+            if (length < 3 || length > 18) {
+                //alert("Password must be between 6 and 18 characters.");
+                writeMessage("Password must be between 6 and 18 characters.");
+                return false;
+            }
+
+            if (form.username.value === form.password.value) {
+                writeMessage("Username and password must not be the same.")
+                return false;
+            }
+
+            if (form.password.value != form.pwdCheck.value) {
+                writeMessage("Passwords must match.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function writeMessage(message) {
+            $("#alert").addClass("alert alert-danger");
+            $("#alert").html("<button type='button'" +
+                             "class='close'" + "data-dismiss='alert'"
+                             + ">×</button>" + "<strong>Error:</strong> "
+                             + message);
+            $(".close").click(function () {
+                $("#alert").html("");
+                $("#alert").removeClass("alert alert-danger");
+            });
+        }
+    </script>
 </body>
 
 </html>
