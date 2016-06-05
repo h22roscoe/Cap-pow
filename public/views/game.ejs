@@ -25,6 +25,16 @@
         margin: 0px;
     }
 
+    .table th {
+        text-align: center;
+        font-size: 0.9em;
+    }
+
+    .table td {
+        text-align: center;
+        font-size: 0.75em;
+    }
+
     .score {
         z-index: 5;
         position: absolute;
@@ -34,6 +44,8 @@
         text-align: left;
         font-size: 1.5em;
         font-family: inherit;
+        width: 20%;
+        background-color: transparent;
     }
 
     #loading {
@@ -79,7 +91,7 @@
 </style>
 
 <body>
-    <table id="scores" class="score">
+    <table id="scores" class="table score">
         <thead>
             <tr>
                 <th>Player</th>

@@ -25,14 +25,6 @@
             <h1><span class="fa fa-users"></span> <%= roomname %></h1>
             <a href="/lobby" class="btn btn-default btn-sm"><span class="fa fa-reply"></span> Exit</a>
         </div>
-        <div class="row text-center">
-            <h3 class="btn btn-default btn-lg"
-                ng-disabled="isReady()"
-                ng-click="startGame()"><span class="fa fa-play"></span> Start the game!</h3>
-
-            <h1 id="count">
-            </h1>
-        </div>
 
         <br>
 
@@ -52,6 +44,14 @@
                 </table>
                 <hr>
                 <p ng-click="loadRoom()" style="cursor: pointer"><span class="fa fa-refresh"></span> Refresh</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <h3 class="btn btn-default btn-lg"
+                    ng-disabled="isReady()"
+                    ng-click="startGame()"><span class="fa fa-play"></span> Start the game!</h3>
+
+                <h1 id="count">
+                </h1>
             </div>
         </div>
     </div>
