@@ -119,6 +119,10 @@ setUpObject.updateSpecificPlayerId = function (data) {
     return actor;
 };
 
+setUpObject.updateScores = function (data) {
+
+}
+
 var UiScore = document.getElementById("score");
 
 //Creating the stage for tmplevel
@@ -155,7 +159,10 @@ Q.scene("tmplevel", function (stage) {
 
 function updatePoints() {
     if (setUpObject.flag.p.shouldUpdatePoints) {
-        setUpObject.player.p.gamePoints++;
+        socket.emit("points", {
+            playerId: setUpObject.player.p.playerId,
+            gamePoints: ++setUpObject.player.p.gamePoints
+        });
     }
 }
 
@@ -164,6 +171,9 @@ function setUp(stage) {
     setUpObject.stage = stage;
 
     socket.on("connected", setUpObject.addNewPlayer);
+
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
+
+    socket.on("newScore", setUpObject.updateScores);
 }

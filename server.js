@@ -85,6 +85,10 @@ gameNsp.on("connection", function (socket) {
         socket.on("update", function (updateInfo) {
             socket.broadcast.to(gameData.roomName).emit("updated", updateInfo);
         })
+
+        socket.on("points", function (updateInfo) {
+            socket.broadcast.to(gameData.roomName).emit("newScores", updateInfo);
+        })
     });
 });
 

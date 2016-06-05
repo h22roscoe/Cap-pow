@@ -31,11 +31,8 @@ Q.Sprite.extend("Player", {
             playerId: this.p.playerId,
             x: this.p.x,
             y: this.p.y,
-            sheet: this.p.sheet,
-            gamePoints: this.p.gamePoints
+            sheet: this.p.sheet
         });
-
-        UiScore.innerHTML = "Score: " + this.p.gamePoints;
     }
 });
 
