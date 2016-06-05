@@ -5,7 +5,10 @@ var pg = require("pg");
 var models = require("./app/models");
 var app = express();
 var server = require("http").Server(app);
-var io = require("socket.io")(server);
+var io = require("socket.io")(server, {
+    pingTimeout: 300000,
+    pingInterval: 25000
+});
 var rooms = require("./rooms");
 
 io.serveClient(true);
@@ -59,6 +62,15 @@ app.use(passport.session());
 // Use connect-flash for flash messages stored in session
 app.use(flash());
 
+var username;
+app.use(function (req, res, next) {
+    if (req.user) {
+        username = req.user.username;
+    }
+
+    next();
+});
+
 // TODO: May not use this guy's directory structure so check this.
 var route = require("./app/routes");
 route(app, passport);
@@ -66,7 +78,7 @@ route(app, passport);
 // Whenever a user connects set up default event listeners.
 roomNsp.on("connection", function (socket) {
     console.log("Setup: A user connected");
-    rooms(roomNsp, socket);
+    rooms(username, roomNsp, models, socket);
 });
 
 gameNsp.on("connection", function (socket) {

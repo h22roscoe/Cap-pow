@@ -34,7 +34,7 @@ module.exports = function (sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function (models) {
-                Room.hasMany(models.user);
+                Room.hasMany(models.users);
             },
             validPassword: function (password, dbpassword) {
                 return bcrypt.compareSync(password, dbpassword);

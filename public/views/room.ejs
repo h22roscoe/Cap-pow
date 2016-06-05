@@ -2,48 +2,104 @@
 <html>
 
 <head>
-    <title>Cap-pow! <%= roomname %></title>
+    <title>Cap-pow!
+        <%= roomname %>
+    </title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <link href="../css/login.css" rel="stylesheet">
+    <link rel="icon" href="../images/logo.ico">
 </head>
 
 <body>
-    <script src="../src/room.js"></script>
-    <div class="container">
+    <div class="container" ng-app="room" ng-controller="roomCtrl">
 
         <div id="logo">
-                <img src="../css/images/logo.png"/>
+            <img src="../images/cap-pow.png" />
         </div>
 
         <div class="page-header text-center">
-            <h1><span class="fa fa-anchor"></span> Room: <%= roomname %></h1>
-            <a href="/lobby" class="btn btn-default btn-sm">Exit</a>
+            <h1><span class="fa fa-users"></span> <%= roomname %></h1>
+            <a href="/lobby" class="btn btn-default btn-sm"><span class="fa fa-reply"></span> Exit</a>
         </div>
-        <div class="col-lg-12 text-center">
-            <button id="countdown">
-                START THE GAME!
-            </button>
+        <div class="row text-center">
+            <h3 class="btn btn-default btn-lg"
+                ng-disabled="isReady()"
+                ng-click="startGame()"><span class="fa fa-play"></span> Start the game!</h3>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 id="count"></h1>
-                </div>
+            <h1 id="count">
+            </h1>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-8 text-center">
+                <table class="table table-responsive">
+                    <thead>
+                        <th align="center">Players</th>
+                        <th align="center">Total score</th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="player in players | orderBy: 'username'">
+                            <td>{{ player.username }}</td>
+                            <td>{{ player.password }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <p ng-click="loadRoom()" style="cursor: pointer"><span class="fa fa-refresh"></span> Refresh</p>
             </div>
         </div>
     </div>
     <script>
-        $(document).ready(function () {
-            $("#countdown").click(function () {
-                Room.socket.emit("countDown", {
+        var app = angular.module("room", []);
+
+        app.controller("roomCtrl", function ($scope, $http, $timeout, $window) {
+            $scope.socket = io.connect("/room");
+
+            $scope.socket.emit("joinRoom", {
+                roomName: sessionStorage.getItem("roomName")
+            });
+
+            $scope.socket.on("countdown", function (data) {
+                if (data.time) {
+                    $("#count").text(data.time + " seconds to go!");
+                } else {
+                    $window.location.href = "/game";
+                }
+            });
+
+            $scope.startGame = function () {
+                $scope.socket.emit('countdown', {
                     roomName: sessionStorage.getItem("roomName")
                 });
+            }
 
-                window.document.location = "/game";
-            });
+            $scope.loadRoom = function () {
+                $http.get($window.location.href + "/data").then(function (players) {
+                    $scope.players = players.data;
+                });
+            }
+
+            $scope.isReady = function () {
+                return $scope.players.length < 1;
+            }
+
+            $scope.ajax = function () {
+                $http.get($window.location.href + "/data").then(function (players) {
+                    $scope.players = players.data;
+                });
+
+                $timeout($scope.ajax, 2000);
+            }
+
+            $scope.ajax();
         });
     </script>
 </body>
+
 </html>

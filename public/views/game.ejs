@@ -12,7 +12,6 @@
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/main.css"/>
 
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <title>Cap-pow!</title>
@@ -22,17 +21,6 @@
     body {
         padding: 0px;
         margin: 0px;
-    }
-
-    .players {
-        z-index: 5;
-        position: absolute;
-        padding-top: 10px;
-        padding-right: 10px;
-        right: 0;
-        text-align: right;
-        font-size: 1.5em;
-        font-family: inherit;
     }
 
     .score {
@@ -89,11 +77,9 @@
 </style>
 
 <body>
-    <!--The current player count displayed inside this span will be changed
-        by the javascript when a player connects or disconnects-->
     <span id="score" class="score"></span>
 
-    <div id='loading' style="top: 50%;margin-top: -50px;">
+    <div id='loading' style="top: 50%; margin-top: -50px;">
         <div id='loading_container'>
             <div id='loading_progress'></div>
         </div>

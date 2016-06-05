@@ -5,44 +5,43 @@
     <title>Cap-pow! Lobby</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <link href="../css/login.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/login.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <link rel="icon" href="../images/logo.ico">
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" ng-app="lobby">
         <div id="logo">
-                <a href="/"><img src="../css/images/logo.png" /></a>
-            </div>
+            <a href="/"><img src="../images/cap-pow.png" /></a>
+        </div>
         <div class="page-header text-center">
             <h1><span class="fa fa-list-ul"></span> Lobby</h1>
         </div>
 
-        <div class="row">
+        <div class="row" ng-controller="rooms">
             <!-- GAME ROOMS LIST -->
-
             <div class="col-sm-8 text-center">
-                <!-- IF WE WERE DOING EJS HERE -->
-                <table class="table table-hover table-responsive">
-                    <thead>
-                        <th align="center">Room Name</th>
-                        <th align="center"># Players</th>
+                <table class="table table-hover">
+                    <thead align="center">
+                        <th>Room Name</th>
+                        <th># Players</th>
                     </thead>
-                    <tbody id="rooms">
-                        <% if (rooms) { %>
-                            <% for (var i = 0; i < rooms.length; i++) { %>
-                                <tr class="clickable-row" data-url="/room/<%= rooms[i].name %>">
-                                    <td><%= rooms[i].name %></td>
-                                    <td><%= rooms[i].players %></td>
-                                </tr>
-                            <% } %>
-                        <% } %>
+                    <tbody>
+                        <tr ng-repeat="room in rooms | orderBy: 'players': true"
+                            ng-click="loadRoom(room);"
+                            ng-href="/room/{{ room.name }}"
+                            style="cursor: pointer; cursor: hand;">
+                                <td>{{ room.name }}</td>
+                                <td>{{ room.players }}</td>
+                        </tr>
                     </tbody>
                 </table>
                 <hr>
                 <a href="/lobby" style="color: black"> <span class="fa fa-refresh"></span> Refresh</a>
             </div>
+
+            <br>
 
             <div class="col-sm-4 text-center">
                 <% if (message) { %>
@@ -50,11 +49,12 @@
                         <%= message %>
                     </div>
                 <% } %>
-                <form action="/lobby" method="post">
-                    <label>Create your own</label>
+
+                <form id="roomform" action="/lobby" method="post">
+                    <label>Make your own room!</label>
                     <input type="text" class="form-control" name="roomname">
                     <br>
-                    <button type="submit" class="btn btn-warning btn-md">Create Room</button>
+                    <button id="create" type="submit" class="btn btn-warning btn-md">Create Room</button>
                 </form>
 
                 <hr>
@@ -63,55 +63,36 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="span12 text-center">
-                <p><span class="fa fa-blind"></span> Cap-pow 2016</p>
+    <footer>
+        <div class="container" style="padding-top: 1cm; padding-bottom: 2cm">
+            <div class="row">
+                <div class="span12 text-center">
+                    <p><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</p>
+                </div>
             </div>
         </div>
-    </div>
+    </footer>
     <script>
-        $(document).ready(function() {
-            setInterval(function () {
-                $.ajax({
-                    url: "http://localhost:8080/lobby/data",
-                    dataType: "json",
-                    cache: false,
-                    timeout: 5000,
-                    success: function(rooms) {
-                        var str = "";
+        var app = angular.module("lobby", []);
 
-                        for (var i = 0; i < rooms.length; i++) {
-                            str += "<tr>";
-                            str += "<td>" + rooms[i].name + "</td>";
-                            str += "<td>" + rooms[i].players + "</td>";
-                            str += "</tr>";
-                        }
-
-                        $("#rooms").html(str);
-
-                        for (var i = 1; i < rooms.length + 1; i++) {
-                            $("tr").eq(i).addClass("clickable-row")
-                                .attr("data-url", "/room/" + rooms[i - 1].name);
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert("error " + textStatus + " " + errorThrown);
-                    }
+        app.controller("rooms", function ($scope, $http, $timeout, $window) {
+            $scope.ajax = function () {
+                $http.get($window.location.href + "/data").then(function (rooms) {
+                    $scope.rooms = rooms.data;
                 });
-            }, 15000);
 
-            $(".clickable-row").css('cursor', 'pointer').click(function () {
-                sessionStorage.setItem("roomName", $(this).data("url").substring(6));
-                window.document.location = $(this).data("url");
-            });
-        });
+                $timeout($scope.ajax, 2000);
+            }
 
-        $(document).ajaxSuccess(function () {
-            $(".clickable-row").css('cursor', 'pointer').click(function () {
-                sessionStorage.setItem("roomName", $(this).data("url").substring(6));
-                window.document.location = $(this).data("url");
-            });
+            $scope.ajax();
+
+            $scope.loadRoom = function (room) {
+                $http.put("/room/" + room.name).then(angular.noop);
+
+                sessionStorage.setItem("roomName", room.name);
+
+                $window.location.href = "/room/" + room.name;
+            }
         });
     </script>
 </body>

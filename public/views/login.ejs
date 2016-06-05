@@ -17,22 +17,24 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
     <!-- Custom styles for this template -->
     <link href="../css/login.css" rel="stylesheet">
 </head>
 
 <body>
-
     <div class="container">
-            <div id="logo">
-                <a href="/"><img src="../css/images/logo.png" /></a>
-            </div>
+        <div id="logo">
+            <a href="/"><img src="../images/cap-pow.png" /></a>
+        </div>
 
-            <div class="col-sm-6 col-sm-offset-3">
-            <!-- show any messages that come back with authentication -->
+        <div class="col-sm-6 col-sm-offset-3">
+        <!-- show any messages that come back with authentication -->
             <% if (message.length > 0) { %>
-                <div class="alert alert-danger">
-                    <%= message %>
+                <div id="alert" class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <strong>Error:</strong> <%= message %>
                 </div>
             <% } %>
 
@@ -43,19 +45,31 @@
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
                 <br>
-                <!--<div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Remember me
-                    </label>
-                </div>-->
                 <button class="btn btn-lg btn-primary btn-block" type="submit"><span class="fa fa-sign-in"></span> Sign in</button>
                 <hr>
-                <p> Don't have an account? <a href="/signup" style="color:white">Sign up here!</a> </p>
+                <p>Don't have an account? <a href="/signup">Sign up here!</a></p>
             </form>
         </div>
     </div>
     <!-- /container -->
+    <footer>
+        <div class="container" style="padding-top: 1cm; padding-bottom: 2cm">
+            <div class="row">
+                <div class="span12 text-center">
+                    <p><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
+    <script>
+        $(document).ready(function () {
+            $(".close").click(function () {
+                $("#alert").html("");
+                $("#alert").removeClass("alert alert-danger");
+            });
+        });
+    </script>
 </body>
 
 </html>

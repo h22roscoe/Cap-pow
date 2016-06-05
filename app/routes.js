@@ -29,9 +29,9 @@ module.exports = function (app, passport) {
 
     // Process the login form
     app.post("/login", passport.authenticate("local-login", {
-        successRedirect : "/lobby",
-        failureRedirect : "/login",
-        failureFlash : true
+        successRedirect: "/lobby",
+        failureRedirect: "/login",
+        failureFlash: true
     }));
 
     // SIGNUP
@@ -45,9 +45,9 @@ module.exports = function (app, passport) {
 
     // Process the signup form
     app.post("/signup", passport.authenticate("local-signup", {
-        successRedirect : "/lobby",
-        failureRedirect : "/signup",
-        failureFlash : true
+        successRedirect: "/lobby",
+        failureRedirect: "/signup",
+        failureFlash: true
     }));
 
     // PROFILE SECTION -- POSSIBLY TEMPORARY ONLY
@@ -60,12 +60,9 @@ module.exports = function (app, passport) {
     });
 
     app.get("/lobby", isLoggedIn, function (req, res) {
-        models.room.findAll().then(function (rooms) {
-            res.render("lobby", {
-                message: "",
-                user: req.user,
-                rooms: rooms
-            });
+        res.render("lobby", {
+            message: "",
+            user: req.user
         });
     });
 
@@ -88,28 +85,43 @@ module.exports = function (app, passport) {
                         name: req.body.roomname,
                         players: 0
                     });
-
-                    // Be put into the room (get room.ejs)
-                    res.redirect("/room/" + req.body.roomname);
                 }
             });
         }
     });
 
-    app.delete("/lobby", function (req, res) {
-        models.room.destroy({
+    // ROOM
+    app.put("/room/:roomname", isLoggedIn, function (req, res) {
+        models.users.update({
+            roomId: req.params.roomname
+        }, {
             where: {
-                name: req.body.roomname
+                username: req.user.username
             }
+        }).then(function () {
+            models.room.update({
+                players: models.sequelize.literal("players + 1")
+            }, {
+                where: {
+                    id: req.params.roomname
+                }
+            });
         });
-
-        // Refresh rooms (May be done by AJAX)
     });
 
-    // ROOM
-    app.get("/room/:roomname", isLoggedIn, function (req, res) {
+    app.get("/room/:roomname", isLoggedIn, function (req, res, next) {
         res.render("room", {
             roomname: req.params.roomname
+        });
+    });
+
+    app.get("/room/:roomname/data", function (req, res) {
+        models.users.findAll({
+            where: {
+                roomId: req.params.roomname
+            }
+        }).then(function (users) {
+            res.json(users);
         });
     });
 
@@ -120,7 +132,7 @@ module.exports = function (app, passport) {
     });
 
     // GAME
-    app.get("/game", function (req, res) {
+    app.get("/game", isLoggedIn, function (req, res) {
         res.render("game", {});
     });
 };
