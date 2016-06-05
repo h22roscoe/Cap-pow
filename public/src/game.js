@@ -118,7 +118,6 @@ setUpObject.updateSpecificPlayerId = function (data) {
                                        + "</td><td>"
                                        + 0
                                        + "</td></tr>");
-        console.log("temp.p.playerId: ", temp.p.playerId);
 
         if (setUpObject.stage) {
             setUpObject.stage.insert(temp);
@@ -134,6 +133,8 @@ setUpObject.updateScores = function (data) {
     var actor = actors.filter(function (obj) {
         return obj.player.p.playerId === data.playerId;
     })[0];
+
+    console.log("Actor: ", actor);
 
     actor.gamePoints = data.gamePoints;
 
