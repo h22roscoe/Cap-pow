@@ -62,15 +62,6 @@ app.use(passport.session());
 // Use connect-flash for flash messages stored in session
 app.use(flash());
 
-var username;
-app.use(function (req, res, next) {
-    if (req.user) {
-        username = req.user.username;
-    }
-
-    next();
-});
-
 // TODO: May not use this guy's directory structure so check this.
 var route = require("./app/routes");
 route(app, passport);
@@ -78,7 +69,7 @@ route(app, passport);
 // Whenever a user connects set up default event listeners.
 roomNsp.on("connection", function (socket) {
     console.log("Setup: A user connected");
-    rooms(username, roomNsp, models, socket);
+    rooms(roomNsp, models, socket);
 });
 
 gameNsp.on("connection", function (socket) {
@@ -87,20 +78,21 @@ gameNsp.on("connection", function (socket) {
     socket.on("joinGame", function (gameData) {
         socket.join(gameData.roomName);
 
-        // PUT A LOAD SCREEN HERE?
         setTimeout(function () {
             socket.emit("connected", {
-                playerId: username
+                playerId: gameData.playerId
             });
         }, 1000);
 
         socket.on("update", function (updateInfo) {
-            socket.broadcast.to(gameData.roomName).emit("updated", updateInfo);
-        })
+            socket.broadcast.to(gameData.roomName)
+                .emit("updated", updateInfo);
+        });
 
         socket.on("points", function (updateInfo) {
-            socket.broadcast.to(gameData.roomName).emit("newScore", updateInfo);
-        })
+            socket.broadcast.to(gameData.roomName)
+                .emit("newScore", updateInfo);
+        });
     });
 });
 
@@ -108,6 +100,7 @@ models.sequelize.sync().then(function () {
     "use strict";
 
     server.listen(PORT, function () {
-        console.log('The magic happens on port ' + PORT);
+        console.log('The magic happens on port ' +
+            PORT);
     });
 });

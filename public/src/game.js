@@ -47,12 +47,13 @@ Q.load(files.join(','), function () {
 var roomName = sessionStorage.getItem("roomName")
 var socket = io.connect("/game");
 socket.emit("joinGame", {
-    roomName: roomName
+    roomName: roomName,
+    playerId: sessionStorage.getItem("playerId")
 });
 
-setUpObject.addNewPlayer = function (data) {
+function addSelf() {
     // Set this players unique id
-    setUpObject.selfId = data.playerId;
+    setUpObject.selfId = sessionStorage.getItem("playerId");
 
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
@@ -191,7 +192,7 @@ function updatePoints() {
 function setUp(stage) {
     setUpObject.stage = stage;
 
-    socket.on("connected", setUpObject.addNewPlayer);
+    addSelf();
 
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
