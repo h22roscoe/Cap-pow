@@ -138,7 +138,7 @@ setUpObject.updateScores = function (data) {
 
     actor.gamePoints = data.gamePoints;
 
-    $("#score #" + actor.player.p.playerId).html("<td>"
+    $("#scores #" + actor.player.p.playerId).html("<td>"
                                           + actor.player.p.playerId
                                           + "</td><td>"
                                           + actor.gamePoints
