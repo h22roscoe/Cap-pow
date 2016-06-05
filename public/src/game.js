@@ -62,9 +62,9 @@ setUpObject.addNewPlayer = function (data) {
     });
 
     $("#scores > tbody:last-child").append("<tr id='"
-                                   + setUpObject.player.p.playerId
+                                   + setUpObject.selfId
                                    + "'><td>"
-                                   + setUpObject.player.p.playerId
+                                   + setUpObject.selfId
                                    + "</td><td>"
                                    + 0
                                    + "</td></tr>");
@@ -145,8 +145,6 @@ setUpObject.updateScores = function (data) {
 //Creating the stage for tmplevel
 Q.scene("tmplevel", function (stage) {
     //Parallax (Background moves as player moves)
-    //TODO: Not sure if parallax works with multiple players
-    //TODO: Might need foldername/file for each of these assets
     stage.insert(new Q.Repeater({
         asset: "../images/tmpbackground.png",
         speedX: 0.5,
@@ -167,7 +165,6 @@ Q.scene("tmplevel", function (stage) {
         y: 850
     });
 
-    // TODO: Will need to add the flag
     stage.insert(setUpObject.flag);
 
     // Set up the socket connections.
@@ -182,7 +179,7 @@ function updatePoints() {
         });
 
         $("#" + setUpObject.player.p.playerId).html("<td>"
-                                            + setUpObject.player.p.playerId
+                                            + setUpObject.selfId
                                             + "</td><td>"
                                             + setUpObject.player.p.gamePoints
                                             + "</td>");
