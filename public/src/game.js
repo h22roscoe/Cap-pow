@@ -102,6 +102,14 @@ setUpObject.updateSpecificPlayerId = function (data) {
             gamePoints: 0
         });
 
+        $("#scores > tbody:last-child").append("<tr id='"
+                                       + temp.p.playerId
+                                       + "'><td>"
+                                       + temp.p.playerId
+                                       + "</td><td>"
+                                       + 0
+                                       + "</td></tr>");
+
         if (setUpObject.stage) {
             setUpObject.stage.insert(temp);
         }
@@ -117,11 +125,13 @@ setUpObject.updateScores = function (data) {
         return obj.player.p.playerId === data.playerId;
     })[0];
 
-    if (actor) {
-        actor.gamePoints = data.gamePoints;
-    } else {
-        console.log("Error: Actor is not yet defined in this game");
-    }
+    actor.gamePoints = data.gamePoints;
+
+    $("#scores #" + actor.player.p.playerId).html("<td>"
+                                                  + actor.player.p.playerId
+                                                  + "</td><td>"
+                                                  + actor.gamePoints
+                                                  + "</td>");
 }
 
 //Creating the stage for tmplevel
