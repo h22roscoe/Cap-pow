@@ -61,6 +61,14 @@ setUpObject.addNewPlayer = function (data) {
         y: 400
     });
 
+    $("#scores > tbody:last-child").append("<tr id='"
+                                   + setUpObject.player.p.playerId
+                                   + "'><td>"
+                                   + setUpObject.player.p.playerId
+                                   + "</td><td>"
+                                   + 0
+                                   + "</td></tr>");
+
     if (setUpObject.stage) {
         // Insert this player into the stage
         setUpObject.stage.insert(setUpObject.player);
@@ -172,6 +180,12 @@ function updatePoints() {
             playerId: setUpObject.player.p.playerId,
             gamePoints: ++setUpObject.player.p.gamePoints
         });
+
+        $("#" + setUpObject.player.p.playerId).html("<td>"
+                                            + setUpObject.player.p.playerId
+                                            + "</td><td>"
+                                            + setUpObject.player.p.gamePoints
+                                            + "</td>");
     }
 }
 

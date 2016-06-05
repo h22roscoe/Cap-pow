@@ -90,7 +90,7 @@ gameNsp.on("connection", function (socket) {
         // PUT A LOAD SCREEN HERE?
         setTimeout(function () {
             socket.emit("connected", {
-                playerId: socket.id
+                playerId: username
             });
         }, 1000);
 
