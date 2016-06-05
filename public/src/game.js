@@ -134,8 +134,6 @@ setUpObject.updateScores = function (data) {
         return obj.player.p.playerId === data.playerId;
     })[0];
 
-    console.log("Actor: ", actor);
-
     actor.gamePoints = data.gamePoints;
 
     $("#scores #" + actor.player.p.playerId).html("<td>"
