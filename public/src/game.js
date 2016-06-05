@@ -135,11 +135,11 @@ setUpObject.updateScores = function (data) {
 
     actor.gamePoints = data.gamePoints;
 
-    $("#scores #" + actor.player.p.playerId).html("<td>"
-                                                  + actor.player.p.playerId
-                                                  + "</td><td>"
-                                                  + actor.gamePoints
-                                                  + "</td>");
+    $("#" + actor.player.p.playerId).html("<td>"
+                                          + actor.player.p.playerId
+                                          + "</td><td>"
+                                          + actor.gamePoints
+                                          + "</td>");
 }
 
 //Creating the stage for tmplevel
