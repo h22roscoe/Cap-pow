@@ -117,6 +117,7 @@ setUpObject.updateSpecificPlayerId = function (data) {
                                        + "</td><td>"
                                        + 0
                                        + "</td></tr>");
+        console.log("temp.p.playerId: ", temp.p.playerId);
 
         if (setUpObject.stage) {
             setUpObject.stage.insert(temp);
