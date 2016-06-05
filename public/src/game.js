@@ -1,10 +1,3 @@
-// Set up instance of the Quintus engine.
-// Supports .mp3 and .ogg audio files.
-// Add in all the modules we may need using include().
-// Maximise the game to the size of the browser.
-// Turns on default controls and allows touch input with mouse/touch screen.
-// Giving covar roomName = sessionStorage.getItem("roomName")ntrol() a parameter of true will use a joypad instead.
-// Enables sound.
 var Q = window.Q = Quintus({
         audioSupported: ["mp3", "ogg"],
         development: true
@@ -88,7 +81,7 @@ setUpObject.addNewPlayer = function (data) {
 
 setUpObject.updateSpecificPlayerId = function (data) {
     var actor = actors.filter(function (obj) {
-        return obj.playerId === data.playerId;
+        return obj.player.p.playerId === data.playerId;
     })[0];
 
     if (actor) {
@@ -106,7 +99,7 @@ setUpObject.updateSpecificPlayerId = function (data) {
 
         actors.push({
             player: temp,
-            playerId: data.playerId
+            gamePoints: 0
         });
 
         if (setUpObject.stage) {
@@ -120,10 +113,16 @@ setUpObject.updateSpecificPlayerId = function (data) {
 };
 
 setUpObject.updateScores = function (data) {
+    var actor = actors.filter(function (obj) {
+        return obj.player.p.playerId === data.playerId;
+    })[0];
 
+    if (actor) {
+        actor.gamePoints = data.gamePoints;
+    } else {
+        console.log("Error: Actor is not yet defined in this game");
+    }
 }
-
-var UiScore = document.getElementById("score");
 
 //Creating the stage for tmplevel
 Q.scene("tmplevel", function (stage) {
