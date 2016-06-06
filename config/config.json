@@ -1,9 +1,9 @@
 {
     "development": {
-        "database": "d9cipg8t3q8pu2",
-        "username": "fbqlonrijrmpwe",
-        "password": "irYdc-vj42ES0_GO6WXZfOIxTd",
-        "host": "ec2-54-228-226-93.eu-west-1.compute.amazonaws.com",
+        "database": "g1527113_u",
+        "username": "g1527113_u",
+        "password": "tVJZsEufUS",
+        "host": "cloud-vm-45-144.doc.ic.ac.uk",
         "port": 5432,
         "dialect": "postgres",
         "ssl": true
