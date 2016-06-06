@@ -3,7 +3,7 @@
         "database": "g1527113_u",
         "username": "g1527113_u",
         "password": "tVJZsEufUS",
-        "host": "cloud-vm-45-144.doc.ic.ac.uk",
+        "host": "db.doc.ic.ac.uk",
         "port": 5432,
         "dialect": "postgres",
         "ssl": true
