@@ -30,6 +30,7 @@ window.addEventListener("load", function () {
 
     // Split up the blocks and sprites from being one long PNG.
     // Load the actual level and run the game.
+    /*
     Q.load(files.join(','), function() {
         Q.sheet("tmptiles", "../images/tmptiles.png", {
             tilew: 32,
@@ -47,6 +48,26 @@ window.addEventListener("load", function () {
                 document.getElementById("loading").remove();
             }
         }
+    });
+    */
+    Q.loadTMX("level1.tmx, sprites.json, sprites.png", function () {
+        Q.compileSheets("sprites.png", "sprites.json");
+        Q.stageScene("level");
+    });
+
+    Q.scene("level", function () {
+        Q.stageTMX("level1.tmx", stage);
+
+        // Temp
+        setUpObject.flag = new Q.Flag({
+            x: 10,
+            y: 10
+        });
+
+        stage.insert(setUpObject.flag);
+
+        // Set up the socket connections.
+        setUp(stage);
     });
 
     // var socket = TEST? null : io.connect("cap-pow.herokuapp.com");
