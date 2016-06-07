@@ -1,5 +1,5 @@
 // Put all code in here except what happens to players when it is collected
-Q.Powerup = function (Q) {
+Q.Powerup = function(Q) {
     Q.Sprite.extend("Powerup", {
         init: function(p) {
             this._super(p, {
@@ -22,11 +22,9 @@ Q.Powerup = function (Q) {
             this.destroy();
         }
     });
-}
 
-//TODO: Need all sheets for each powerup compiled etc
 
-Q.Slow = function (Q) {
+    //TODO: Need all sheets for each powerup compiled etc
     Q.Powerup.extend("Slow", {
         init: function(p) {
             this._super(p, {
@@ -42,9 +40,7 @@ Q.Slow = function (Q) {
             this.destroy();
         }
     });
-}
 
-Q.Fast = function (Q) {
     Q.Powerup.extend("Fast", {
         init: function(p) {
             this._super(p, {
