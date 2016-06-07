@@ -40,6 +40,10 @@ Q.load(files.join(','), function () {
     progressCallback: function(loaded, total) {
         var element = document.getElementById("loading_progress");
         element.style.width = Math.floor(loaded / total * 100) + "%";
+
+        if (loaded === total) {
+            document.getElementById("loading").remove();
+        }
     }
 });
 
@@ -50,6 +54,14 @@ socket.emit("joinGame", {
     roomName: roomName,
     playerId: sessionStorage.getItem("playerId")
 });
+
+function createTableRowWithId(playerId, contents) {
+    return "<tr id='" + playerId + "'>" + contents + "</tr>";
+}
+
+function createTableDataRow(playerId, gamePoints) {
+    return "<td>" + playerId + "</td><td>" + gamePoints + "</td>";
+}
 
 function addSelf() {
     // Set this players unique id
@@ -62,13 +74,9 @@ function addSelf() {
         y: 400
     });
 
-    $("#scores > tbody:last-child").append("<tr id='"
-                                   + setUpObject.selfId
-                                   + "'><td>"
-                                   + setUpObject.selfId
-                                   + "</td><td>"
-                                   + 0
-                                   + "</td></tr>");
+    $("#scores > tbody:last-child").append(
+        createTableRowWithId(setUpObject.selfId,
+            createTableDataRow(setUpObject.selfId, 0)));
 
     if (setUpObject.stage) {
         // Insert this player into the stage
@@ -111,14 +119,11 @@ setUpObject.updateSpecificPlayerId = function (data) {
             gamePoints: 0
         });
 
-        $("#scores > tbody:last-child").append("<tr id='"
-                                       + temp.p.playerId
-                                       + "'><td>"
-                                       + temp.p.playerId
-                                       + "</td><td>"
-                                       + 0
-                                       + "</td></tr>");
+        $("#scores > tbody:last-child").append(
+            createTableRowWithId(temp.p.playerId,
+                createTableDataRow(temp.p.playerId, 0)));
 
+        // No need to add to stage in testing cases
         if (setUpObject.stage) {
             setUpObject.stage.insert(temp);
         }
@@ -136,21 +141,18 @@ setUpObject.updateScores = function (data) {
 
     actor.gamePoints = data.gamePoints;
 
-    $("#scores #" + actor.player.p.playerId).html("<td>"
-                                          + actor.player.p.playerId
-                                          + "</td><td>"
-                                          + actor.gamePoints
-                                          + "</td>");
+    $("#scores #" + actor.player.p.playerId).html(
+        createTableDataRow(actor.player.p.playerId, actor.gamePoints));
 }
 
-//Creating the stage for tmplevel
+// Creating the stage for tmplevel
 Q.scene("tmplevel", function (stage) {
-    //Parallax (Background moves as player moves)
+    // Parallax (Background moves as player moves)
     stage.insert(new Q.Repeater({
         asset: "../images/tmpbackground.png",
         speedX: 0.5,
         speedY: 0.5,
-        //Only repeat the background horizontally
+        // Only repeat the background horizontally
         repeatY: false
     }));
 
@@ -179,11 +181,9 @@ function updatePoints() {
             gamePoints: ++setUpObject.player.p.gamePoints
         });
 
-        $("#scores #" + setUpObject.selfId).html("<td>"
-                                            + setUpObject.selfId
-                                            + "</td><td>"
-                                            + setUpObject.player.p.gamePoints
-                                            + "</td>");
+        $("#scores #" + setUpObject.selfId).html(
+            createTableDataRow(setUpObject.selfId,
+                setUpObject.player.p.gamePoints));
     }
 }
 
