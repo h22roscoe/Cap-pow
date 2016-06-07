@@ -37,6 +37,7 @@ window.addEventListener("load", function() {
 
     Q.loadTMX(files.join(','), function() {
         Q.compileSheets("../images/sprites.png", "../data/sprites.json");
+        Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
         Q.stageScene("castleLevel");
     }, {
         progressCallback: function(loaded, total) {
@@ -52,7 +53,12 @@ window.addEventListener("load", function() {
     Q.scene("castleLevel", function(stage) {
         Q.stageTMX("../data/castleLevel.tmx", stage);
 
-        setUpObject.flag = new Q("Flag").first();
+        setUpObject.flag = new Q.Flag({
+            x: 693,
+            y: 557
+        });
+
+        stage.insert(setUpObject.flag);
 
         // Set up the socket connections.
         setUp(stage);
