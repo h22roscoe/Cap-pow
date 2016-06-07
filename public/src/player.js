@@ -1,4 +1,4 @@
-Q.Player = function(Q) {
+Quintus.Player = function(Q) {
     // The very basic player sprite, this is just a normal sprite
     // using the player sprite sheet with default controls added to it.
     Q.Sprite.extend("Player", {
@@ -12,6 +12,8 @@ Q.Player = function(Q) {
                 type: Q.SPRITE_PLAYER,
                 // TODO: Need to change collisionMask so that players
                 // dont collide with each other
+                jumpSpeed: -300,
+                speed: 100,
                 gamePoints: 0
             });
 
@@ -19,7 +21,7 @@ Q.Player = function(Q) {
         },
 
         step: function(dt) {
-            socket.emit("update", {
+            this.p.socket.emit("update", {
                 playerId: this.p.playerId,
                 x: this.p.x,
                 y: this.p.y,

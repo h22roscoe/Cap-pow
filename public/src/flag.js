@@ -1,4 +1,4 @@
-Q.Flag = function (Q) {
+Quintus.Flag = function (Q) {
     // TODO:
     // Needs to change colour when a player hits it
     // Needs to change colour when a player is within vicinity
@@ -32,6 +32,7 @@ Q.Flag = function (Q) {
             // This doesn't take in parameters because it should already
             // know the player that it is not looking for
             // (ie this client's player)
+            var actors = Q("Actor");
             for (var i = 0; i < actors.length; i++) {
                 if (actors[i].player.p.playerId != this.p.player.p.playerId
                         && this.withinRange(actors[i].player)) {

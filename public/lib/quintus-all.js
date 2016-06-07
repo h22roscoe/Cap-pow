@@ -1484,7 +1484,7 @@ var Quintus = function Quintus(opts) {
 
     Q.setImageSmoothing = function (enabled) {
         Q.ctx.mozImageSmoothingEnabled = enabled;
-        Q.ctx.webkitImageSmoothingEnabled = enabled;
+        Q.ctx.imageSmoothingEnabled = enabled;
         Q.ctx.msImageSmoothingEnabled = enabled;
         Q.ctx.imageSmoothingEnabled = enabled;
     };

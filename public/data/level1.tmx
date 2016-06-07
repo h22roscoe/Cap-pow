@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="41" tilewidth="21" tileheight="21" nextobjectid="26">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="41" tilewidth="21" tileheight="21" nextobjectid="28">
  <tileset firstgid="1" name="spritesheet" tilewidth="21" tileheight="21" spacing="2" tilecount="900" columns="30">
   <image source="../images/spritesheet.png" width="692" height="692"/>
   <tile id="19">
@@ -18,6 +18,15 @@
     <property name="Class" value="VerticalEnemy"/>
     <property name="sheet" value="gray-alien"/>
    </properties>
+  </tile>
+  <tile id="312">
+   <properties>
+    <property name="Class" value="Flag"/>
+   </properties>
+   <animation>
+    <frame tileid="312" duration="150"/>
+    <frame tileid="342" duration="150"/>
+   </animation>
   </tile>
   <tile id="354">
    <properties>
@@ -46,7 +55,7 @@
  </tileset>
  <layer name="background1" width="32" height="41">
   <properties>
-   <property name="boundingBox" value="true"/>
+   <property name="boundingBox" type="bool" value="true"/>
    <property name="type" value="0"/>
   </properties>
   <data>
@@ -2685,7 +2694,7 @@
  </layer>
  <layer name="collision" width="32" height="41">
   <properties>
-   <property name="collision" value="true"/>
+   <property name="collision" type="bool" value="true"/>
   </properties>
   <data>
    <tile gid="153"/>
@@ -4002,4 +4011,16 @@
    <tile gid="213"/>
   </data>
  </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="26" gid="20" x="110" y="685" width="21" height="21">
+   <properties>
+    <property name="Class" value="Player"/>
+   </properties>
+  </object>
+  <object id="27" gid="313" x="272" y="505" width="21" height="21">
+   <properties>
+    <property name="Class" value="Flag"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

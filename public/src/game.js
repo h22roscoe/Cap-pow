@@ -6,10 +6,12 @@ window.addEventListener("load", function () {
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
         .include("Player, Flag, Powerup")
         .setup({
-            maximize: true
+            maximise: true
         })
         .controls().touch()
         .enableSound();
+
+    Q.setImageSmoothing(false);
 
     Q.SPRITE_PLAYER = 64;
     Q.SPRITE_FLAG = 128;
@@ -21,24 +23,20 @@ window.addEventListener("load", function () {
     };
 
     var files = [
+        "../data/level1.tmx",
         "../images/tmptiles.png",
         "../data/tmplevel.json",
         "../images/tmpsprites.png",
         "../data/tmpsprites.json",
-        "../images/tmpbackground.png"
+        "../images/tmpbackground.png",
+        "../data/sprites.json",
+        "../images/sprites.png"
     ];
 
-    // Split up the blocks and sprites from being one long PNG.
-    // Load the actual level and run the game.
-    /*
-    Q.load(files.join(','), function() {
-        Q.sheet("tmptiles", "../images/tmptiles.png", {
-            tilew: 32,
-            tileh: 32
-        });
-
+    Q.loadTMX(files.join(','), function () {
+        Q.compileSheets("../images/sprites.png", "../data/sprites.json");
         Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
-        Q.stageScene("tmplevel");
+        Q.stageScene("level");
     }, {
         progressCallback: function(loaded, total) {
             var element = document.getElementById("loading_progress");
@@ -49,28 +47,16 @@ window.addEventListener("load", function () {
             }
         }
     });
-    */
-    Q.loadTMX("level1.tmx, sprites.json, sprites.png", function () {
-        Q.compileSheets("sprites.png", "sprites.json");
-        Q.stageScene("level");
-    });
 
-    Q.scene("level", function () {
-        Q.stageTMX("level1.tmx", stage);
+    Q.scene("level", function (stage) {
+        Q.stageTMX("../data/level1.tmx", stage);
 
-        // Temp
-        setUpObject.flag = new Q.Flag({
-            x: 10,
-            y: 10
-        });
-
-        stage.insert(setUpObject.flag);
+        setUpObject.flag = new Q("Flag").first();
 
         // Set up the socket connections.
         setUp(stage);
     });
 
-    // var socket = TEST? null : io.connect("cap-pow.herokuapp.com");
     var roomName = sessionStorage.getItem("roomName")
     var socket = io.connect("/game");
     socket.emit("joinGame", {
@@ -91,11 +77,9 @@ window.addEventListener("load", function () {
         setUpObject.selfId = sessionStorage.getItem("playerId");
 
         // Create the actual player with this unique id
-        setUpObject.player = new Q.Player({
-            playerId: setUpObject.selfId,
-            x: 1100,
-            y: 400
-        });
+        setUpObject.player = new Q("Player").first();
+        setUpObject.player.p.socket = socket;
+        setUpObject.player.p.playerId = setUpObject.selfId;
 
         $("#scores > tbody:last-child").append(
             createTableRowWithId(setUpObject.selfId,
@@ -103,7 +87,7 @@ window.addEventListener("load", function () {
 
         if (setUpObject.stage) {
             // Insert this player into the stage
-            setUpObject.stage.insert(setUpObject.player);
+            // setUpObject.stage.insert(setUpObject.player);
 
             // Add a camera  for this player
             // TODO: Change to view the whole screen? Or keep like this?
@@ -167,35 +151,6 @@ window.addEventListener("load", function () {
         $("#scores #" + actor.player.p.playerId).html(
             createTableDataRow(actor.player.p.playerId, actor.gamePoints));
     }
-
-    // Creating the stage for tmplevel
-    Q.scene("tmplevel", function(stage) {
-        // Parallax (Background moves as player moves)
-        stage.insert(new Q.Repeater({
-            asset: "../images/tmpbackground.png",
-            speedX: 0.5,
-            speedY: 0.5,
-            // Only repeat the background horizontally
-            repeatY: false
-        }));
-
-        // Create the walls of the game. Level is described by json. Blocks are
-        // described by the sheet.
-        stage.collisionLayer(new Q.TileLayer({
-            dataAsset: "../data/tmplevel.json",
-            sheet: "tmptiles"
-        }));
-
-        setUpObject.flag = new Q.Flag({
-            x: 1390,
-            y: 850
-        });
-
-        stage.insert(setUpObject.flag);
-
-        // Set up the socket connections.
-        setUp(stage);
-    });
 
     function updatePoints() {
         if (setUpObject.flag.p.shouldUpdatePoints) {

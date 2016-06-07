@@ -10,7 +10,7 @@
                                    maximum-scale=1.0"/>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
 
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 
@@ -79,19 +79,6 @@
       text-align: center;
     }
 
-    div {
-        width: 100px;
-        height; 100px;
-
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-
-        margin: auto;
-    }
-
     #loading_container {
       position: relative;
       margin: 0 auto;
@@ -132,7 +119,11 @@
         Loading...
     </div>
 
-    <script src='../build/all.min.js'></script>
+    <script src="../lib/quintus-all.js"></script>
+    <script src="../src/player.js"></script>
+    <script src="../src/flag.js"></script>
+    <script src="../src/powerup.js"></script>
+    <script src="../src/game.js"></script>
 </body>
 
 </html>

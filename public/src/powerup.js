@@ -1,4 +1,4 @@
-Q.Powerup = function (Q) {
+Quintus.Powerup = function (Q) {
     Q.Sprite.extend("powerup", {
         init: function(p) {
             this._super(p, {
