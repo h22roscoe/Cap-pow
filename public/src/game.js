@@ -58,8 +58,8 @@ function addSelf() {
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
         playerId: setUpObject.selfId,
-        x: 1100,
-        y: 400
+        x: 900,
+        y: 100
     });
 
     $("#scores > tbody:last-child").append("<tr id='"
