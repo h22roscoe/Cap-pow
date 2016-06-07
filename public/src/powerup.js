@@ -1,5 +1,5 @@
 // Put all code in here except what happens to players when it is collected
-Q.Powerup = function(Q) {
+Quintus.Powerup = function(Q) {
     Q.Sprite.extend("Powerup", {
         init: function(p) {
             this._super(p, {

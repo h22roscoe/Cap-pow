@@ -53,7 +53,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="background1" width="32" height="41">
+ <layer name="background1" width="32" height="41" offsetx="0" offsety="-2">
   <properties>
    <property name="boundingBox" type="bool" value="true"/>
    <property name="type" value="0"/>
@@ -4012,11 +4012,6 @@
   </data>
  </layer>
  <objectgroup name="Object Layer 1">
-  <object id="26" gid="20" x="110" y="685" width="21" height="21">
-   <properties>
-    <property name="Class" value="Player"/>
-   </properties>
-  </object>
   <object id="27" gid="313" x="272" y="505" width="21" height="21">
    <properties>
     <property name="Class" value="Flag"/>

@@ -1,4 +1,4 @@
-window.addEventListener("load", function () {
+window.addEventListener("load", function() {
     var Q = window.Q = Quintus({
             audioSupported: ["mp3", "ogg"],
             development: true
@@ -23,6 +23,8 @@ window.addEventListener("load", function () {
     };
 
     var files = [
+        "../data/test.tmx",
+        "../data/castleLevel.tmx",
         "../data/level1.tmx",
         "../images/tmptiles.png",
         "../data/tmplevel.json",
@@ -33,10 +35,9 @@ window.addEventListener("load", function () {
         "../images/sprites.png"
     ];
 
-    Q.loadTMX(files.join(','), function () {
+    Q.loadTMX(files.join(','), function() {
         Q.compileSheets("../images/sprites.png", "../data/sprites.json");
-        Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
-        Q.stageScene("level");
+        Q.stageScene("castleLevel");
     }, {
         progressCallback: function(loaded, total) {
             var element = document.getElementById("loading_progress");
@@ -48,8 +49,8 @@ window.addEventListener("load", function () {
         }
     });
 
-    Q.scene("level", function (stage) {
-        Q.stageTMX("../data/level1.tmx", stage);
+    Q.scene("castleLevel", function(stage) {
+        Q.stageTMX("../data/castleLevel.tmx", stage);
 
         setUpObject.flag = new Q("Flag").first();
 
@@ -77,9 +78,12 @@ window.addEventListener("load", function () {
         setUpObject.selfId = sessionStorage.getItem("playerId");
 
         // Create the actual player with this unique id
-        setUpObject.player = new Q("Player").first();
-        setUpObject.player.p.socket = socket;
-        setUpObject.player.p.playerId = setUpObject.selfId;
+        setUpObject.player = new Q.Player({
+            socket: socket,
+            playerId: setUpObject.selfId,
+            x: 300,
+            y: 50
+        });
 
         $("#scores > tbody:last-child").append(
             createTableRowWithId(setUpObject.selfId,
@@ -87,7 +91,7 @@ window.addEventListener("load", function () {
 
         if (setUpObject.stage) {
             // Insert this player into the stage
-            // setUpObject.stage.insert(setUpObject.player);
+            setUpObject.stage.insert(setUpObject.player);
 
             // Add a camera  for this player
             // TODO: Change to view the whole screen? Or keep like this?
