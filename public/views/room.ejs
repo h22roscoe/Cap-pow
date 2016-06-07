@@ -76,6 +76,14 @@
                 <hr>
                 <p ng-click="loadRoom()" style="cursor: pointer"><span class="fa fa-refresh"></span> Refresh</p>
             </div>
+            <div class="col-lg-4 text-center">
+                <h3 class="btn btn-default btn-lg"
+                    ng-disabled="isReady()"
+                    ng-click="startGame()"><span class="fa fa-play"></span> Start the game!</h3>
+
+                <h1 id="count">
+                </h1>
+            </div>
         </div>
     </div>
     <script>

@@ -36,6 +36,8 @@
     <meta name="msapplication-TileImage" content="../favicons/mstile-144x144.png">
     <meta name="theme-color" content="#21bf73">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
     <title>Cap-pow!</title>
 </head>
 
@@ -43,6 +45,16 @@
     body {
         padding: 0px;
         margin: 0px;
+    }
+
+    .table th {
+        text-align: center;
+        font-size: 0.9em;
+    }
+
+    .table td {
+        text-align: center;
+        font-size: 0.75em;
     }
 
     .score {
@@ -54,6 +66,8 @@
         text-align: left;
         font-size: 1.5em;
         font-family: inherit;
+        width: 20%;
+        background-color: transparent;
     }
 
     #loading {
@@ -99,7 +113,16 @@
 </style>
 
 <body>
-    <span id="score" class="score"></span>
+    <table id="scores" class="table score">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 
     <div id='loading' style="top: 50%; margin-top: -50px;">
         <div id='loading_container'>

@@ -60,7 +60,7 @@
             <% } %>
 
             <!-- Change /index to /lobby -->
-            <form class="form-signin" action="/login" method="post">
+            <form class="form-signin" onsubmit='return checkForm(this);' action="/login" method="post">
                 <label for="inputUsername" class="sr-only">Username</label>
                 <input type="username" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
@@ -84,6 +84,12 @@
     </footer>
 
     <script>
+        function checkForm(form) {
+            sessionStorage.setItem("playerId", form.username.value);
+
+            return true;
+        }
+
         $(document).ready(function () {
             $(".close").click(function () {
                 $("#alert").html("");

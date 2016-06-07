@@ -36,7 +36,7 @@ function sendHeartbeat(){
     setTimeout(sendHeartbeat, 8000);
 }
 
-module.exports = function (username, roomio, models, roomSocket) {
+module.exports = function (roomio, models, roomSocket) {
     roomNsp = roomio;
     roomSocket = roomSocket;
 

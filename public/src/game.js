@@ -1,10 +1,3 @@
-// Set up instance of the Quintus engine.
-// Supports .mp3 and .ogg audio files.
-// Add in all the modules we may need using include().
-// Maximise the game to the size of the browser.
-// Turns on default controls and allows touch input with mouse/touch screen.
-// Giving covar roomName = sessionStorage.getItem("roomName")ntrol() a parameter of true will use a joypad instead.
-// Enables sound.
 var Q = window.Q = Quintus({
         audioSupported: ["mp3", "ogg"],
         development: true
@@ -54,12 +47,13 @@ Q.load(files.join(','), function () {
 var roomName = sessionStorage.getItem("roomName")
 var socket = io.connect("/game");
 socket.emit("joinGame", {
-    roomName: roomName
+    roomName: roomName,
+    playerId: sessionStorage.getItem("playerId")
 });
 
-setUpObject.addNewPlayer = function (data) {
+function addSelf() {
     // Set this players unique id
-    setUpObject.selfId = data.playerId;
+    setUpObject.selfId = sessionStorage.getItem("playerId");
 
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
@@ -67,6 +61,14 @@ setUpObject.addNewPlayer = function (data) {
         x: 1100,
         y: 400
     });
+
+    $("#scores > tbody:last-child").append("<tr id='"
+                                   + setUpObject.selfId
+                                   + "'><td>"
+                                   + setUpObject.selfId
+                                   + "</td><td>"
+                                   + 0
+                                   + "</td></tr>");
 
     if (setUpObject.stage) {
         // Insert this player into the stage
@@ -88,7 +90,7 @@ setUpObject.addNewPlayer = function (data) {
 
 setUpObject.updateSpecificPlayerId = function (data) {
     var actor = actors.filter(function (obj) {
-        return obj.playerId === data.playerId;
+        return obj.player.p.playerId === data.playerId;
     })[0];
 
     if (actor) {
@@ -106,8 +108,16 @@ setUpObject.updateSpecificPlayerId = function (data) {
 
         actors.push({
             player: temp,
-            playerId: data.playerId
+            gamePoints: 0
         });
+
+        $("#scores > tbody:last-child").append("<tr id='"
+                                       + temp.p.playerId
+                                       + "'><td>"
+                                       + temp.p.playerId
+                                       + "</td><td>"
+                                       + 0
+                                       + "</td></tr>");
 
         if (setUpObject.stage) {
             setUpObject.stage.insert(temp);
@@ -119,13 +129,23 @@ setUpObject.updateSpecificPlayerId = function (data) {
     return actor;
 };
 
-var UiScore = document.getElementById("score");
+setUpObject.updateScores = function (data) {
+    var actor = actors.filter(function (obj) {
+        return obj.player.p.playerId === data.playerId;
+    })[0];
+
+    actor.gamePoints = data.gamePoints;
+
+    $("#scores #" + actor.player.p.playerId).html("<td>"
+                                          + actor.player.p.playerId
+                                          + "</td><td>"
+                                          + actor.gamePoints
+                                          + "</td>");
+}
 
 //Creating the stage for tmplevel
 Q.scene("tmplevel", function (stage) {
     //Parallax (Background moves as player moves)
-    //TODO: Not sure if parallax works with multiple players
-    //TODO: Might need foldername/file for each of these assets
     stage.insert(new Q.Repeater({
         asset: "../images/tmpbackground.png",
         speedX: 0.5,
@@ -146,7 +166,6 @@ Q.scene("tmplevel", function (stage) {
         y: 850
     });
 
-    // TODO: Will need to add the flag
     stage.insert(setUpObject.flag);
 
     // Set up the socket connections.
@@ -155,7 +174,16 @@ Q.scene("tmplevel", function (stage) {
 
 function updatePoints() {
     if (setUpObject.flag.p.shouldUpdatePoints) {
-        setUpObject.player.p.gamePoints++;
+        socket.emit("points", {
+            playerId: setUpObject.player.p.playerId,
+            gamePoints: ++setUpObject.player.p.gamePoints
+        });
+
+        $("#scores #" + setUpObject.selfId).html("<td>"
+                                            + setUpObject.selfId
+                                            + "</td><td>"
+                                            + setUpObject.player.p.gamePoints
+                                            + "</td>");
     }
 }
 
@@ -163,7 +191,10 @@ function updatePoints() {
 function setUp(stage) {
     setUpObject.stage = stage;
 
-    socket.on("connected", setUpObject.addNewPlayer);
+    addSelf();
+
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
+
+    socket.on("newScore", setUpObject.updateScores);
 }
