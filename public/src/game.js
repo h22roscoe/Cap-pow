@@ -64,17 +64,6 @@ window.addEventListener("load", function () {
 
         stage.insert(setUpObject.flag);
 
-        fastPowerup = new Q.Fast({
-            x: 380,
-            y: 70
-        });
-        stage.insert(fastPowerup);
-        
-        /*stage.insert(new Q.Fast({
-            x: 380,
-            y: 70
-        }));*/
-
         // Set up the socket connections.
         setUp(stage);
     });
@@ -201,6 +190,43 @@ window.addEventListener("load", function () {
         socket.on("updated", setUpObject.updateSpecificPlayerId);
 
         socket.on("newScore", setUpObject.updateScores);
+
+        socket.on("makeFast", function (data) {
+            stage.insert(new Q.Fast({
+                x: data.x,
+                y: data.y
+            }));
+        });
+
+        socket.on("makeSlow", function (data) {
+            stage.insert(new Q.Slow({
+                x: data.x,
+                y: data.y
+            }));
+        });
+
+        socket.on("makeHeavy", function (data) {
+            stage.insert(new Q.Heavy({
+                x: data.x,
+                y: data.y
+            }));
+        });
+
+        socket.on("makeLight", function (data) {
+            stage.insert(new Q.Light({
+                x: data.x,
+                y: data.y
+            }));
+        });
+
+        socket.on("makeFreeze", function (data) {
+            stage.insert(new Q.Freeze({
+                x: data.x,
+                y: data.y
+            }));
+        });
+
+
 
         //When a powerup has been collected, a message specific to that powerup will be
         //emitted, causing the other players to get the corresponding component for that powerup

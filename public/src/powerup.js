@@ -116,7 +116,8 @@ Quintus.Powerup = function (Q) {
                 type: Q.SPRITE_POWERUP,
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
-                gravity: 0
+                gravity: 0,
+                id: ++heavyId
             });
             this.on("sensor");
             this.add("2d");
@@ -158,7 +159,8 @@ Quintus.Powerup = function (Q) {
                 type: Q.SPRITE_POWERUP,
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
-                gravity: 0
+                gravity: 0,
+                id: ++lightId
             });
 
             this.on("sensor");
@@ -201,7 +203,8 @@ Quintus.Powerup = function (Q) {
                 type: Q.SPRITE_POWERUP,
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
-                gravity: 0
+                gravity: 0,
+                id: freezeId
             });
 
             this.on("sensor");
