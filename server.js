@@ -127,10 +127,12 @@ gameNsp.on("connection", function (socket) {
                 .emit("newScore", updateInfo);
         });
 
-        socket.on("fast", function (updateInfo) {
+        socket.on("powerUp", function (powerUpInfo) {
             socket.broadcast.to(gameData.roomName)
-                .emit("fastAcquired", updateInfo);
+                .emit(powerUpInfo.name + "Acquired", powerUpInfo);
+            POWER_UP_POSITIONS.push({ x: powerUpInfo.x, y: powerUpInfo.y });
         });
+
     });
 });
 

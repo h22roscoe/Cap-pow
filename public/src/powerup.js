@@ -26,13 +26,14 @@ Quintus.Powerup = function (Q) {
         //When a slow powerup is hit (Called instead of sensor() in Powerup)
         sensor: function (colObj) {
             //Tell every other player in the room that they should equip a slow component, emitting the id of
-            sensor: function (colObj) {
-            colObj.p.socket.emit("slow", {
+            colObj.p.socket.emit("powerUp", {
+                name: "slow",
                 playerId: colObj.p.playerId,
-                id: this.p.id
+                id: this.p.id,
+                x: this.p.x,
+                y: this.p.y
             });
             this.destroy();
-        }
         }
     });
 
@@ -81,9 +82,12 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            colObj.p.socket.emit("fast", {
+            colObj.p.socket.emit("powerUp", {
+                name: "fast",
                 playerId: colObj.p.playerId,
-                id: this.p.id
+                id: this.p.id,
+                x: this.p.x,
+                y: this.p.y
             });
             this.destroy();
         }
@@ -125,9 +129,12 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            colObj.p.socket.emit("heavy", {
+            colObj.p.socket.emit("powerUp", {
+                name: "heavy",
                 playerId: colObj.p.playerId,
-                id: this.p.id
+                id: this.p.id,
+                x: this.p.x,
+                y: this.p.y
             });
             this.destroy();
         }
@@ -170,9 +177,12 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            colObj.p.socket.emit("light", {
+            colObj.p.socket.emit("powerUp", {
+                name: "light",
                 playerId: colObj.p.playerId,
-                id: this.p.id
+                id: this.p.id,
+                x: this.p.x,
+                y: this.p.y
             });
             this.destroy();
         }
@@ -215,9 +225,12 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            colObj.p.socket.emit("freeze", {
+            colObj.p.socket.emit("powerUp", {
+                name: "freeze",
                 playerId: colObj.p.playerId,
-                id: this.p.id
+                id: this.p.id,
+                x: this.p.x,
+                y: this.p.y
             });
             this.destroy();
         }
