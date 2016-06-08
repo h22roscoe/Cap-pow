@@ -6,7 +6,9 @@ window.addEventListener("load", function () {
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
         .include("Player, Flag, Powerup")
         .setup({
-            maximise: true
+            width: $(window).width() - 10,
+            height: $(window).height() - 10,
+            scaleToFit: true
         })
         .controls().touch()
         .enableSound();
