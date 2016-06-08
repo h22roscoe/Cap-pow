@@ -109,9 +109,10 @@ gameNsp.on("connection", function (socket) {
                 Math.random() * POWER_UP_POSITIONS.length);
 
             setTimeout(function () {
+                var pos = POWER_UP_POSITIONS.splice(randPos, 1);
+                console.log(pos);
                 gameNsp.to(gameData.roomName)
-                    .emit(POWER_UPS[randPowerUp],
-                          POWER_UP_POSITIONS.splice(randPos, 1));
+                    .emit(POWER_UPS[randPowerUp], pos[0]);
                 powerups++;
 
                 if (powerups < MAX_POWER_UPS) {

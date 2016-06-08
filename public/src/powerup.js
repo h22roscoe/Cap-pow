@@ -1,6 +1,5 @@
 // Put all code in here except what happens to players when it is collected
 Quintus.Powerup = function (Q) {
-
     var slowId = 0;
     var fastId = 0;
     var heavyId = 0;
