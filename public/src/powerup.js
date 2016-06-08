@@ -1,34 +1,18 @@
 // Put all code in here except what happens to players when it is collected
 Quintus.Powerup = function (Q) {
-    Q.Sprite.extend("Powerup", {
-        init: function (p) {
-            this._super(p, {
-                type: Q.SPRITE_POWERUP,
-                collisionMask: Q.SPRITE_PLAYER,
-                sensor: true,
-                gravity: 0
-            });
 
-            // Call sensor() when powerup is hit
-            this.on("sensor");
-        },
-
-        //THIS sensor() WONT ACTUALLY BE CALLED, AS WE ALWAYS USE A CONCRETE POWERUP BELOW
-        // When a powerup is hit
-        // colObj will be the Player that collided with the powerup
-        sensor: function (colObj) {
-            // Destroy the powerup as it has been collected
-            this.destroy();
-        }
-    });
-
-    //TODO: Need all sheets for each powerup compiled etc
-    Q.Powerup.extend("Slow", {
+    Q.Sprite.extend("Slow", {
         init: function (p) {
             //Concrete implementation of a Q.Powerup
             this._super(p, {
-                sheet: "slowPowerup"
+                sheet: "red",
+                type: Q.SPRITE_POWERUP,
+                collisionMask: Q.SPRITE_NONE,
+                sensor: true,
+                gravity: 0
             });
+            //Call sensor() when powerup is hit
+            this.on("sensor");
         },
 
         //When a slow powerup is hit (Called instead of sensor() in Powerup)
@@ -63,7 +47,7 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 //Double the players speed back to what it would have been without this powerup
                 this.entity.p.speed = this.entity.p.speed * 2;
-                this.entity.off("step", this, "step");
+                // this.entity.off("step", this, "step");
                 this.entity.p.del("slow");
             } else {
                 timeLeft--;
@@ -75,15 +59,34 @@ Quintus.Powerup = function (Q) {
         //Can extend the player to have some more functions while this component is equipped (Gun example is fire())
     });
 
-    Q.Powerup.extend("Fast", {
+    Q.Sprite.extend("Fast", {
         init: function (p) {
             this._super(p, {
-                sheet: "fastPowerup"
+                sheet: "green",
+                type: Q.SPRITE_POWERUP,
+                collisionMask: Q.SPRITE_PLAYER,
+                sensor: true,
+                gravity: 0
             });
+            console.log("Binding sensor");
+            this.on("sensor");
+            /*this.on("hit.sprite", function (collision) {
+                console.log("HIT");
+                if (collision.obj.isA("Player")) {
+                    collision.obj.p.socket.broadcast.to(colObj.p.roomName).emit("fast", {
+                        playerId: colObj.p.playerId
+                    });
+                    this.destroy();
+                }
+            });*/
+            this.add("2d");
         },
 
         sensor: function (colObj) {
-            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("fast", {
+            //console.log(colObj.p);
+            //console.log(colObj.p.socket.broadcast);
+            //colObj.p.socket.broadcast.to(colObj.p.roomName).emit("fast", {
+            colObj.p.socket.emit("fast", {
                 playerId: colObj.p.playerId
             });
             this.destroy();
@@ -102,7 +105,7 @@ Quintus.Powerup = function (Q) {
         step: function (dt) {
             if (this.timeLeft == 0) {
                 this.entity.p.speed = this.entity.p.speed / 2;
-                this.entity.off("step", this, "step");
+                // this.entity.off("step", this, "step");
                 this.entity.p.del("fast");
             } else {
                 timeLeft--;
@@ -111,11 +114,17 @@ Quintus.Powerup = function (Q) {
 
     });
 
-    Q.Powerup.extend("Heavy", {
+    Q.Sprite.extend("Heavy", {
         init: function (p) {
             this._super(p, {
-                sheet: "heavyPowerup"
+                sheet: "darkBlue",
+                type: Q.SPRITE_POWERUP,
+                collisionMask: Q.SPRITE_PLAYER,
+                sensor: true,
+                gravity: 0
             });
+
+            this.on("sensor");
         },
 
         sensor: function (colObj) {
@@ -138,7 +147,7 @@ Quintus.Powerup = function (Q) {
         step: function (dt) {
             if (this.timeLeft == 0) {
                 this.entity.p.gravity = this.entity.p.gravity / 2;
-                this.entity.off("step", this, "step");
+                // this.entity.off("step", this, "step");
                 this.entity.p.del("heavy");
             } else {
                 timeLeft--;
@@ -147,11 +156,17 @@ Quintus.Powerup = function (Q) {
 
     });
 
-    Q.Powerup.extend("Light", {
+    Q.Sprite.extend("Light", {
         init: function (p) {
             this._super(p, {
-                sheet: "lightPowerup"
+                sheet: "yellow",
+                type: Q.SPRITE_POWERUP,
+                collisionMask: Q.SPRITE_PLAYER,
+                sensor: true,
+                gravity: 0
             });
+
+            this.on("sensor");
         },
 
         sensor: function (colObj) {
@@ -174,7 +189,7 @@ Quintus.Powerup = function (Q) {
         step: function (dt) {
             if (this.timeLeft == 0) {
                 this.entity.p.gravity = this.entity.p.gravity * 2;
-                this.entity.off("step", this, "step");
+                // this.entity.off("step", this, "step");
                 this.entity.p.del("light");
             } else {
                 timeLeft--;
@@ -183,11 +198,17 @@ Quintus.Powerup = function (Q) {
 
     });
 
-    Q.Powerup.extend("Freeze", {
+    Q.Sprite.extend("Freeze", {
         init: function (p) {
             this._super(p, {
-                sheet: "freezePowerup"
+                sheet: "lightBlue",
+                type: Q.SPRITE_POWERUP,
+                collisionMask: Q.SPRITE_PLAYER,
+                sensor: true,
+                gravity: 0
             });
+
+            this.on("sensor");
         },
 
         sensor: function (colObj) {
@@ -228,7 +249,7 @@ Quintus.Powerup = function (Q) {
 
             }
             if (this.timeLeft == 0) {
-                this.entity.off("step", this, "step");
+                // this.entity.off("step", this, "step");
                 this.entity.p.del("freeze");
             } else {
                 timeLeft--;
