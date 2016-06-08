@@ -25,7 +25,6 @@ window.addEventListener("load", function () {
     };
 
     var files = [
-        "../data/test.tmx",
         "../data/castleLevel.tmx",
         "../data/level1.tmx",
         "../images/tmptiles.png",
