@@ -13,7 +13,7 @@ Quintus.Powerup = function (Q) {
                 collisionMask: Q.SPRITE_NONE,
                 sensor: true,
                 gravity: 0,
-                id: ++slowId
+                powerupId: ++slowId
             });
 
             this.on("sensor");
@@ -26,7 +26,7 @@ Quintus.Powerup = function (Q) {
             colObj.p.socket.emit("powerUp", {
                 name: "Slow",
                 playerId: colObj.p.playerId,
-                id: this.p.id,
+                powerupId: this.p.powerupId,
                 x: this.p.x,
                 y: this.p.y
             });
@@ -60,7 +60,7 @@ Quintus.Powerup = function (Q) {
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
                 gravity: 0,
-                id: ++fastId
+                powerupId: ++fastId
             });
 
             this.on("sensor");
@@ -68,11 +68,10 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            console.log("should emit fast");
             colObj.p.socket.emit("powerUp", {
                 name: "Fast",
                 playerId: colObj.p.playerId,
-                id: this.p.id,
+                powerupId: this.p.powerupId,
                 x: this.p.x,
                 y: this.p.y
             });
@@ -106,7 +105,7 @@ Quintus.Powerup = function (Q) {
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
                 gravity: 0,
-                id: ++heavyId
+                powerupId: ++heavyId
             });
 
             this.on("sensor");
@@ -117,7 +116,7 @@ Quintus.Powerup = function (Q) {
             colObj.p.socket.emit("powerUp", {
                 name: "Heavy",
                 playerId: colObj.p.playerId,
-                id: this.p.id,
+                powerupId: this.p.powerupId,
                 x: this.p.x,
                 y: this.p.y
             });
@@ -153,7 +152,7 @@ Quintus.Powerup = function (Q) {
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
                 gravity: 0,
-                id: ++lightId
+                powerupId: ++lightId
             });
 
             this.on("sensor");
@@ -164,7 +163,7 @@ Quintus.Powerup = function (Q) {
             colObj.p.socket.emit("powerUp", {
                 name: "Light",
                 playerId: colObj.p.playerId,
-                id: this.p.id,
+                powerupId: this.p.powerupId,
                 x: this.p.x,
                 y: this.p.y
             });
@@ -198,7 +197,7 @@ Quintus.Powerup = function (Q) {
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
                 gravity: 0,
-                id: ++freezeId
+                powerupId: ++freezeId
             });
 
             this.on("sensor");
@@ -209,7 +208,7 @@ Quintus.Powerup = function (Q) {
             colObj.p.socket.emit("powerUp", {
                 name: "Freeze",
                 playerId: colObj.p.playerId,
-                id: this.p.id,
+                powerupId: this.p.powerupId,
                 x: this.p.x,
                 y: this.p.y
             });

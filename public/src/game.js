@@ -231,7 +231,7 @@ window.addEventListener("load", function () {
         socket.on("powerupAcquired", function (data) {
             console.log(Q(data.name));
             Q(data.name).each(function () {
-                if (this.id === data.id) {
+                if (this.powerupId === data.powerupId) {
                     this.destroy();
                 }
             });

@@ -80,29 +80,29 @@ var POWER_UPS = [
     "makeHeavy"
 ]
 
-var POWER_UP_POSITIONS = [
-    {
-        x: 380,
-        y: 70
-    },
-    {
-        x: 1218,
-        y: 189
-    },
-    {
-        x: 273,
-        y: 441
-    }
-]
-
 var OFFSET = 1;
-var MAX_POWER_UPS = POWER_UP_POSITIONS.length - OFFSET;
-var powerups = 0;
 
 gameNsp.on("connection", function (socket) {
     console.log("Game: A user connected");
 
     socket.on("joinGame", function (gameData) {
+        var powerups = 0;
+        var powerUpPositions = [
+            {
+                x: 380,
+                y: 70
+            },
+            {
+                x: 1218,
+                y: 189
+            },
+            {
+                x: 273,
+                y: 441
+            }
+        ];
+        var MAX_POWER_UPS = powerUpPositions.length - OFFSET;
+
         socket.join(gameData.roomName);
 
         setTimeout(function () {
@@ -115,14 +115,14 @@ gameNsp.on("connection", function (socket) {
             var randTime = Math.round(Math.random() * (20000 - 5000)) + 5000;
             var randPowerUp = Math.floor(Math.random() * POWER_UPS.length);
             var randPos = Math.floor(
-                Math.random() * POWER_UP_POSITIONS.length);
+                Math.random() * powerUpPositions.length);
 
             setTimeout(function () {
                 if (powerups < MAX_POWER_UPS) {
-                    console.log("Before: ", POWER_UP_POSITIONS);
-                    console.log("index: ", randPowerUp);
-                    var pos = POWER_UP_POSITIONS.splice(randPos, 1);
-                    console.log("After: ", POWER_UP_POSITIONS);
+                    console.log("Before: ", powerUpPositions);
+                    console.log("index: ", randPos);
+                    var pos = powerUpPositions.splice(randPos, 1);
+                    console.log("After: ", powerUpPositions);
                     console.log("Spliced: ", pos);
 
                     gameNsp.to(gameData.roomName)
@@ -148,11 +148,11 @@ gameNsp.on("connection", function (socket) {
             console.log("powerUp is given: ", powerUpInfo.id);
             socket.broadcast.to(gameData.roomName)
                 .emit("powerupAcquired", powerUpInfo);
-            console.log("powerUp should be recived");
-            POWER_UP_POSITIONS.push({
+            powerUpPositions.push({
                 x: powerUpInfo.x,
                 y: powerUpInfo.y
             });
+
             powerups--;
         });
     });
