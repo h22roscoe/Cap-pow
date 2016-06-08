@@ -1,4 +1,4 @@
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
     var Q = window.Q = Quintus({
             audioSupported: ["mp3", "ogg"],
             development: true
@@ -37,12 +37,12 @@ window.addEventListener("load", function() {
         "../images/sprites.png"
     ];
 
-    Q.loadTMX(files.join(','), function() {
+    Q.loadTMX(files.join(','), function () {
         Q.compileSheets("../images/sprites.png", "../data/sprites.json");
         Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
         Q.stageScene("castleLevel");
     }, {
-        progressCallback: function(loaded, total) {
+        progressCallback: function (loaded, total) {
             var element = document.getElementById("loading_progress");
             element.style.width = Math.floor(loaded / total * 100) + "%";
 
@@ -52,7 +52,7 @@ window.addEventListener("load", function() {
         }
     });
 
-    Q.scene("castleLevel", function(stage) {
+    Q.scene("castleLevel", function (stage) {
         Q.stageTMX("../data/castleLevel.tmx", stage);
 
         setUpObject.flag = new Q.Flag({
@@ -88,6 +88,7 @@ window.addEventListener("load", function() {
         // Create the actual player with this unique id
         setUpObject.player = new Q.Player({
             socket: socket,
+            roomName: roomName,
             playerId: setUpObject.selfId,
             x: 300,
             y: 50
@@ -115,8 +116,8 @@ window.addEventListener("load", function() {
         return setUpObject.player;
     };
 
-    setUpObject.updateSpecificPlayerId = function(data) {
-        var actor = actors.filter(function(obj) {
+    setUpObject.updateSpecificPlayerId = function (data) {
+        var actor = actors.filter(function (obj) {
             return obj.player.p.playerId === data.playerId;
         })[0];
 
@@ -153,8 +154,8 @@ window.addEventListener("load", function() {
         return actor;
     };
 
-    setUpObject.updateScores = function(data) {
-        var actor = actors.filter(function(obj) {
+    setUpObject.updateScores = function (data) {
+        var actor = actors.filter(function (obj) {
             return obj.player.p.playerId === data.playerId;
         })[0];
 
@@ -187,5 +188,27 @@ window.addEventListener("load", function() {
         socket.on("updated", setUpObject.updateSpecificPlayerId);
 
         socket.on("newScore", setUpObject.updateScores);
+
+        //When a powerup has been collected, a message specific to that powerup will be
+        //emitted, causing the other players to get the corresponding component for that powerup
+        socket.on("slow", function (data) {
+            setUpObject.player.add("slow");
+        });
+
+        socket.on("fast", function (data) {
+            setUpObject.player.add("fast");
+        });
+
+        socket.on("heavy", function (data) {
+            setUpObject.player.add("heavy");
+        });
+
+        socket.on("light", function (data) {
+            setUpObject.player.add("light");
+        });
+
+        socket.on("freeze", function (data) {
+            setUpObject.player.add("freeze");
+        });
     }
 });
