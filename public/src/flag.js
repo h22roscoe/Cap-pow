@@ -33,6 +33,7 @@ Quintus.Flag = function (Q) {
             // know the player that it is not looking for
             // (ie this client's player)
             var actors = Q("Actor");
+            console.log(actors);
             for (var i = 0; i < actors.length; i++) {
                 if (actors[i].player.p.playerId != this.p.player.p.playerId
                         && this.withinRange(actors[i].player)) {
