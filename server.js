@@ -81,9 +81,18 @@ var POWER_UPS = [
 ]
 
 var POWER_UP_POSITIONS = [
-    { x: 380, y: 70 },
-    { x: 1218, y: 189 },
-    { x: 273, y: 441 }
+    {
+        x: 380,
+        y: 70
+    },
+    {
+        x: 1218,
+        y: 189
+    },
+    {
+        x: 273,
+        y: 441
+    }
 ]
 
 var OFFSET = 1;
@@ -109,15 +118,19 @@ gameNsp.on("connection", function (socket) {
                 Math.random() * POWER_UP_POSITIONS.length);
 
             setTimeout(function () {
-                var pos = POWER_UP_POSITIONS.splice(randPos, 1);
-                console.log(pos);
-                gameNsp.to(gameData.roomName)
-                    .emit(POWER_UPS[randPowerUp], pos[0]);
-                powerups++;
-
                 if (powerups < MAX_POWER_UPS) {
-                    loop();
+                    console.log("Before: ", POWER_UP_POSITIONS);
+                    console.log("index: ", randPowerUp);
+                    var pos = POWER_UP_POSITIONS.splice(randPos, 1);
+                    console.log("After: ", POWER_UP_POSITIONS);
+                    console.log("Spliced: ", pos);
+
+                    gameNsp.to(gameData.roomName)
+                        .emit(POWER_UPS[randPowerUp], pos[0]);
+                    powerups++;
                 }
+
+                loop();
             }, randTime);
         })();
 
@@ -132,9 +145,14 @@ gameNsp.on("connection", function (socket) {
         });
 
         socket.on("powerUp", function (powerUpInfo) {
+            console.log("powerUp is given: ", powerUpInfo.id);
             socket.broadcast.to(gameData.roomName)
                 .emit("powerupAcquired", powerUpInfo);
-            POWER_UP_POSITIONS.push({ x: powerUpInfo.x, y: powerUpInfo.y });
+            console.log("powerUp should be recived");
+            POWER_UP_POSITIONS.push({
+                x: powerUpInfo.x,
+                y: powerUpInfo.y
+            });
             powerups--;
         });
     });
@@ -144,7 +162,6 @@ models.sequelize.sync().then(function () {
     "use strict";
 
     server.listen(PORT, function () {
-        console.log('The magic happens on port ' +
-            PORT);
+        console.log('The magic happens on port ' + PORT);
     });
 });
