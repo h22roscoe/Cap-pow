@@ -33,12 +33,15 @@ window.addEventListener("load", function () {
         "../data/tmpsprites.json",
         "../images/tmpbackground.png",
         "../data/sprites.json",
-        "../images/sprites.png"
+        "../images/sprites.png",
+        "../images/powerups.png",
+        "../data/powerups.json"
     ];
 
     Q.loadTMX(files.join(','), function () {
         Q.compileSheets("../images/sprites.png", "../data/sprites.json");
         Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
+        Q.compileSheets("../images/powerups.png", "../data/powerups.json");
         Q.stageScene("castleLevel");
     }, {
         progressCallback: function (loaded, total) {
@@ -60,6 +63,17 @@ window.addEventListener("load", function () {
         });
 
         stage.insert(setUpObject.flag);
+
+        fastPowerup = new Q.Fast({
+            x: 380,
+            y: 70
+        });
+        stage.insert(fastPowerup);
+        
+        /*stage.insert(new Q.Fast({
+            x: 380,
+            y: 70
+        }));*/
 
         // Set up the socket connections.
         setUp(stage);
