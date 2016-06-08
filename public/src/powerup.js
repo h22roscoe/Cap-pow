@@ -72,7 +72,8 @@ Quintus.Powerup = function (Q) {
                 type: Q.SPRITE_POWERUP,
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
-                gravity: 0
+                gravity: 0,
+                id: ++fastId
             });
             console.log("Binding sensor");
             this.on("sensor");
