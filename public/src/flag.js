@@ -34,8 +34,8 @@ Quintus.Flag = function (Q) {
             // (ie this client's player)
             var actors = Q("Actor").items;
             for (var i = 0; i < actors.length; i++) {
-                if (actors[i].player.p.playerId != this.p.player.p.playerId
-                        && this.withinRange(actors[i].player)) {
+                if (actors[i].playerId != this.p.player.p.playerId
+                        && this.withinRange(actors[i])) {
                     return true;
                 }
             }
