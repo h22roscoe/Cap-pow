@@ -55,7 +55,7 @@ Quintus.Powerup = function (Q) {
                 //Double the players speed back to what it would have been without this powerup
                 this.entity.p.speed += 300;
                 // this.entity.off("step", this, "step");
-                this.entity.del("slow");
+                this.entity.del("Slow");
             } else {
                 this.timeLeft--;
             }
@@ -105,7 +105,7 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.speed -= 300;
                 // this.entity.off("step", this, "step");
-                this.entity.del("fast");
+                this.entity.del("Fast");
             } else {
                 this.timeLeft--;
             }
@@ -152,7 +152,7 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.gravity = this.entity.p.gravity / 2;
                 // this.entity.off("step", this, "step");
-                this.entity.del("heavy");
+                this.entity.del("Heavy");
             } else {
                 this.timeLeft--;
             }
@@ -200,7 +200,7 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.gravity = this.entity.p.gravity * 2;
                 // this.entity.off("step", this, "step");
-                this.entity.del("light");
+                this.entity.del("Light");
             } else {
                 this.timeLeft--;
             }
@@ -239,8 +239,8 @@ Quintus.Powerup = function (Q) {
 
         added: function () {
             //Make velocity of player 0 as soon as they receive powerup
-            p.vx = 0;
-            p.vy = 0;
+            this.entity.p.vx = 0;
+            this.entity.p.vy = 0;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
@@ -266,7 +266,7 @@ Quintus.Powerup = function (Q) {
             }
             if (this.timeLeft == 0) {
                 // this.entity.off("step", this, "step");
-                this.entity.del("freeze");
+                this.entity.del("Freeze");
             } else {
                 this.timeLeft--;
             }
