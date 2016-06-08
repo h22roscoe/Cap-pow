@@ -104,7 +104,8 @@ gameNsp.on("connection", function (socket) {
         (function loop() {
             var randTime = Math.round(Math.random() * (20000 - 5000)) + 5000;
             var randPowerUp = Math.floor(Math.random() * POWER_UPS.length);
-            var randPos = Math.floor(Math.random() * POWER_UP_POSITIONS.length);
+            var randPos = Math.floor(
+                Math.random() * POWER_UP_POSITIONS.length);
 
             setTimeout(function () {
                 socket.to(gameData.roomName)
@@ -129,10 +130,9 @@ gameNsp.on("connection", function (socket) {
 
         socket.on("powerUp", function (powerUpInfo) {
             socket.broadcast.to(gameData.roomName)
-                .emit(powerUpInfo.name + "Acquired", powerUpInfo);
+                .emit("powerupAcquired", powerUpInfo);
             POWER_UP_POSITIONS.push({ x: powerUpInfo.x, y: powerUpInfo.y });
         });
-
     });
 });
 

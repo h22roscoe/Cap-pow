@@ -226,58 +226,16 @@ window.addEventListener("load", function () {
             }));
         });
 
-
-
         //When a powerup has been collected, a message specific to that powerup will be
         //emitted, causing the other players to get the corresponding component for that powerup
-        socket.on("slowAcquired", function (data) {
-            Q("Slow").each(function () {
+        socket.on("powerupAcquired", function (data) {
+            Q(data.name).each(function () {
                 if (this.id === data.id) {
                     this.destroy();
                 }
             });
 
-            setUpObject.player.add("slow");
-        });
-
-        socket.on("fastAcquired", function (data) {
-            Q("Fast").each(function () {
-                if (this.p.id === data.id) {
-                    this.destroy();
-                }
-            });
-
-            setUpObject.player.add("fast");
-        });
-
-        socket.on("heavyAcquired", function (data) {
-            Q("Heavy").each(function () {
-                if (this.p.id === data.id) {
-                    this.destroy();
-                }
-            });
-
-            setUpObject.player.add("heavy");
-        });
-
-        socket.on("lightAcquired", function (data) {
-            Q("Light").each(function () {
-                if (this.p.id === data.id) {
-                    this.destroy();
-                }
-            });
-
-            setUpObject.player.add("light");
-        });
-
-        socket.on("freezeAcquired", function (data) {
-            Q("Freeze").each(function () {
-                if (this.p.id === data.id) {
-                    this.destroy();
-                }
-            });
-
-            setUpObject.player.add("freeze");
+            setUpObject.player.add(data.name);
         });
     }
 });

@@ -27,7 +27,7 @@ Quintus.Powerup = function (Q) {
         sensor: function (colObj) {
             //Tell every other player in the room that they should equip a slow component, emitting the id of
             colObj.p.socket.emit("powerUp", {
-                name: "slow",
+                name: "Slow",
                 playerId: colObj.p.playerId,
                 id: this.p.id,
                 x: this.p.x,
@@ -37,7 +37,7 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.component("slow", {
+    Q.component("Slow", {
         //this.entity is the player holding the component (do this.entity.p.speed to access the player's speed, etc)
         //Called when player.add("slow") happens
         added: function () {
@@ -83,7 +83,7 @@ Quintus.Powerup = function (Q) {
 
         sensor: function (colObj) {
             colObj.p.socket.emit("powerUp", {
-                name: "fast",
+                name: "Fast",
                 playerId: colObj.p.playerId,
                 id: this.p.id,
                 x: this.p.x,
@@ -93,7 +93,7 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.component("fast", {
+    Q.component("Fast", {
 
         added: function () {
             // Double the players speed
@@ -130,7 +130,7 @@ Quintus.Powerup = function (Q) {
 
         sensor: function (colObj) {
             colObj.p.socket.emit("powerUp", {
-                name: "heavy",
+                name: "Heavy",
                 playerId: colObj.p.playerId,
                 id: this.p.id,
                 x: this.p.x,
@@ -140,7 +140,7 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.component("heavy", {
+    Q.component("Heavy", {
 
         added: function () {
             //Double the player's gravity
@@ -178,7 +178,7 @@ Quintus.Powerup = function (Q) {
 
         sensor: function (colObj) {
             colObj.p.socket.emit("powerUp", {
-                name: "light",
+                name: "Light",
                 playerId: colObj.p.playerId,
                 id: this.p.id,
                 x: this.p.x,
@@ -188,7 +188,7 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.component("light", {
+    Q.component("Light", {
 
         added: function () {
             //Double the player's gravity
@@ -226,7 +226,7 @@ Quintus.Powerup = function (Q) {
 
         sensor: function (colObj) {
             colObj.p.socket.emit("powerUp", {
-                name: "freeze",
+                name: "Freeze",
                 playerId: colObj.p.playerId,
                 id: this.p.id,
                 x: this.p.x,
@@ -236,7 +236,7 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.component("freeze", {
+    Q.component("Freeze", {
 
         added: function () {
             //Make velocity of player 0 as soon as they receive powerup
