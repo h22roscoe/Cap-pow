@@ -46,7 +46,7 @@ Quintus.Powerup = function (Q) {
                 //Double the players speed back to what it would have been without this powerup
                 this.entity.p.speed = this.entity.p.speed * 2;
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("slow");
+                this.entity.del("slow");
             } else {
                 this.timeLeft--;
             }
@@ -104,7 +104,7 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.speed = this.entity.p.speed / 2;
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("fast");
+                this.entity.del("fast");
             } else {
                 this.timeLeft--;
             }
@@ -146,7 +146,7 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.gravity = this.entity.p.gravity / 2;
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("heavy");
+                this.entity.del("heavy");
             } else {
                 this.timeLeft--;
             }
@@ -188,7 +188,7 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.gravity = this.entity.p.gravity * 2;
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("light");
+                this.entity.del("light");
             } else {
                 this.timeLeft--;
             }
@@ -248,7 +248,7 @@ Quintus.Powerup = function (Q) {
             }
             if (this.timeLeft == 0) {
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("freeze");
+                this.entity.del("freeze");
             } else {
                 this.timeLeft--;
             }
