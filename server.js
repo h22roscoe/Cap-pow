@@ -72,6 +72,23 @@ roomNsp.on("connection", function (socket) {
     rooms(roomNsp, models, socket);
 });
 
+var POWER_UPS = [
+    "makeFast",
+    "makeSlow",
+    "makeFreeze",
+    "makeLight",
+    "makeHeavy"
+]
+
+var POWER_UP_POSITIONS = [
+    { x: 380, y: 70 },
+    { x: 1218, y: 189 },
+    { x: 273, y: 441 }
+]
+
+var OFFSET = 1;
+var MAX_POWER_UPS = POWER_UP_POSITIONS.length - OFFSET;
+
 gameNsp.on("connection", function (socket) {
     console.log("Game: A user connected");
 
@@ -83,6 +100,22 @@ gameNsp.on("connection", function (socket) {
                 playerId: gameData.playerId
             });
         }, 1000);
+
+        (function loop() {
+            var randTime = Math.round(Math.random() * (20000 - 5000)) + 5000;
+            var randPowerUp = Math.floor(Math.random() * POWER_UPS.length);
+            var randPos = Math.floor(Math.random() * POWER_UP_POSITIONS.length);
+
+            setTimeout(function () {
+                socket.to(gameData.roomName)
+                    .emit(POWER_UPS[randPowerUp],
+                          POWER_UP_POSITIONS.splice(randPos, 1));
+
+                if (powerups < MAX_POWER_UPS) {
+                    loop();
+                }
+            }, randTime);
+        })();
 
         socket.on("update", function (updateInfo) {
             socket.broadcast.to(gameData.roomName)

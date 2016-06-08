@@ -26,12 +26,13 @@ Quintus.Powerup = function (Q) {
         //When a slow powerup is hit (Called instead of sensor() in Powerup)
         sensor: function (colObj) {
             //Tell every other player in the room that they should equip a slow component, emitting the id of
-            //the player who collided with the powerup, so that we can  tell the other players who activated the powerup
-            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("slow", {
-                playerId: colObj.p.playerId
+            sensor: function (colObj) {
+            colObj.p.socket.emit("slow", {
+                playerId: colObj.p.playerId,
+                id: this.p.id
             });
-            //Destroy the powerup sprite as it has been collected
             this.destroy();
+        }
         }
     });
 
@@ -124,8 +125,9 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("heavy", {
-                playerId: colObj.p.playerId
+            colObj.p.socket.emit("heavy", {
+                playerId: colObj.p.playerId,
+                id: this.p.id
             });
             this.destroy();
         }
@@ -168,8 +170,9 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("light", {
-                playerId: colObj.p.playerId
+            colObj.p.socket.emit("light", {
+                playerId: colObj.p.playerId,
+                id: this.p.id
             });
             this.destroy();
         }
@@ -212,8 +215,9 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("freeze", {
-                playerId: colObj.p.playerId
+            colObj.p.socket.emit("freeze", {
+                playerId: colObj.p.playerId,
+                id: this.p.id
             });
             this.destroy();
         }
