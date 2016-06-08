@@ -108,7 +108,7 @@ gameNsp.on("connection", function (socket) {
                 Math.random() * POWER_UP_POSITIONS.length);
 
             setTimeout(function () {
-                socket.to(gameData.roomName)
+                gameNsp.to(gameData.roomName)
                     .emit(POWER_UPS[randPowerUp],
                           POWER_UP_POSITIONS.splice(randPos, 1));
 
