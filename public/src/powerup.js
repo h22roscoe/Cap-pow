@@ -28,9 +28,7 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("slow", {
-
         //this.entity is the player holding the component (do this.entity.p.speed to access the player's speed, etc)
-
         //Called when player.add("slow") happens
         added: function () {
             // Slow the player down to half speed as soon as component is added
@@ -48,9 +46,9 @@ Quintus.Powerup = function (Q) {
                 //Double the players speed back to what it would have been without this powerup
                 this.entity.p.speed += 300;
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("slow");
+                this.entity.del("slow");
             } else {
-                timeLeft--;
+                this.timeLeft--;
             }
         }
 
@@ -106,9 +104,9 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.speed -= 300;
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("fast");
+                this.entity.del("fast");
             } else {
-                timeLeft--;
+                this.timeLeft--;
             }
         }
 
@@ -148,9 +146,9 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.gravity = this.entity.p.gravity / 2;
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("heavy");
+                this.entity.del("heavy");
             } else {
-                timeLeft--;
+                this.timeLeft--;
             }
         }
 
@@ -190,9 +188,9 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft == 0) {
                 this.entity.p.gravity = this.entity.p.gravity * 2;
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("light");
+                this.entity.del("light");
             } else {
-                timeLeft--;
+                this.timeLeft--;
             }
         }
 
@@ -250,9 +248,9 @@ Quintus.Powerup = function (Q) {
             }
             if (this.timeLeft == 0) {
                 // this.entity.off("step", this, "step");
-                this.entity.p.del("freeze");
+                this.entity.del("freeze");
             } else {
-                timeLeft--;
+                this.timeLeft--;
             }
         }
 
