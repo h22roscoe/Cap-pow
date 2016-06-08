@@ -17,17 +17,15 @@ Quintus.Powerup = function (Q) {
         // When a powerup is hit
         // colObj will be the Player that collided with the powerup
         sensor: function (colObj) {
-            // TODO: Add the component which represents this power up?
-
             // Destroy the powerup as it has been collected
             this.destroy();
         }
     });
 
-
     //TODO: Need all sheets for each powerup compiled etc
     Q.Powerup.extend("Slow", {
         init: function (p) {
+            //Concrete implementation of a Q.Powerup
             this._super(p, {
                 sheet: "slowPowerup"
             });
@@ -35,10 +33,12 @@ Quintus.Powerup = function (Q) {
 
         //When a slow powerup is hit (Called instead of sensor() in Powerup)
         sensor: function (colObj) {
-            //Make every player slow and make colObj normal speed again
-            //OR
-            //Just make every other player slow in one socket emit/broadcast
-            //BEST IDEA SEEMS TO BE JUST DO player.add("slow") FOR EVERY OTHER PLAYER
+            //Tell every other player in the room that they should equip a slow component, emitting the id of 
+            //the player who collided with the powerup, so that we can  tell the other players who activated the powerup
+            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("slow", {
+                colObj.p.playerId
+            });
+            //Destroy the powerup sprite as it has been collected
             this.destroy();
         }
     });
@@ -50,12 +50,10 @@ Quintus.Powerup = function (Q) {
             });
         },
 
-        // When a slow powerup is hit (Called instead of sensor() in Powerup)
         sensor: function (colObj) {
-            // Make every player fast and make colObj normal speed again
-            // OR
-            // Just make every other player fast in one socket emit/broadcast
-            //BEST IDEA SEEMS TO BE JUST DO player.add("fast") FOR EVERY OTHER PLAYER
+            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("fast", {
+                colObj.p.playerId
+            });
             this.destroy();
         }
     });
@@ -68,7 +66,9 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            //Give every other player the component
+            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("heavy", {
+                colObj.p.playerId
+            });
             this.destroy();
         }
     });
@@ -81,7 +81,24 @@ Quintus.Powerup = function (Q) {
         },
 
         sensor: function (colObj) {
-            //Give every other player the component
+            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("light", {
+                colObj.p.playerId
+            });
+            this.destroy();
+        }
+    });
+
+    Q.Powerup.extend("Freeze", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "freezePowerup"
+            });
+        },
+
+        sensor: function (colObj) {
+            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("freeze", {
+                colObj.p.playerId
+            });
             this.destroy();
         }
     });

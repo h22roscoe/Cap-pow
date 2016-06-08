@@ -54,7 +54,7 @@ Q.component("heavy", {
     added: function () {
         //Double the player's gravity
         this.entity.p.gravity = this.entity.p.gravity * 2;
-        this.timeLeft = 5;
+        this.timeLeft = 5 * 60;
         this.entity.on("step", this, "step");
     },
 
@@ -74,7 +74,7 @@ Q.component("light", {
     added: function () {
         //Double the player's gravity
         this.entity.p.gravity = this.entity.p.gravity / 2;
-        this.timeLeft = 5;
+        this.timeLeft = 5 * 60;
         this.entity.on("step", this, "step");
     },
 
@@ -89,4 +89,38 @@ Q.component("light", {
 
 });
 
+Q.component("freeze", {
 
+    added: function () {
+        //Make velocity of player 0
+        p.vx = 0;
+        p.vy = 0;
+        this.timeLeft = 5 * 60;
+        this.entity.on("step", this, "step");
+    },
+
+    step: function (dt) {
+
+        this.entity.p.direction = Q.inputs['left'] ? 'left' :
+            Q.inputs['right'] ? 'right' :
+            Q.inputs['up'] ? 'up' :
+            Q.inputs['down'] ? 'down' : this.entity.p.direction;
+
+        switch (p.direction) {
+            case "left":
+            case "right":
+            case "up":
+            case "down":
+                p.vx = 0;
+                p.vy = 0;
+                break;
+
+        }
+        if (this.timeLeft == 0) {
+            this.entity.p.del("freeze");
+        } else {
+            timeLeft--;
+        }
+    }
+
+});
