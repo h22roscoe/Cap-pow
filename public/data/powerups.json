@@ -1,0 +1,82 @@
+{
+    "green": {
+        "sx": 0,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    },
+
+    "red": {
+        "sx": 20,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    },
+
+    "darkBlue": {
+        "sx": 40,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    },
+
+    "lightBlue": {
+        "sx": 60,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    },
+
+    "yellow": {
+        "sx": 80,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    },
+
+    "orange": {
+        "sx": 100,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    },
+
+    "purple": {
+        "sx": 120,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    },
+
+    "black": {
+        "sx": 140,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    },
+
+    "white": {
+        "sx": 160,
+        "sy": 0,
+        "tilew": 20,
+        "tileh": 20,
+        "cols": 1,
+        "frames": 1
+    }
+}

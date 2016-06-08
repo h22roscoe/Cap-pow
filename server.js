@@ -93,6 +93,11 @@ gameNsp.on("connection", function (socket) {
             socket.broadcast.to(gameData.roomName)
                 .emit("newScore", updateInfo);
         });
+
+        socket.on("fast", function (updateInfo) {
+            socket.broadcast.to(gameData.roomName)
+                .emit("fast", updateInfo);
+        });
     });
 });
 
