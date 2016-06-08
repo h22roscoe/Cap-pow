@@ -1,18 +1,26 @@
 // Put all code in here except what happens to players when it is collected
 Quintus.Powerup = function (Q) {
 
+    var slowId = 0;
+    var fastId = 0;
+    var heavyId = 0;
+    var lightId = 0;
+    var freezeId = 0;
+
     Q.Sprite.extend("Slow", {
         init: function (p) {
-            //Concrete implementation of a Q.Powerup
+            // Concrete implementation of a Q.Powerup
             this._super(p, {
                 sheet: "red",
                 type: Q.SPRITE_POWERUP,
                 collisionMask: Q.SPRITE_NONE,
                 sensor: true,
-                gravity: 0
+                gravity: 0,
+                id: ++slowId
             });
-            //Call sensor() when powerup is hit
+            // Call sensor() when powerup is hit
             this.on("sensor");
+            this.add("2d");
         },
 
         //When a slow powerup is hit (Called instead of sensor() in Powerup)
@@ -68,24 +76,13 @@ Quintus.Powerup = function (Q) {
             });
             console.log("Binding sensor");
             this.on("sensor");
-            /*this.on("hit.sprite", function (collision) {
-                console.log("HIT");
-                if (collision.obj.isA("Player")) {
-                    collision.obj.p.socket.broadcast.to(colObj.p.roomName).emit("fast", {
-                        playerId: colObj.p.playerId
-                    });
-                    this.destroy();
-                }
-            });*/
             this.add("2d");
         },
 
         sensor: function (colObj) {
-            //console.log(colObj.p);
-            //console.log(colObj.p.socket.broadcast);
-            //colObj.p.socket.broadcast.to(colObj.p.roomName).emit("fast", {
             colObj.p.socket.emit("fast", {
-                playerId: colObj.p.playerId
+                playerId: colObj.p.playerId,
+                id: this.p.id
             });
             this.destroy();
         }
@@ -121,8 +118,8 @@ Quintus.Powerup = function (Q) {
                 sensor: true,
                 gravity: 0
             });
-
             this.on("sensor");
+            this.add("2d");
         },
 
         sensor: function (colObj) {
@@ -165,6 +162,7 @@ Quintus.Powerup = function (Q) {
             });
 
             this.on("sensor");
+            this.add("2d");
         },
 
         sensor: function (colObj) {
@@ -207,6 +205,7 @@ Quintus.Powerup = function (Q) {
             });
 
             this.on("sensor");
+            this.add("2d");
         },
 
         sensor: function (colObj) {

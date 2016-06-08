@@ -96,7 +96,7 @@ gameNsp.on("connection", function (socket) {
 
         socket.on("fast", function (updateInfo) {
             socket.broadcast.to(gameData.roomName)
-                .emit("fast", updateInfo);
+                .emit("fastAcquired", updateInfo);
         });
     });
 });
