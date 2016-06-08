@@ -216,7 +216,7 @@ window.addEventListener("load", function () {
 
         socket.on("fastAcquired", function (data) {
             Q("Fast").each(function () {
-                if (this.id === data.id) {
+                if (this.p.id === data.id) {
                     this.destroy();
                 }
             });
@@ -226,7 +226,7 @@ window.addEventListener("load", function () {
 
         socket.on("heavyAcquired", function (data) {
             Q("Heavy").each(function () {
-                if (this.id === data.id) {
+                if (this.p.id === data.id) {
                     this.destroy();
                 }
             });
@@ -236,7 +236,7 @@ window.addEventListener("load", function () {
 
         socket.on("lightAcquired", function (data) {
             Q("Light").each(function () {
-                if (this.id === data.id) {
+                if (this.p.id === data.id) {
                     this.destroy();
                 }
             });
@@ -246,7 +246,7 @@ window.addEventListener("load", function () {
 
         socket.on("freezeAcquired", function (data) {
             Q("Freeze").each(function () {
-                if (this.id === data.id) {
+                if (this.p.id === data.id) {
                     this.destroy();
                 }
             });

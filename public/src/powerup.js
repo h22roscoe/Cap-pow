@@ -75,7 +75,6 @@ Quintus.Powerup = function (Q) {
                 gravity: 0,
                 id: ++fastId
             });
-            console.log("Binding sensor");
             this.on("sensor");
             this.add("2d");
         },
