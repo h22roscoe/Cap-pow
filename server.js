@@ -88,6 +88,7 @@ var POWER_UP_POSITIONS = [
 
 var OFFSET = 1;
 var MAX_POWER_UPS = POWER_UP_POSITIONS.length - OFFSET;
+var powerups = 0;
 
 gameNsp.on("connection", function (socket) {
     console.log("Game: A user connected");
@@ -111,6 +112,7 @@ gameNsp.on("connection", function (socket) {
                 gameNsp.to(gameData.roomName)
                     .emit(POWER_UPS[randPowerUp],
                           POWER_UP_POSITIONS.splice(randPos, 1));
+                powerups++;
 
                 if (powerups < MAX_POWER_UPS) {
                     loop();
@@ -132,6 +134,7 @@ gameNsp.on("connection", function (socket) {
             socket.broadcast.to(gameData.roomName)
                 .emit("powerupAcquired", powerUpInfo);
             POWER_UP_POSITIONS.push({ x: powerUpInfo.x, y: powerUpInfo.y });
+            powerups--;
         });
     });
 });
