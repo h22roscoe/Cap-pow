@@ -33,10 +33,10 @@ Quintus.Powerup = function (Q) {
         added: function () {
             // Slow the player down to half speed as soon as component is added
             // Doing this, rather than set speed to 50, allows us to stack components on a player
-            this.entity.p.speed = this.entity.p.speed / 2;
-            // Will last for 5 seconds (60 frames per second)
-            this.timeLeft = 5 * 60;
-            // Whenever the entity steps, this component's step function will be called too
+            this.entity.p.speed -= 300;
+            //Will last for 5 seconds (60 frames per second)
+            this.timeLeft = 10 * 60;
+            //Whenever the entity steps, this component's step function will be called too
             this.entity.on("step", this, "step");
         },
 
@@ -44,7 +44,7 @@ Quintus.Powerup = function (Q) {
             //If the player has had this component for long enough
             if (this.timeLeft == 0) {
                 //Double the players speed back to what it would have been without this powerup
-                this.entity.p.speed = this.entity.p.speed * 2;
+                this.entity.p.speed += 300;
                 // this.entity.off("step", this, "step");
                 this.entity.del("slow");
             } else {
@@ -95,14 +95,14 @@ Quintus.Powerup = function (Q) {
 
         added: function () {
             // Double the players speed
-            this.entity.p.speed = this.entity.p.speed * 2;
-            this.timeLeft = 5 * 60;
+            this.entity.p.speed += 300;
+            this.timeLeft = 10 * 60;
             this.entity.on("step", this, "step");
         },
 
         step: function (dt) {
             if (this.timeLeft == 0) {
-                this.entity.p.speed = this.entity.p.speed / 2;
+                this.entity.p.speed -= 300;
                 // this.entity.off("step", this, "step");
                 this.entity.del("fast");
             } else {
