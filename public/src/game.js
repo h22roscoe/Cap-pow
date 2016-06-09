@@ -223,8 +223,6 @@ function setUp(stage) {
     // corresponding component for that powerup
     socket.on("powerupAcquired", function(data) {
         Q(data.name).each(function() {
-            console.log("How does this: ", this);
-            console.log("compare to our data?: ", data);
             if (this.p.powerupId === data.powerupId) {
                 this.destroy();
             }
