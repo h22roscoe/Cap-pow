@@ -62,7 +62,7 @@
         "tileh": 21
     },
 
-    "power": {
+    "door": {
         "sx": 146,
         "sy": 2,
         "cols": 1,

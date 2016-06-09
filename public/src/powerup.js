@@ -10,13 +10,12 @@ Quintus.Powerup = function(Q) {
         init: function (p) {
             this._super(p, {
                 type: Q.SPRITE_POWERUP,
-                collisionMask: Q.SPRITE_PLAYER,
+                collisionMask: Q.SPRITE_NONE,
                 sensor: true,
                 gravity: 0,
             });
 
             this.on("sensor");
-            this.add("2d");
         },
     });
 
