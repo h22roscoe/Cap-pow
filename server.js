@@ -116,7 +116,7 @@ gameNsp.on("connection", function(socket) {
                             socket, "powerUpPositions").length);
 
                 setTimeout(function() {
-                    if (roomData.get(socket, "powerUpPositions") < MAX_POWER_UPS) {
+                    if (roomData.get(socket, "powerUpsGiven") < MAX_POWER_UPS) {
                         var powerUpPositions = roomData.get(
                             socket, "powerUpPositions");
 
