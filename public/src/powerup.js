@@ -1,9 +1,10 @@
-Quintus.Powerup = function (Q) {
+Quintus.Powerup = function(Q) {
     var slowId = 0;
     var fastId = 0;
     var heavyId = 0;
     var lightId = 0;
     var freezeId = 0;
+
 
     Q.Sprite.extend("Powerup", {
         init: function (p) {
@@ -18,6 +19,7 @@ Quintus.Powerup = function (Q) {
             this.add("2d");
         },
     });
+
 
     Q.Powerup.extend("Slow", {
         init: function (p) {
@@ -42,13 +44,13 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Slow", {
-        added: function () {
+        added: function() {
             this.entity.p.speed /= 2;
             this.timeLeft = 10 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.speed *= 2;
                 this.entity.del("Slow");
@@ -66,7 +68,7 @@ Quintus.Powerup = function (Q) {
             this.p.sheet = "green";
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Fast",
                 playerId: colObj.p.playerId,
@@ -80,13 +82,13 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Fast", {
-        added: function () {
+        added: function() {
             this.entity.p.speed *= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.speed /= 2;
                 this.entity.del("Fast");
@@ -96,6 +98,7 @@ Quintus.Powerup = function (Q) {
         }
     });
 
+
     Q.Powerup.extend("Heavy", {
         init: function (p) {
             this._super(p, {
@@ -104,7 +107,7 @@ Quintus.Powerup = function (Q) {
             this.p.sheet = "darkBlue";
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Heavy",
                 playerId: colObj.p.playerId,
@@ -118,13 +121,13 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Heavy", {
-        added: function () {
+        added: function() {
             this.entity.p.gravity *= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.gravity /= 2;
                 this.entity.del("Heavy");
@@ -134,6 +137,7 @@ Quintus.Powerup = function (Q) {
         }
     });
 
+
     Q.Powerup.extend("Light", {
         init: function (p) {
             this._super(p, {
@@ -142,7 +146,7 @@ Quintus.Powerup = function (Q) {
             this.p.sheet = "yellow";
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Light",
                 playerId: colObj.p.playerId,
@@ -156,13 +160,13 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Light", {
-        added: function () {
+        added: function() {
             this.entity.p.gravity /= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.gravity *= 2;
                 this.entity.del("Light");
@@ -180,7 +184,7 @@ Quintus.Powerup = function (Q) {
             this.p.sheet = "lightBlue";
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Freeze",
                 playerId: colObj.p.playerId,
@@ -194,14 +198,14 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Freeze", {
-        added: function () {
+        added: function() {
             this.entity.p.vx = 0;
             this.entity.p.vy = 0;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             // If the player tries to move, set it's velocity to 0
             this.entity.p.vx = 0;
             this.entity.p.vy = 0;

@@ -26,12 +26,4 @@ describe("Flag", function () {
     it("has nothing which will collide with it", function () {
         expect(flag.p.collisionMask).toEqual(Q.SPRITE_NONE);
     });
-
-    describe("how flag responds to Player with selfId", function () {
-        it("knows that selfId is near flag", function () {
-            flag.step();
-
-            expect(flag.p.shouldUpdatePoints).toBe(true);
-        });
-    });
 });

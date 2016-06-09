@@ -26,12 +26,18 @@ module.exports = function (config) {
                 included: false,
                 served: true
             },
+            {
+                pattern: 'public/data/*.tmx',
+                watched: false,
+                included: false,
+                served: true
+            },
             'public/lib/quintus-all.js',
             'public/src/player.js',
             'public/src/powerup.js',
             'public/src/flag.js',
             'public/src/game.js',
-            'spec/tests/*.js'
+            'spec/tests/*Spec.js'
         ],
 
         proxies: {
