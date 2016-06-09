@@ -72,10 +72,37 @@ roomNsp.on("connection", function (socket) {
     rooms(roomNsp, models, socket);
 });
 
+var POWER_UPS = [
+    "makeFast",
+    "makeSlow",
+    "makeFreeze",
+    "makeLight",
+    "makeHeavy"
+]
+
+var OFFSET = 1;
+
 gameNsp.on("connection", function (socket) {
     console.log("Game: A user connected");
 
     socket.on("joinGame", function (gameData) {
+        var powerups = 0;
+        var powerUpPositions = [
+            {
+                x: 380,
+                y: 70
+            },
+            {
+                x: 1218,
+                y: 189
+            },
+            {
+                x: 273,
+                y: 441
+            }
+        ];
+        var MAX_POWER_UPS = powerUpPositions.length - OFFSET;
+
         socket.join(gameData.roomName);
 
         setTimeout(function () {
@@ -83,6 +110,29 @@ gameNsp.on("connection", function (socket) {
                 playerId: gameData.playerId
             });
         }, 1000);
+
+        (function loop() {
+            var randTime = Math.round(Math.random() * (20000 - 5000)) + 5000;
+            var randPowerUp = Math.floor(Math.random() * POWER_UPS.length);
+            var randPos = Math.floor(
+                Math.random() * powerUpPositions.length);
+
+            setTimeout(function () {
+                if (powerups < MAX_POWER_UPS) {
+                    console.log("Before: ", powerUpPositions);
+                    console.log("index: ", randPos);
+                    var pos = powerUpPositions.splice(randPos, 1);
+                    console.log("After: ", powerUpPositions);
+                    console.log("Spliced: ", pos);
+
+                    gameNsp.to(gameData.roomName)
+                        .emit(POWER_UPS[randPowerUp], pos[0]);
+                    powerups++;
+                }
+
+                loop();
+            }, randTime);
+        })();
 
         socket.on("update", function (updateInfo) {
             socket.broadcast.to(gameData.roomName)
@@ -94,9 +144,16 @@ gameNsp.on("connection", function (socket) {
                 .emit("newScore", updateInfo);
         });
 
-        socket.on("fast", function (updateInfo) {
+        socket.on("powerUp", function (powerUpInfo) {
+            console.log("powerUp is given: ", powerUpInfo.id);
             socket.broadcast.to(gameData.roomName)
-                .emit("fast", updateInfo);
+                .emit("powerupAcquired", powerUpInfo);
+            powerUpPositions.push({
+                x: powerUpInfo.x,
+                y: powerUpInfo.y
+            });
+
+            powerups--;
         });
     });
 });
@@ -105,7 +162,6 @@ models.sequelize.sync().then(function () {
     "use strict";
 
     server.listen(PORT, function () {
-        console.log('The magic happens on port ' +
-            PORT);
+        console.log('The magic happens on port ' + PORT);
     });
 });
