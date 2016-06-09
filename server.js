@@ -81,9 +81,7 @@ var POWER_UPS = [
     "makeHeavy"
 ]
 
-var OFFSET = 1;
-
-var MAX_POWER_UPS = powerUpPositions.length - OFFSET;
+var MAX_POWER_UPS = 2;
 
 gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
