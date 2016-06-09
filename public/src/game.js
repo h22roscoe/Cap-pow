@@ -222,8 +222,9 @@ function setUp(stage) {
     // powerup will be emitted, causing the other players to get the
     // corresponding component for that powerup
     socket.on("powerupAcquired", function(data) {
-        console.log(Q(data.name));
         Q(data.name).each(function() {
+            console.log("How does this: ", this);
+            console.log("compare to our data?: ", data);
             if (this.powerupId === data.powerupId) {
                 this.destroy();
             }
