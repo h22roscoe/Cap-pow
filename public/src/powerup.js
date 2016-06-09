@@ -1,4 +1,4 @@
-Quintus.Powerup = function (Q) {
+Quintus.Powerup = function(Q) {
     var slowId = 0;
     var fastId = 0;
     var heavyId = 0;
@@ -6,7 +6,7 @@ Quintus.Powerup = function (Q) {
     var freezeId = 0;
 
     Q.Sprite.extend("Slow", {
-        init: function (p) {
+        init: function(p) {
             this._super(p, {
                 sheet: "red",
                 type: Q.SPRITE_POWERUP,
@@ -20,7 +20,7 @@ Quintus.Powerup = function (Q) {
             this.add("2d");
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             console.log("Should emit slow");
 
             colObj.p.socket.emit("powerUp", {
@@ -36,13 +36,13 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Slow", {
-        added: function () {
+        added: function() {
             this.entity.p.speed /= 2;
-            this.timeLeft = 5 * 60;
+            this.timeLeft = 10 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.speed *= 2;
                 this.entity.del("Slow");
@@ -53,7 +53,7 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.Sprite.extend("Fast", {
-        init: function (p) {
+        init: function(p) {
             this._super(p, {
                 sheet: "green",
                 type: Q.SPRITE_POWERUP,
@@ -67,7 +67,7 @@ Quintus.Powerup = function (Q) {
             this.add("2d");
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Fast",
                 playerId: colObj.p.playerId,
@@ -81,13 +81,13 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Fast", {
-        added: function () {
+        added: function() {
             this.entity.p.speed *= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.speed /= 2;
                 this.entity.del("Fast");
@@ -98,7 +98,7 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.Sprite.extend("Heavy", {
-        init: function (p) {
+        init: function(p) {
             this._super(p, {
                 sheet: "darkBlue",
                 type: Q.SPRITE_POWERUP,
@@ -112,7 +112,7 @@ Quintus.Powerup = function (Q) {
             this.add("2d");
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Heavy",
                 playerId: colObj.p.playerId,
@@ -126,13 +126,13 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Heavy", {
-        added: function () {
+        added: function() {
             this.entity.p.gravity *= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.gravity /= 2;
                 this.entity.del("Heavy");
@@ -143,7 +143,7 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.Sprite.extend("Light", {
-        init: function (p) {
+        init: function(p) {
             this._super(p, {
                 sheet: "yellow",
                 type: Q.SPRITE_POWERUP,
@@ -157,7 +157,7 @@ Quintus.Powerup = function (Q) {
             this.add("2d");
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Light",
                 playerId: colObj.p.playerId,
@@ -171,13 +171,13 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Light", {
-        added: function () {
+        added: function() {
             this.entity.p.gravity /= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.gravity *= 2;
                 this.entity.del("Light");
@@ -188,7 +188,7 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.Sprite.extend("Freeze", {
-        init: function (p) {
+        init: function(p) {
             this._super(p, {
                 sheet: "lightBlue",
                 type: Q.SPRITE_POWERUP,
@@ -202,7 +202,7 @@ Quintus.Powerup = function (Q) {
             this.add("2d");
         },
 
-        sensor: function (colObj) {
+        sensor: function(colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Freeze",
                 playerId: colObj.p.playerId,
@@ -216,14 +216,14 @@ Quintus.Powerup = function (Q) {
     });
 
     Q.component("Freeze", {
-        added: function () {
+        added: function() {
             this.entity.p.vx = 0;
             this.entity.p.vy = 0;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function (dt) {
+        step: function(dt) {
             // If the player tries to move, set it's velocity to 0
             this.entity.p.vx = 0;
             this.entity.p.vy = 0;
@@ -235,4 +235,26 @@ Quintus.Powerup = function (Q) {
             }
         }
     });
+
+    /*  Q.Sprite.extend("FlagMove", {
+          init: function (p) {
+              this._super(p, {
+                  sheet: "White",
+                  type: Q.SPRITE_POWERUP,
+                  collisionMask: Q.SPRITE_PLAYER,
+                  sensor: true,
+                  gravity: 0
+              });
+
+              this.on("sensor");
+          },
+
+          sensor: function (colObj) {
+              colObj.p.socket.broadcast.to(colObj.p.roomName).emit("flag", {
+                  playerId: colObj.p.playerId,
+
+              });
+              this.destroy();
+          }
+      });  */
 }

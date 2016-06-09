@@ -63,22 +63,6 @@ Q.scene("castleLevel", function(stage) {
 
     stage.insert(setUpObject.flag);
 
-<<<<<<< HEAD
-    fastPowerup = new Q.Fast({
-        x: 380,
-        y: 70
-=======
-        // Set up the socket connections.
-        setUp(stage);
->>>>>>> 8ffa357df8c927d2cb4054e7683a0f4486c38744
-    });
-    stage.insert(fastPowerup);
-
-    /*stage.insert(new Q.Fast({
-        x: 380,
-        y: 70
-    }));*/
-
     // Set up the socket connections.
     setUp(stage);
 });
@@ -206,78 +190,51 @@ function setUp(stage) {
 
     socket.on("newScore", setUpObject.updateScores);
 
-<<<<<<< HEAD
-    // When a powerup has been collected, a message specific to that
-    // powerup will be emitted, causing the other players to get the
-    // corresponding component for that powerup
-    socket.on("slow", function(data) {
-        setUpObject.player.add("slow");
+    socket.on("makeFast", function(data) {
+        stage.insert(new Q.Fast({
+            x: data.x,
+            y: data.y
+        }));
     });
 
-    socket.on("fast", function(data) {
-        setUpObject.player.add("fast");
+    socket.on("makeSlow", function(data) {
+        stage.insert(new Q.Slow({
+            x: data.x,
+            y: data.y
+        }));
     });
 
-    socket.on("heavy", function(data) {
-        setUpObject.player.add("heavy");
+    socket.on("makeHeavy", function(data) {
+        stage.insert(new Q.Heavy({
+            x: data.x,
+            y: data.y
+        }));
     });
 
-    socket.on("light", function(data) {
-        setUpObject.player.add("light");
+    socket.on("makeLight", function(data) {
+        stage.insert(new Q.Light({
+            x: data.x,
+            y: data.y
+        }));
     });
 
-    socket.on("freeze", function(data) {
-        setUpObject.player.add("freeze");
+    socket.on("makeFreeze", function(data) {
+        stage.insert(new Q.Freeze({
+            x: data.x,
+            y: data.y
+        }));
+    });
+
+    // When a powerup has been collected, a message specific to that powerup will be
+    // emitted, causing the other players to get the corresponding component for that powerup
+    socket.on("powerupAcquired", function(data) {
+        console.log(Q(data.name));
+        Q(data.name).each(function() {
+            if (this.powerupId === data.powerupId) {
+                this.destroy();
+            }
+        });
+
+        setUpObject.player.add(data.name);
     });
 }
-=======
-        socket.on("makeFast", function (data) {
-            stage.insert(new Q.Fast({
-                x: data.x,
-                y: data.y
-            }));
-        });
-
-        socket.on("makeSlow", function (data) {
-            stage.insert(new Q.Slow({
-                x: data.x,
-                y: data.y
-            }));
-        });
-
-        socket.on("makeHeavy", function (data) {
-            stage.insert(new Q.Heavy({
-                x: data.x,
-                y: data.y
-            }));
-        });
-
-        socket.on("makeLight", function (data) {
-            stage.insert(new Q.Light({
-                x: data.x,
-                y: data.y
-            }));
-        });
-
-        socket.on("makeFreeze", function (data) {
-            stage.insert(new Q.Freeze({
-                x: data.x,
-                y: data.y
-            }));
-        });
-
-        //When a powerup has been collected, a message specific to that powerup will be
-        //emitted, causing the other players to get the corresponding component for that powerup
-        socket.on("powerupAcquired", function (data) {
-            console.log(Q(data.name));
-            Q(data.name).each(function () {
-                if (this.powerupId === data.powerupId) {
-                    this.destroy();
-                }
-            });
-
-            setUpObject.player.add(data.name);
-        });
-    }
-});
->>>>>>> 8ffa357df8c927d2cb4054e7683a0f4486c38744
