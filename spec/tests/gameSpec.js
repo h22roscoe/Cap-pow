@@ -43,8 +43,8 @@ describe("Game setup", function () {
         expect(Q.SPRITE_POWERUP).toEqual(256);
     });
 
-    it("has created the tmplevel scene on the Q variable", function () {
-        expect(Q.scenes.tmplevel).toBeDefined();
+    it("has created the castleLevel scene on the Q variable", function () {
+        expect(Q.scenes.castleLevel).toBeDefined();
     });
 
     it("updates the value of the players points each second", function () {
