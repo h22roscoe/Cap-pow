@@ -65,10 +65,7 @@ Q.scene("castleLevel", function (stage) {
 
     // Set up the socket connections.
     setUp(stage);
-    stage.insert(fastPowerup);
 
-    // Set up the socket connections.
-    setUp(stage);
 });
 
 var roomName = sessionStorage.getItem("roomName")

@@ -10,7 +10,7 @@ Quintus.Powerup = function (Q) {
             this._super(p, {
                 sheet: "red",
                 type: Q.SPRITE_POWERUP,
-                collisionMask: Q.SPRITE_NONE,
+                collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
                 gravity: 0,
                 powerupId: ++slowId
@@ -37,21 +37,15 @@ Quintus.Powerup = function (Q) {
 
     Q.component("Slow", {
         added: function () {
-            // Slow the player down to half speed as soon as component is added
-            // Doing this, rather than set speed to 50, allows us to stack components on a player
-            this.entity.p.speed = this.entity.p.speed / 2;
-            //Will last for 5 seconds (60 frames per second)
+            this.entity.p.speed /= 2;
             this.timeLeft = 10 * 60;
             this.entity.on("step", this, "step");
         },
 
         step: function (dt) {
-            //If the player has had this component for long enough
-            if (this.timeLeft == 0) {
-                //Double the players speed back to what it would have been without this powerup
-                this.entity.p.speed = this.entity.p.speed * 2;
-                // this.entity.off("step", this, "step");
-                this.entity.del("slow");
+            if (this.timeLeft === 0) {
+                this.entity.p.speed *= 2;
+                this.entity.del("Slow");
             } else {
                 this.timeLeft--;
             }
@@ -88,14 +82,14 @@ Quintus.Powerup = function (Q) {
 
     Q.component("Fast", {
         added: function () {
-            this.entity.p.speed += 300;
-            this.timeLeft = 10 * 60;
+            this.entity.p.speed *= 2;
+            this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
         step: function (dt) {
             if (this.timeLeft === 0) {
-                this.entity.p.speed -= 300;
+                this.entity.p.speed /= 2;
                 this.entity.del("Fast");
             } else {
                 this.timeLeft--;
@@ -133,16 +127,14 @@ Quintus.Powerup = function (Q) {
 
     Q.component("Heavy", {
         added: function () {
-            //Double the player's gravity
-            this.entity.p.gravity = this.entity.p.gravity * 2;
+            this.entity.p.gravity *= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
         step: function (dt) {
             if (this.timeLeft === 0) {
-                this.entity.p.gravity = this.entity.p.gravity / 2;
-                // this.entity.off("step", this, "step");
+                this.entity.p.gravity /= 2;
                 this.entity.del("Heavy");
             } else {
                 this.timeLeft--;
@@ -233,49 +225,37 @@ Quintus.Powerup = function (Q) {
 
         step: function (dt) {
             // If the player tries to move, set it's velocity to 0
-            this.entity.p.direction = Q.inputs['left'] ? 'left' :
-                Q.inputs['right'] ? 'right' :
-                Q.inputs['up'] ? 'up' :
-                Q.inputs['down'] ? 'down' : this.entity.p.direction;
-
-            switch (this.entity.p.direction) {
-                case "left":
-                case "right":
-                case "up":
-                case "down":
-                    this.entity.p.vx = 0;
-                    this.entity.p.vy = 0;
-                    break;
-            }
+            this.entity.p.vx = 0;
+            this.entity.p.vy = 0;
 
             if (this.timeLeft === 0) {
                 this.entity.del("Freeze");
             } else {
-                this.timeLeft--;
+                thistimeLeft--;
             }
         }
     });
 
-  /*  Q.Sprite.extend("FlagMove", {
-        init: function (p) {
-            this._super(p, {
-                sheet: "White",
-                type: Q.SPRITE_POWERUP,
-                collisionMask: Q.SPRITE_PLAYER,
-                sensor: true,
-                gravity: 0
-            });
+    /*  Q.Sprite.extend("FlagMove", {
+          init: function (p) {
+              this._super(p, {
+                  sheet: "White",
+                  type: Q.SPRITE_POWERUP,
+                  collisionMask: Q.SPRITE_PLAYER,
+                  sensor: true,
+                  gravity: 0
+              });
 
-            this.on("sensor");
-        },
+              this.on("sensor");
+          },
 
-        sensor: function (colObj) {
-            colObj.p.socket.broadcast.to(colObj.p.roomName).emit("flag", {
-                playerId: colObj.p.playerId,
+          sensor: function (colObj) {
+              colObj.p.socket.broadcast.to(colObj.p.roomName).emit("flag", {
+                  playerId: colObj.p.playerId,
 
-            });
-            this.destroy();
-        }
-    });  */
+              });
+              this.destroy();
+          }
+      });  */
 
 }
