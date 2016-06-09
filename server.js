@@ -124,6 +124,7 @@ gameNsp.on("connection", function (socket) {
                     var pos = powerUpPositions.splice(randPos, 1);
                     console.log("After: ", powerUpPositions);
                     console.log("Spliced: ", pos);
+                    console.log("-----------------------");
 
                     gameNsp.to(gameData.roomName)
                         .emit(POWER_UPS[randPowerUp], pos[0]);
