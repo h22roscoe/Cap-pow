@@ -82,27 +82,29 @@ var POWER_UPS = [
 
 var OFFSET = 1;
 
+var powerups = 0;
+
+var powerUpPositions = [
+    {
+        x: 380,
+        y: 70
+    },
+    {
+        x: 1218,
+        y: 189
+    },
+    {
+        x: 273,
+        y: 441
+    }
+];
+
+var MAX_POWER_UPS = powerUpPositions.length - OFFSET;
+
 gameNsp.on("connection", function (socket) {
     console.log("Game: A user connected");
 
     socket.on("joinGame", function (gameData) {
-        var powerups = 0;
-        var powerUpPositions = [
-            {
-                x: 380,
-                y: 70
-            },
-            {
-                x: 1218,
-                y: 189
-            },
-            {
-                x: 273,
-                y: 441
-            }
-        ];
-        var MAX_POWER_UPS = powerUpPositions.length - OFFSET;
-
         socket.join(gameData.roomName);
 
         setTimeout(function () {
