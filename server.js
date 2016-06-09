@@ -145,14 +145,16 @@ gameNsp.on("connection", function (socket) {
         });
 
         socket.on("powerUp", function (powerUpInfo) {
-            console.log("Someone got a powerUp with this id: ", powerUpInfo.powerupId);
-            console.log("It had this name: ", powerUpInfo.name)
+            console.log("Someone got a powerUp with this x: ", powerUpInfo.x);
+            console.log("It had this y: ", powerUpInfo.y);
+            console.log("This is our possible positions list before: ", powerUpPositions);
             socket.broadcast.to(gameData.roomName)
                 .emit("powerupAcquired", powerUpInfo);
             powerUpPositions.push({
                 x: powerUpInfo.x,
                 y: powerUpInfo.y
             });
+            console.log("This is our possible positions list after: ", powerUpPositions);
 
             powerups--;
         });
