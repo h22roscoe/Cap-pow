@@ -5,24 +5,29 @@ Quintus.Powerup = function (Q) {
     var lightId = 0;
     var freezeId = 0;
 
-    Q.Sprite.extend("Slow", {
+    Q.Sprite.extend("Powerup", {
         init: function (p) {
             this._super(p, {
-                sheet: "red",
                 type: Q.SPRITE_POWERUP,
                 collisionMask: Q.SPRITE_PLAYER,
                 sensor: true,
                 gravity: 0,
-                powerupId: ++slowId
             });
 
             this.on("sensor");
             this.add("2d");
         },
+    });
+
+    Q.Powerup.extend("Slow", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "red",
+                powerupId: ++slowId
+            });
+        },
 
         sensor: function (colObj) {
-            console.log("Should emit slow");
-
             colObj.p.socket.emit("powerUp", {
                 name: "Slow",
                 playerId: colObj.p.playerId,
@@ -52,19 +57,12 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.Sprite.extend("Fast", {
+    Q.Powerup.extend("Fast", {
         init: function (p) {
             this._super(p, {
                 sheet: "green",
-                type: Q.SPRITE_POWERUP,
-                collisionMask: Q.SPRITE_PLAYER,
-                sensor: true,
-                gravity: 0,
                 powerupId: ++fastId
             });
-
-            this.on("sensor");
-            this.add("2d");
         },
 
         sensor: function (colObj) {
@@ -97,19 +95,12 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.Sprite.extend("Heavy", {
+    Q.Powerup.extend("Heavy", {
         init: function (p) {
             this._super(p, {
                 sheet: "darkBlue",
-                type: Q.SPRITE_POWERUP,
-                collisionMask: Q.SPRITE_PLAYER,
-                sensor: true,
-                gravity: 0,
                 powerupId: ++heavyId
             });
-
-            this.on("sensor");
-            this.add("2d");
         },
 
         sensor: function (colObj) {
@@ -142,19 +133,12 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.Sprite.extend("Light", {
+    Q.Powerup.extend("Light", {
         init: function (p) {
             this._super(p, {
                 sheet: "yellow",
-                type: Q.SPRITE_POWERUP,
-                collisionMask: Q.SPRITE_PLAYER,
-                sensor: true,
-                gravity: 0,
                 powerupId: ++lightId
             });
-
-            this.on("sensor");
-            this.add("2d");
         },
 
         sensor: function (colObj) {
@@ -187,19 +171,12 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    Q.Sprite.extend("Freeze", {
+    Q.Powerup.extend("Freeze", {
         init: function (p) {
             this._super(p, {
                 sheet: "lightBlue",
-                type: Q.SPRITE_POWERUP,
-                collisionMask: Q.SPRITE_PLAYER,
-                sensor: true,
-                gravity: 0,
                 powerupId: ++freezeId
             });
-
-            this.on("sensor");
-            this.add("2d");
         },
 
         sensor: function (colObj) {
@@ -236,17 +213,12 @@ Quintus.Powerup = function (Q) {
         }
     });
 
-    /*  Q.Sprite.extend("FlagMove", {
+    /*  Q.Powerup.extend("FlagMove", {
           init: function (p) {
               this._super(p, {
                   sheet: "White",
-                  type: Q.SPRITE_POWERUP,
-                  collisionMask: Q.SPRITE_PLAYER,
-                  sensor: true,
                   gravity: 0
               });
-
-              this.on("sensor");
           },
 
           sensor: function (colObj) {
