@@ -99,15 +99,11 @@ function addSelf() {
         createTableRowWithId(setUpObject.selfId,
             createTableDataRow(setUpObject.selfId, 0)));
 
-    if (setUpObject.stage) {
-        // Insert this player into the stage
-        setUpObject.stage.insert(setUpObject.player);
+    // Insert this player into the stage
+    setUpObject.stage.insert(setUpObject.player);
 
-        // Add a camera  for this player
-        // TODO: Change to view the whole screen? Or keep like this?
-        //  Is this different for mobile/web?
-        setUpObject.stage.add("viewport").follow(setUpObject.player);
-    }
+    // Add a camera  for this player
+    setUpObject.stage.add("viewport").follow(setUpObject.player);
 
     setUpObject.flag.p.player = setUpObject.player;
 
@@ -144,10 +140,7 @@ setUpObject.updateSpecificPlayerId = function(data) {
             createTableRowWithId(temp.p.playerId,
                 createTableDataRow(temp.p.playerId, 0)));
 
-        // No need to add to stage in testing cases
-        if (setUpObject.stage) {
-            setUpObject.stage.insert(temp);
-        }
+        setUpObject.stage.insert(temp);
 
         actor = temp;
     }
@@ -225,8 +218,9 @@ function setUp(stage) {
         }));
     });
 
-    // When a powerup has been collected, a message specific to that powerup will be
-    // emitted, causing the other players to get the corresponding component for that powerup
+    // When a powerup has been collected, a message specific to that
+    // powerup will be emitted, causing the other players to get the
+    // corresponding component for that powerup
     socket.on("powerupAcquired", function(data) {
         console.log(Q(data.name));
         Q(data.name).each(function() {
