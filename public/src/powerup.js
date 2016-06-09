@@ -22,9 +22,10 @@ Quintus.Powerup = function (Q) {
     Q.Powerup.extend("Slow", {
         init: function (p) {
             this._super(p, {
-                sheet: "red",
+                //sheet: "red",
                 powerupId: ++slowId
             });
+            this.p.sheet = "red";
         },
 
         sensor: function (colObj) {
@@ -60,9 +61,9 @@ Quintus.Powerup = function (Q) {
     Q.Powerup.extend("Fast", {
         init: function (p) {
             this._super(p, {
-                sheet: "green",
                 powerupId: ++fastId
             });
+            this.p.sheet = "green";
         },
 
         sensor: function (colObj) {
@@ -98,9 +99,9 @@ Quintus.Powerup = function (Q) {
     Q.Powerup.extend("Heavy", {
         init: function (p) {
             this._super(p, {
-                sheet: "darkBlue",
                 powerupId: ++heavyId
             });
+            this.p.sheet = "darkBlue";
         },
 
         sensor: function (colObj) {
@@ -136,9 +137,9 @@ Quintus.Powerup = function (Q) {
     Q.Powerup.extend("Light", {
         init: function (p) {
             this._super(p, {
-                sheet: "yellow",
                 powerupId: ++lightId
             });
+            this.p.sheet = "yellow";
         },
 
         sensor: function (colObj) {
@@ -174,9 +175,9 @@ Quintus.Powerup = function (Q) {
     Q.Powerup.extend("Freeze", {
         init: function (p) {
             this._super(p, {
-                sheet: "lightBlue",
                 powerupId: ++freezeId
             });
+            this.p.sheet = "lightBlue";
         },
 
         sensor: function (colObj) {
@@ -208,7 +209,7 @@ Quintus.Powerup = function (Q) {
             if (this.timeLeft === 0) {
                 this.entity.del("Freeze");
             } else {
-                thistimeLeft--;
+                this.timeLeft--;
             }
         }
     });
