@@ -26,8 +26,12 @@ module.exports = function (config) {
                 included: false,
                 served: true
             },
-            'public/build/alltest.min.js',
-            'public/build/tests.min.js'
+            'public/lib/quintus-all.js',
+            'public/src/player.js',
+            'public/src/powerup.js',
+            'public/src/flag.js',
+            'public/src/game.js',
+            'spec/tests/*.js'
         ],
 
         proxies: {
