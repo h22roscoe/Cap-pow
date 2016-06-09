@@ -225,7 +225,7 @@ function setUp(stage) {
         Q(data.name).each(function() {
             console.log("How does this: ", this);
             console.log("compare to our data?: ", data);
-            if (this.powerupId === data.powerupId) {
+            if (this.p.powerupId === data.powerupId) {
                 this.destroy();
             }
         });
