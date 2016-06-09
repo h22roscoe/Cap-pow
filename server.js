@@ -10,6 +10,7 @@ var io = require("socket.io")(server, {
     pingInterval: 25000
 });
 var rooms = require("./rooms");
+var roomData = require("roomdata");
 
 io.serveClient(true);
 
@@ -105,7 +106,7 @@ gameNsp.on("connection", function (socket) {
     console.log("Game: A user connected");
 
     socket.on("joinGame", function (gameData) {
-        socket.join(gameData.roomName);
+        roomData.joinRoom(socket, gameData.roomName);
 
         setTimeout(function () {
             socket.emit("connected", {

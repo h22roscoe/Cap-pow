@@ -17,8 +17,6 @@ function joinRoom(data) {
 // is removed from the list of available rooms.
 // Started by button press to start countdown.
 function startCountdown(data) {
-
-    //this function may be able to be put straight into the button event
     var time = 5;
     var id = setInterval(function () {
         roomNsp.to(data.roomName).emit("countdown", {
