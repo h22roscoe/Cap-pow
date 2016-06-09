@@ -3,14 +3,13 @@ exports.Debug = false;
 exports.rooms = {};
 
 exports.roomExists = function (socket, room) {
-    if (!this.rooms[room]) return false;
-    return true;
+    return this.rooms[room];
 };
 
-exports.createRoom = function (socket, room) {
-    if (exports.Debug) console.log(socket.id + ": Creating Room: " + room);
+exports.createRoom = function (socket, username, room) {
+    if (exports.Debug) console.log(username + ": Creating Room: " + room);
     this.rooms[room] = {
-        owner: socket.id,
+        owner: username,
         users: [],
         variables: {}
     };
@@ -25,7 +24,7 @@ exports.set = function (socket, variable, content) {
     this.rooms[socket.roomdata_room].variables[variable] = content;
 }
 
-exports.get = function (socket, variable, content) {
+exports.get = function (socket, variable) {
     if (exports.Debug) console.log(socket.id + ": Getting variable: " + variable);
     if (variable == "room") {
         if (!socket.roomdata_room) return undefined;
@@ -40,10 +39,15 @@ exports.get = function (socket, variable, content) {
     return this.rooms[socket.roomdata_room].variables[variable];
 }
 
+exports.rejoinRoom = function (socket, room) {
+    socket.join(room);
+    socket.roomdata_room = room;
+}
+
 exports.joinRoom = function (socket, username, room) {
     if (exports.Debug) console.log(socket.id + ": Joining room: " + room);
     if (socket.roomdata_room) this.leaveRoom(socket, room);
-    if (!this.roomExists(socket, room)) this.createRoom(socket, room);
+    if (!this.roomExists(socket, room)) this.createRoom(socket, username, room);
     this.rooms[room].users.push(socket.id);
     socket.join(room);
     socket.roomdata_room = room;

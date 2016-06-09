@@ -1,13 +1,14 @@
 // Global variables set at the bottom
 var roomSocket;
 var currentRoom;
+var roomData;
 var playerCount = 0;
 
 // Called when a player clicks on a room to join it takes that player
 // to the lobby screen
 function joinRoom(data) {
     // Socket for the player joining room
-    this.join(data.roomName);
+    roomData.joinRoom(this, data.playerId, data.roomName);
     playerCount++;
     currentRoom = data.roomName;
 }
@@ -34,9 +35,10 @@ function sendHeartbeat(){
     setTimeout(sendHeartbeat, 8000);
 }
 
-module.exports = function (roomio, models, roomSocket) {
+module.exports = function (roomio, models, roomdata, roomSocket) {
     roomNsp = roomio;
     roomSocket = roomSocket;
+    roomData = roomdata;
 
     // Host Events
     // Emitted when start button pressed

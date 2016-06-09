@@ -70,7 +70,7 @@ route(app, passport);
 // Whenever a user connects set up default event listeners.
 roomNsp.on("connection", function(socket) {
     console.log("Setup: A user connected");
-    rooms(roomNsp, models, socket);
+    rooms(roomNsp, models, roomData, socket);
 });
 
 var POWER_UPS = [
@@ -87,7 +87,7 @@ gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
 
     socket.on("joinGame", function(gameData) {
-        roomData.joinRoom(socket, gameData.roomName);
+        roomData.rejoinRoom(socket, gameData.roomName);
         var ownerId = roomData.get(socket, "owner");
 
         if (socket.id === ownerId) {
