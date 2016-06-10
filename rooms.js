@@ -41,6 +41,16 @@ module.exports = function (roomNsp, models, roomData, roomSocket) {
                 name: data.playerName,
                 id: rooms.players
             }, data.roomName);
+
+            if (data.playerName === roomData.get(socket, "owner")) {
+                models.room.find({
+                    where: {
+                        id: data.roomName
+                    }
+                }).then(function (room) {
+                    roomData.set(socket, "winPoints", room.winPoints);
+                })
+            }
         });
 
         currentRoom = data.roomName;

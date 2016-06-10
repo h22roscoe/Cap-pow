@@ -63,6 +63,8 @@ var files = [
 
 var roomName = sessionStorage.getItem("roomName");
 var socket = io.connect("/game");
+var winPoints;
+var noWinner = true;
 
 Q.loadTMX(files.join(','), function () {
     Q.compileSheets("../images/sprites.png", "../data/sprites.json");
@@ -121,28 +123,6 @@ Q.scene("castleLevel", function(stage) {
     setUp(stage);
 });
 
-var noWinner = true;
-var winPoints;
-
-var app = angular.module("game", []);
-
-app.controller("game", function($scope, $http) {
-    // TODO: Should get from lobby not room (WHEN KIRAN/BILLY DONE WITH ONE NSP)
-    $http.get("/room/" + roomName + "/data").then(function(rooms) {
-        var rooms = rooms.data;
-        console.log(rooms);
-        for (var i = 0; i < rooms.length; i++) {
-            console.log("ith room: ", rooms[i]);
-            console.log("roomName: ", roomName);
-            // TODO: roomId to name
-            if (rooms[i].roomId === roomName) {
-                // TODO: Magic #  on RHS to winPoints
-                winPoints = 10;// rooms[i].winPoints;
-            }
-        }
-    });
-})
-
 function createTableRowWithId(playerId, contents) {
     return "<tr id='" + playerId + "'>" + contents + "</tr>";
 }
@@ -153,7 +133,6 @@ function createTableDataRow(playerId, gamePoints) {
 
 setUpObject.addSelf = function(data) {
     // Set this players unique id
-    console.log("in addSelf ", data);
     setUpObject.selfId = sessionStorage.getItem("playerId");
 
     // Create the actual player with this unique id
@@ -259,7 +238,11 @@ function updatePoints() {
 function setUp(stage) {
     setUpObject.stage = stage;
 
-    socket.on("playerNumber", setUpObject.addSelf);
+    socket.on("gameInfo", function (data) {
+        winPoints = data.winPoints;
+
+        setUpObject.addSelf(data);
+    });
 
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
