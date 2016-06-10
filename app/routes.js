@@ -73,8 +73,7 @@ module.exports = function (app, passport) {
                 if (rooms) {
                     res.render("lobby", {
                         message: "Room is already taken",
-                        user: req.user,
-                        rooms: rooms
+                        user: req.user
                     });
                 } else {
                     models.room.create({
@@ -84,6 +83,11 @@ module.exports = function (app, passport) {
                         players: 0
                     });
                 }
+            });
+        } else {
+            res.render("lobby", {
+                message: "The room needs a name!",
+                user: req.user
             });
         }
     });

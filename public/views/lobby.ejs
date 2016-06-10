@@ -81,9 +81,14 @@
                     <label style="color:white">Make your own room!</label>
                     <input type="text" class="form-control" name="roomname" placeholder="Room Name" style="color: darksalmon">
                     <br>
-                    <input id="points" class="form-control" type="range" name="winPoints">
+                    <span style="color: aliceblue">Points to win: <span id="val" value="50"></span>
                     <br>
-                    <button id="create" ng-click="loadRoom()" type="submit" class="btn btn-md style='color: white'">Create Room</button>
+                    <span style="color: aliceblue">10</span>
+                    <input id="points" class="form-control" type="text" name="winPoints">
+                    <span style="color: aliceblue">100</span>
+                    <br>
+                    <br>
+                    <button id="create" ng-click="loadRoom()" type="submit" class="btn btn-md">Create Room</button>
                 </form>
 
                 <hr>
@@ -126,11 +131,15 @@
     </script>
     <script>
         $("#points").slider({
-            min: 0,
+            min: 10,
             max: 100,
             value: 50,
             step: 10,
-            tooltip_position: 'bottom'
+            tooltip: 'hide'
+        });
+
+        $("#points").on("slide", function(slideEvt) {
+	        $("#val").text(slideEvt.value);
         });
     </script>
 </body>

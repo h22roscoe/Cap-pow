@@ -220,8 +220,6 @@ function updatePoints() {
             gamePoints: ++setUpObject.player.p.gamePoints
         });
 
-        console.log("Player points", setUpObject.player.p.gamePoints);
-        console.log("Max", winPoints);
         if (setUpObject.player.p.gamePoints >= winPoints) {
             socket.emit("gameWon", {
                 playerId: setUpObject.player.p.playerId
@@ -284,6 +282,7 @@ function setUp(stage) {
         Q.stageScene("endGame", 1, { label: data.playerId + " Won!" });
 
         noWinner = false;
+    });
 
     socket.on("makeFlagMove", function (data) {
         stage.insert(new Q.FlagMove({
