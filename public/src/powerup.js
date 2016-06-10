@@ -219,7 +219,7 @@ Quintus.Powerup = function (Q) {
     Q.Powerup.extend("FlagMove", {
         init: function (p) {
             this._super(p, {
-                sheet: "White",
+                sheet: "white",
                 gravity: 0
             });
         },
