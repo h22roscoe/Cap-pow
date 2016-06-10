@@ -224,7 +224,7 @@ Quintus.Powerup = function (Q) {
             });
         },
 
-        var flagPositions = [
+        flagPositions: [
             {
                 x: 693,
                 y: 557
@@ -237,12 +237,14 @@ Quintus.Powerup = function (Q) {
                 x: 1400,
                 y: 160
             }
-        ]
+        ],
 
         sensor: function (colObj) {
-            var randomIndex = Math.floor(Math.random() * flagPositions.length);
-            var flagPos = flagPositions[randomIndex];
+            var randomIndex = Math.floor(Math.random() * this.flagPositions.length);
+            var flagPos = this.flagPositions[randomIndex];
             var flag = Q("Flag").first();
+
+            flag.destroy;
 
             colObj.p.socket.emit("powerUp", {
                 name: "FlagMove",

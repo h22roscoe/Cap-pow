@@ -8,7 +8,7 @@ var playerCount = 0;
 // to the lobby screen
 function joinRoom(data) {
     // Socket for the player joining room
-    roomData.joinRoom(this, data.playerId, data.roomName);
+    this.joinRoom(data.roomName);
     playerCount++;
     currentRoom = data.roomName;
 }

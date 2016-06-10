@@ -88,7 +88,7 @@ gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
 
     socket.on("joinGame", function(gameData) {
-        roomData.rejoinRoom(socket, gameData.roomName);
+        roomData.joinRoom(socket, gameData.roomName);
         var ownerId = roomData.get(socket, "owner");
 
         if (socket.id === ownerId) {
