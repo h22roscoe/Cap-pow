@@ -15,7 +15,6 @@ Quintus.Door = function (Q) {
         },
 
         findLinkedDoor: function () {
-            console.log("Finding...");
             var door = this;
             var returnVal;
             Q("Door").each(function () {
