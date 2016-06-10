@@ -37,6 +37,7 @@
     <meta name="theme-color" content="#21bf73">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
     <title>Cap-pow!</title>
 </head>
@@ -100,7 +101,7 @@
     }
 </style>
 
-<body>
+<body ng-app="game" ng-controller="game">
     <table id="scores" class="table score">
         <thead>
             <tr>

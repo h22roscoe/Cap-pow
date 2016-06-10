@@ -118,14 +118,7 @@ gameNsp.on("connection", function(socket) {
                         var powerUpPositions = roomData.get(
                             socket, "powerUpPositions");
 
-                        console.log("Before: ", powerUpPositions);
-                        console.log("index: ", randPos);
-
                         var pos = powerUpPositions.splice(randPos, 1);
-
-                        console.log("After: ", powerUpPositions);
-                        console.log("Spliced: ", pos);
-                        console.log("-----------------------");
 
                         roomData.set(
                             socket, "powerUpPositions", powerUpPositions);
@@ -159,23 +152,22 @@ gameNsp.on("connection", function(socket) {
                 .emit("newScore", updateInfo);
         });
 
-        socket.on("powerUp", function(powerUpInfo) {
-            console.log("Someone got a powerUp with this x: ", powerUpInfo.x);
-            console.log("It had this y: ", powerUpInfo.y);
+        socket.on("gameWon", function(updateInfo) {
+            console.log("This guy won!: ", updateInfo.playerId);
+            gameNsp.to(gameData.roomName)
+                .emit("gameWon", updateInfo);
+        });
 
+        socket.on("powerUp", function(powerUpInfo) {
             socket.broadcast.to(gameData.roomName)
                 .emit("powerupAcquired", powerUpInfo);
 
             var powerUpPositions = roomData.get(socket, "powerUpPositions");
 
-            console.log("This is our possible positions list before: ", powerUpPositions);
-
             powerUpPositions.push({
                 x: powerUpInfo.x,
                 y: powerUpInfo.y
             });
-
-            console.log("This is our possible positions list after: ", powerUpPositions);
 
             roomData.set(socket, "powerUpPositions", powerUpPositions);
 

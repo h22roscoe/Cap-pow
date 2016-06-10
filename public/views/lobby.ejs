@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.min.css">
 
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.min.js"></script>
 
     <!--- FAVICON -->
     <link rel="shortcut icon" href="../favicons/favicon.ico">
@@ -51,12 +54,9 @@
                         <th># Players</th>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="room in rooms | orderBy: 'players': true"
-                            ng-click="loadRoom(room);"
-                            ng-href="/room/{{ room.name }}"
-                            style="cursor: pointer; cursor: hand;">
-                                <td>{{ room.name }}</td>
-                                <td>{{ room.players }}</td>
+                        <tr ng-repeat="room in rooms | orderBy: 'players': true" ng-click="loadRoom(room);" style="cursor: pointer; cursor: hand;">
+                            <td>{{ room.name }}</td>
+                            <td>{{ room.players }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -71,18 +71,20 @@
                     <div class="alert alert-danger">
                         <%= message %>
                     </div>
-                <% } %>
+                    <% } %>
 
-                <form id="roomform" action="/lobby" method="post">
-                    <label>Make your own room!</label>
-                    <input type="text" class="form-control" name="roomname">
-                    <br>
-                    <button id="create" ng-click="loadRoom()" type="submit" class="btn btn-warning btn-md">Create Room</button>
-                </form>
+                        <form id="roomform" action="/lobby" method="post">
+                            <label>Make your own room!</label>
+                            <input type="text" class="form-control" name="roomname">
+                            <br>
+                            <input id="points" class="form-control" type="range" name="winPoints">
+                            <br>
+                            <button id="create" type="submit" class="btn btn-warning btn-md">Create Room</button>
+                        </form>
 
-                <hr>
+                        <hr>
 
-                <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+                        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
             </div>
         </div>
     </div>
@@ -98,9 +100,9 @@
     <script>
         var app = angular.module("lobby", []);
 
-        app.controller("rooms", function ($scope, $http, $timeout, $window) {
-            $scope.ajax = function () {
-                $http.get($window.location.href + "/data").then(function (rooms) {
+        app.controller("rooms", function($scope, $http, $timeout, $window) {
+            $scope.ajax = function() {
+                $http.get($window.location.href + "/data").then(function(rooms) {
                     $scope.rooms = rooms.data;
                 });
 
@@ -109,13 +111,22 @@
 
             $scope.ajax();
 
-            $scope.loadRoom = function (room) {
+            $scope.loadRoom = function(room) {
                 $http.put("/room/" + room.name).then(angular.noop);
 
                 sessionStorage.setItem("roomName", room.name);
 
                 $window.location.href = "/room/" + room.name;
             }
+        });
+    </script>
+    <script>
+        $("#points").slider({
+            min: 0,
+            max: 100,
+            value: 50,
+            step: 10,
+            tooltip_position: 'bottom'
         });
     </script>
 </body>

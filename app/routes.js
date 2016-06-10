@@ -50,9 +50,6 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    // PROFILE SECTION -- POSSIBLY TEMPORARY ONLY
-    // We will want this protected so you have to be logged in to visit
-    // We will use route middleware to verify this (the isLoggedIn function)
     app.get("/lobby/data", isLoggedIn, function (req, res) {
         models.room.findAll().then(function (rooms) {
             res.json(rooms);
@@ -83,6 +80,7 @@ module.exports = function (app, passport) {
                     models.room.create({
                         id: req.body.roomname,
                         name: req.body.roomname,
+                        winPoints: req.body.winPoints,
                         players: 0
                     });
                 }
