@@ -9,7 +9,7 @@ var Q = window.Q = Quintus({
         height: $(window).height() - 10,
         scaleToFit: true
     })
-    .controls().touch()
+    .controls(true).touch()
     .enableSound();
 
 Q.setImageSmoothing(false);
