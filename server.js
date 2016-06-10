@@ -79,6 +79,7 @@ var POWER_UPS = [
     "makeFreeze",
     "makeLight",
     "makeHeavy"
+    "makeFlagMove"
 ]
 
 var MAX_POWER_UPS = 2;
