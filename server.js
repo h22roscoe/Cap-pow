@@ -74,11 +74,11 @@ roomNsp.on("connection", function(socket) {
 });
 
 var POWER_UPS = [
-    "makeFast",
+    /*"makeFast",
     "makeSlow",
     "makeFreeze",
     "makeLight",
-    "makeHeavy",
+    "makeHeavy",*/
     "makeFlagMove"
 ]
 
