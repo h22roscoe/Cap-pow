@@ -244,7 +244,9 @@ Quintus.Powerup = function (Q) {
             var flagPos = this.flagPositions[randomIndex];
             var flag = Q("Flag").first();
 
-            flag.destroy();
+            flag.p.x = flagPos.x;
+            flag.p.y = flagPos.y;
+
 
             colObj.p.socket.emit("powerUp", {
                 name: "FlagMove",

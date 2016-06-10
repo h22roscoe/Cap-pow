@@ -58,6 +58,7 @@ Q.loadTMX(files.join(','), function () {
 Q.scene("castleLevel", function (stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);
 
+    //move creation
     setUpObject.flag = new Q.Flag({
         x: 693,
         y: 557
@@ -221,7 +222,6 @@ function setUp(stage) {
     });
 
     socket.on("makeFlagMove", function (data) {
-        console.log("makeFlagMove");
         stage.insert(new Q.FlagMove({
             x: data.x,
             y: data.y
@@ -239,14 +239,8 @@ function setUp(stage) {
         });
 
         if (data.name === "FlagMove") {
-            setUpObject.flag.destroy();
-
-            setUpObject.flag = new Q.Flag({
-                x: data.flagPos.x,
-                y: data.flagPos.y
-            });
-
-            stage.insert(setUpObject.flag);
+            setUpObject.flag.p.x = data.flagPos.x;
+            setUpObject.flag.p.y = data.flagPos.y;
         } else {
             setUpObject.player.add(data.name);
         }
