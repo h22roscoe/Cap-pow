@@ -2,7 +2,7 @@ Quintus.Player = function (Q) {
     Q.Sprite.extend("Player", {
         init: function (p) {
             this._super(p, {
-                sheet: "player",
+                sheet: "player1",
                 // Setting a sprite sheet sets sprite width and height
                 type: Q.SPRITE_PLAYER,
                 // TODO: Need to change collisionMask so that players
