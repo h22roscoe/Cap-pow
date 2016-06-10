@@ -6,7 +6,7 @@ describe("Player", function () {
     });
 
     it("has a sheet of flag when created", function () {
-        expect(player.p.sheet).toEqual("player");
+        expect(player.p.sheet).toEqual("player1");
     });
 
     it("has a type of SPRITE_PLAYER when created", function () {

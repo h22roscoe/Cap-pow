@@ -53,8 +53,35 @@
         "tileh": 21
     },
 
-    "player": {
+    "player1": {
         "sx": 25,
+        "sy": 2,
+        "cols": 1,
+        "tilew": 17,
+        "frames": 1,
+        "tileh": 21
+    },
+    
+    "player2": {
+        "sx": 185,
+        "sy": 2,
+        "cols": 1,
+        "tilew": 17,
+        "frames": 1,
+        "tileh": 21
+    },
+    
+    "player3": {
+        "sx": 206,
+        "sy": 2,
+        "cols": 1,
+        "tilew": 17,
+        "frames": 1,
+        "tileh": 21
+    },
+    
+    "player4": {
+        "sx": 227,
         "sy": 2,
         "cols": 1,
         "tilew": 17,
