@@ -4,7 +4,7 @@ Quintus.Powerup = function (Q) {
     var heavyId = 0;
     var lightId = 0;
     var freezeId = 0;
-
+    var flagMoveId = 0;
 
     Q.Sprite.extend("Powerup", {
         init: function (p) {
@@ -219,8 +219,8 @@ Quintus.Powerup = function (Q) {
     Q.Powerup.extend("FlagMove", {
         init: function (p) {
             this._super(p, {
-                sheet: "red",
-                gravity: 0
+                sheet: "white",
+                powerupId: ++flagMoveId
             });
         },
 

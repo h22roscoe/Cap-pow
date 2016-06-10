@@ -221,6 +221,7 @@ function setUp(stage) {
     });
 
     socket.on("makeFlagMove", function (data) {
+        console.log("makeFlagMove");
         stage.insert(new Q.FlagMove({
             x: data.x,
             y: data.y
