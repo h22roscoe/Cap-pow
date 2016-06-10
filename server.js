@@ -78,7 +78,7 @@ var POWER_UPS = [
     "makeSlow",
     "makeFreeze",
     "makeLight",
-    "makeHeavy"
+    "makeHeavy",
     "makeFlagMove"
 ]
 
