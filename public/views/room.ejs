@@ -83,9 +83,10 @@
 
         app.controller("roomCtrl", function ($scope, $http, $timeout, $window) {
             $scope.socket = io.connect("/room");
+            var roomName = sessionStorage.getItem("roomName");
 
             $scope.socket.emit("joinRoom", {
-                roomName: sessionStorage.getItem("roomName"),
+                roomName: roomName,
                 playerName: sessionStorage.getItem("playerId")
             });
 
@@ -93,13 +94,13 @@
                 if (data.time) {
                     $("#count").text(data.time + " seconds to go!");
                 } else {
-                    $window.location.href = "/game";
+                    $window.location.href = "/game?roomName=" + roomName;
                 }
             });
 
             $scope.startGame = function () {
                 $scope.socket.emit('countdown', {
-                    roomName: sessionStorage.getItem("roomName")
+                    roomName: roomName
                 });
             }
 

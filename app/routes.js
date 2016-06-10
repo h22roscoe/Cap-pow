@@ -57,9 +57,17 @@ module.exports = function (app, passport) {
     });
 
     app.get("/lobby", isLoggedIn, function (req, res) {
-        res.render("lobby", {
-            message: "",
-            user: req.user
+        models.users.update({
+            roomId: null
+        }, {
+            where: {
+                username: req.user.username
+            }
+        }).then(function () {
+            res.render("lobby", {
+                message: "",
+                user: req.user
+            });
         });
     });
 
@@ -100,14 +108,6 @@ module.exports = function (app, passport) {
             where: {
                 username: req.user.username
             }
-        }).then(function () {
-            models.room.update({
-                players: models.sequelize.literal("players + 1")
-            }, {
-                where: {
-                    id: req.params.roomname
-                }
-            });
         });
     });
 
@@ -134,7 +134,7 @@ module.exports = function (app, passport) {
     });
 
     // GAME
-    app.get("/game", isLoggedIn, function (req, res) {
+    app.get("/game/", isLoggedIn, function (req, res) {
         res.render("game", {});
     });
 };

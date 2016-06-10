@@ -92,8 +92,10 @@ gameNsp.on("connection", function(socket) {
 
         roomData.rejoinRoom(socket, gameData.roomName);
 
+        var spriteId = roomData.getPlayerNumber(socket, gameData.playerId);
+
         socket.emit("playerNumber", {
-          id: roomData.getPlayerNumber(gameData.playerId)
+            id: spriteId
         });
 
         var ownerId = roomData.get(socket, "owner");
@@ -185,7 +187,7 @@ gameNsp.on("connection", function(socket) {
     });
 
     socket.on("disconnect", function() {
-      roomData.clearUsers(socket);
+        roomData.clearUsers(socket);
     });
 });
 

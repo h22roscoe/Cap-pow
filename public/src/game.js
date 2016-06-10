@@ -25,6 +25,28 @@ setUpObject = {
     stage: null
 };
 
+var startPos = {
+    0: {
+        x: 231,
+        y: 84
+    },
+
+    1: {
+        x: 104,
+        y: 693
+    },
+
+    2: {
+        x: 1365,
+        y: 525
+    },
+
+    3: {
+        x: 1323,
+        y: 41
+    }
+}
+
 var files = [
     "../data/castleLevel.tmx",
     "../data/level1.tmx",
@@ -39,15 +61,23 @@ var files = [
     "../data/powerups.json"
 ];
 
+var roomName = sessionStorage.getItem("roomName");
+var socket = io.connect("/game");
+
 Q.loadTMX(files.join(','), function () {
     Q.compileSheets("../images/sprites.png", "../data/sprites.json");
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.compileSheets("../images/powerups.png", "../data/powerups.json");
     Q.stageScene("castleLevel");
+
+    socket.emit("joinGame", {
+        roomName: roomName,
+        playerId: sessionStorage.getItem("playerId")
+    });
 }, {
     progressCallback: function (loaded, total) {
         var element = document.getElementById("loading_progress");
-        element.style.width = Math.flsproor(loaded / total * 100) + "%";
+        element.style.width = Math.floor(loaded / total * 100) + "%";
 
         if (loaded === total) {
             document.getElementById("loading").remove();
@@ -87,23 +117,8 @@ Q.scene("endGame", function(stage) {
 Q.scene("castleLevel", function(stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);
 
-    //move creation to server
-    setUpObject.flag = new Q.Flag({
-        x: 693,
-        y: 557
-    });
-
-    stage.insert(setUpObject.flag);
-
     // Set up the socket connections.
     setUp(stage);
-});
-
-var roomName = sessionStorage.getItem("roomName")
-var socket = io.connect("/game");
-socket.emit("joinGame", {
-    roomName: roomName,
-    playerId: sessionStorage.getItem("playerId")
 });
 
 var noWinner = true;
@@ -136,18 +151,19 @@ function createTableDataRow(playerId, gamePoints) {
     return "<td>" + playerId + "</td><td>" + gamePoints + "</td>";
 }
 
-function addSelf(playerId) {
+setUpObject.addSelf = function(data) {
     // Set this players unique id
+    console.log("in addSelf ", data);
     setUpObject.selfId = sessionStorage.getItem("playerId");
 
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
-        sheet: "player"+playerId,
+        sheet: "player" + data.id,
         socket: socket,
         roomName: roomName,
         playerId: setUpObject.selfId,
-        x: 300,
-        y: 50
+        x: startPos[data.id].x,
+        y: startPos[data.id].y
     });
 
     $("#scores > tbody:last-child").append(
@@ -160,7 +176,13 @@ function addSelf(playerId) {
     // Add a camera  for this player
     setUpObject.stage.add("viewport").follow(setUpObject.player);
 
-    setUpObject.flag.p.player = setUpObject.player;
+    setUpObject.flag = new Q.Flag({
+        x: 693,
+        y: 557,
+        player: setUpObject.player
+    });
+
+    setUpObject.stage.insert(setUpObject.flag);
 
     // Updates the players points every second if within range of flag
     setUpObject.timerId = setInterval(updatePoints, 1000);
@@ -237,14 +259,12 @@ function updatePoints() {
 function setUp(stage) {
     setUpObject.stage = stage;
 
+    socket.on("playerNumber", setUpObject.addSelf);
+
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
 
     socket.on("newScore", setUpObject.updateScores);
-
-    socket.on("playerNumber", function (data) {
-      addSelf(data.id);
-    });
 
     socket.on("makeFast", function (data) {
         stage.insert(new Q.Fast({
