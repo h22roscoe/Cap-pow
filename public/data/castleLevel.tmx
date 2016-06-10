@@ -12817,7 +12817,7 @@
    <tile gid="333"/>
    <tile gid="333"/>
    <tile gid="336"/>
-   <tile gid="301"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="335"/>
@@ -12850,7 +12850,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="331"/>
+   <tile gid="0"/>
    <tile gid="332"/>
    <tile gid="335"/>
    <tile gid="333"/>
