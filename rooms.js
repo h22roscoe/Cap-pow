@@ -40,7 +40,7 @@ module.exports = function (roomio, models, roomdata, roomSocket) {
     roomNsp = roomio;
     roomSocket = roomSocket;
     roomData = roomdata;
-    disconnected = true
+    disconnected = true;
 
     // Host Events
     // Emitted when start button pressed
