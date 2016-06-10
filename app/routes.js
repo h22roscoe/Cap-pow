@@ -50,9 +50,6 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
-    // PROFILE SECTION -- POSSIBLY TEMPORARY ONLY
-    // We will want this protected so you have to be logged in to visit
-    // We will use route middleware to verify this (the isLoggedIn function)
     app.get("/lobby/data", isLoggedIn, function (req, res) {
         models.room.findAll().then(function (rooms) {
             res.json(rooms);
@@ -76,16 +73,21 @@ module.exports = function (app, passport) {
                 if (rooms) {
                     res.render("lobby", {
                         message: "Room is already taken",
-                        user: req.user,
-                        rooms: rooms
+                        user: req.user
                     });
                 } else {
                     models.room.create({
                         id: req.body.roomname,
                         name: req.body.roomname,
+                        winPoints: req.body.winPoints,
                         players: 0
                     });
                 }
+            });
+        } else {
+            res.render("lobby", {
+                message: "The room needs a name!",
+                user: req.user
             });
         }
     });

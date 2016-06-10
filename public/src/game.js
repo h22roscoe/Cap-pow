@@ -55,7 +55,36 @@ Q.loadTMX(files.join(','), function () {
     }
 });
 
-Q.scene("castleLevel", function (stage) {
+Q.scene("endGame", function(stage) {
+    var box = stage.insert(new Q.UI.Container({
+        x: Q.width / 2,
+        y: Q.height / 2,
+        fill: "rgba(0,0,0,0.5)"
+    }));
+
+    var button = box.insert(new Q.UI.Button({
+        x: 0,
+        y: 0,
+        fill: "#CCCCCC",
+        label: "Back to room"
+    }))
+
+    var label = box.insert(new Q.UI.Text({
+        x: 10,
+        y: -10 - button.p.h,
+        label: stage.options.label
+    }));
+
+    button.on("click", function() {
+        Q.clearStages();
+
+        window.location.href = "/room/" + roomName;
+    });
+
+    box.fit(20);
+});
+
+Q.scene("castleLevel", function(stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);
 
     //move creation to server
@@ -76,6 +105,28 @@ socket.emit("joinGame", {
     roomName: roomName,
     playerId: sessionStorage.getItem("playerId")
 });
+
+var noWinner = true;
+var winPoints;
+
+var app = angular.module("game", []);
+
+app.controller("game", function($scope, $http) {
+    // TODO: Should get from lobby not room (WHEN KIRAN/BILLY DONE WITH ONE NSP)
+    $http.get("/room/" + roomName + "/data").then(function(rooms) {
+        var rooms = rooms.data;
+        console.log(rooms);
+        for (var i = 0; i < rooms.length; i++) {
+            console.log("ith room: ", rooms[i]);
+            console.log("roomName: ", roomName);
+            // TODO: roomId to name
+            if (rooms[i].roomId === roomName) {
+                // TODO: Magic #  on RHS to winPoints
+                winPoints = 10;// rooms[i].winPoints;
+            }
+        }
+    });
+})
 
 function createTableRowWithId(playerId, contents) {
     return "<tr id='" + playerId + "'>" + contents + "</tr>";
@@ -164,11 +215,17 @@ setUpObject.updateScores = function (data) {
 }
 
 function updatePoints() {
-    if (setUpObject.flag.p.shouldUpdatePoints) {
+    if (setUpObject.flag.p.shouldUpdatePoints && noWinner) {
         socket.emit("points", {
             playerId: setUpObject.player.p.playerId,
             gamePoints: ++setUpObject.player.p.gamePoints
         });
+
+        if (setUpObject.player.p.gamePoints >= winPoints) {
+            socket.emit("gameWon", {
+                playerId: setUpObject.player.p.playerId
+            })
+        }
 
         $("#scores #" + setUpObject.selfId).html(
             createTableDataRow(setUpObject.selfId,
@@ -222,6 +279,12 @@ function setUp(stage) {
             x: data.x,
             y: data.y
         }));
+    });
+
+    socket.on("gameWon", function(data) {
+        Q.stageScene("endGame", 1, { label: data.playerId + " Won!" });
+
+        noWinner = false;
     });
 
     socket.on("makeFlagMove", function (data) {

@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/css/bootstrap-slider.min.css">
 
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.min.js"></script>
 
     <!--- FAVICON -->
     <link rel="shortcut icon" href="../favicons/favicon.ico">
@@ -39,14 +42,14 @@
             <a href="/"><img src="../images/cap-pow.png" /></a>
         </div>
         <div class="page-header text-center">
-            <h1><span class="fa fa-list-ul"></span> Lobby</h1>
+            <h1 style="color:white"><span class="fa fa-list-ul"></span> Lobby</h1>
         </div>
 
         <div class="row" ng-controller="rooms">
             <!-- GAME ROOMS LIST -->
             <div class="col-sm-8 text-center">
                 <table class="table table-hover">
-                    <thead align="center">
+                    <thead>
                         <th>Room Name</th>
                         <th># Players</th>
                     </thead>
@@ -62,7 +65,7 @@
                     </tbody>
                 </table>
                 <hr>
-                <a href="/lobby" style="color: black"> <span class="fa fa-refresh"></span> Refresh</a>
+                <a href="/lobby" style="color: white"> <span class="fa fa-refresh"></span> Refresh</a>
             </div>
 
             <br>
@@ -75,10 +78,17 @@
                 <% } %>
 
                 <form id="roomform" action="/lobby" method="post">
-                    <label>Make your own room!</label>
-                    <input type="text" class="form-control" name="roomname">
+                    <label style="color:white">Make your own room!</label>
+                    <input type="text" class="form-control" name="roomname" placeholder="Room Name" style="color: darksalmon">
                     <br>
-                    <button id="create" ng-click="loadRoom()" type="submit" class="btn btn-warning btn-md">Create Room</button>
+                    <span style="color: aliceblue">Points to win: <span id="val" value="50"></span>
+                    <br>
+                    <span style="color: aliceblue">10</span>
+                    <input id="points" class="form-control" type="text" name="winPoints">
+                    <span style="color: aliceblue">100</span>
+                    <br>
+                    <br>
+                    <button id="create" ng-click="loadRoom()" type="submit" class="btn btn-md">Create Room</button>
                 </form>
 
                 <hr>
@@ -91,7 +101,7 @@
         <div class="container" style="padding-top: 1cm; padding-bottom: 2cm">
             <div class="row">
                 <div class="span12 text-center">
-                    <p><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</p>
+                    <p style="color:white"><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</p>
                 </div>
             </div>
         </div>
@@ -99,9 +109,9 @@
     <script>
         var app = angular.module("lobby", []);
 
-        app.controller("rooms", function ($scope, $http, $timeout, $window) {
-            $scope.ajax = function () {
-                $http.get($window.location.href + "/data").then(function (rooms) {
+        app.controller("rooms", function($scope, $http, $timeout, $window) {
+            $scope.ajax = function() {
+                $http.get($window.location.href + "/data").then(function(rooms) {
                     $scope.rooms = rooms.data;
                 });
 
@@ -110,13 +120,26 @@
 
             $scope.ajax();
 
-            $scope.loadRoom = function (room) {
+            $scope.loadRoom = function(room) {
                 $http.put("/room/" + room.name).then(angular.noop);
 
                 sessionStorage.setItem("roomName", room.name);
 
                 $window.location.href = "/room/" + room.name;
             }
+        });
+    </script>
+    <script>
+        $("#points").slider({
+            min: 10,
+            max: 100,
+            value: 50,
+            step: 10,
+            tooltip: 'hide'
+        });
+
+        $("#points").on("slide", function(slideEvt) {
+	        $("#val").text(slideEvt.value);
         });
     </script>
 </body>
