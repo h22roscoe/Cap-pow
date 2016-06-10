@@ -1,4 +1,4 @@
-Quintus.Powerup = function(Q) {
+Quintus.Powerup = function (Q) {
     var slowId = 0;
     var fastId = 0;
     var heavyId = 0;
@@ -42,13 +42,13 @@ Quintus.Powerup = function(Q) {
     });
 
     Q.component("Slow", {
-        added: function() {
+        added: function () {
             this.entity.p.speed /= 2;
             this.timeLeft = 10 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function(dt) {
+        step: function (dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.speed *= 2;
                 this.entity.del("Slow");
@@ -66,7 +66,7 @@ Quintus.Powerup = function(Q) {
             }));
         },
 
-        sensor: function(colObj) {
+        sensor: function (colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Fast",
                 playerId: colObj.p.playerId,
@@ -80,13 +80,13 @@ Quintus.Powerup = function(Q) {
     });
 
     Q.component("Fast", {
-        added: function() {
+        added: function () {
             this.entity.p.speed *= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function(dt) {
+        step: function (dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.speed /= 2;
                 this.entity.del("Fast");
@@ -105,7 +105,7 @@ Quintus.Powerup = function(Q) {
             }));
         },
 
-        sensor: function(colObj) {
+        sensor: function (colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Heavy",
                 playerId: colObj.p.playerId,
@@ -119,13 +119,13 @@ Quintus.Powerup = function(Q) {
     });
 
     Q.component("Heavy", {
-        added: function() {
+        added: function () {
             this.entity.p.gravity *= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function(dt) {
+        step: function (dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.gravity /= 2;
                 this.entity.del("Heavy");
@@ -144,7 +144,7 @@ Quintus.Powerup = function(Q) {
             }));
         },
 
-        sensor: function(colObj) {
+        sensor: function (colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Light",
                 playerId: colObj.p.playerId,
@@ -158,13 +158,13 @@ Quintus.Powerup = function(Q) {
     });
 
     Q.component("Light", {
-        added: function() {
+        added: function () {
             this.entity.p.gravity /= 2;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function(dt) {
+        step: function (dt) {
             if (this.timeLeft === 0) {
                 this.entity.p.gravity *= 2;
                 this.entity.del("Light");
@@ -182,7 +182,7 @@ Quintus.Powerup = function(Q) {
             }));
         },
 
-        sensor: function(colObj) {
+        sensor: function (colObj) {
             colObj.p.socket.emit("powerUp", {
                 name: "Freeze",
                 playerId: colObj.p.playerId,
@@ -196,14 +196,14 @@ Quintus.Powerup = function(Q) {
     });
 
     Q.component("Freeze", {
-        added: function() {
+        added: function () {
             this.entity.p.vx = 0;
             this.entity.p.vy = 0;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
-        step: function(dt) {
+        step: function (dt) {
             // If the player tries to move, set it's velocity to 0
             this.entity.p.vx = 0;
             this.entity.p.vy = 0;
@@ -216,21 +216,45 @@ Quintus.Powerup = function(Q) {
         }
     });
 
-    /*  Q.Powerup.extend("FlagMove", {
-          init: function (p) {
-              this._super(p, {
-                  sheet: "White",
-                  gravity: 0
-              });
-          },
+    Q.Powerup.extend("FlagMove", {
+        init: function (p) {
+            this._super(p, {
+                sheet: "White",
+                gravity: 0
+            });
+        },
 
-          sensor: function (colObj) {
-              colObj.p.socket.broadcast.to(colObj.p.roomName).emit("flag", {
-                  playerId: colObj.p.playerId,
+        var flagPositions = [
+            {
+                x: 693,
+                y: 557
+            },
+            {
+                x: 300,
+                y: 50
+            },
+            {
+                x: 1400,
+                y: 160
+            }
+        ]
 
-              });
-              this.destroy();
-          }
-      });  */
+        sensor: function (colObj) {
+            var randomIndex = Math.floor(Math.random() * flagPositions.length);
+            var flagPos = flagPositions[randomIndex];
+            var flag = Q("Flag").first();
+
+            colObj.p.socket.emit("powerUp", {
+                name: "FlagMove",
+                playerId: colObj.p.playerId,
+                powerupId: this.p.powerupId,
+                x: this.p.x,
+                y: this.p.y,
+                flagPos: flagPos
+            });
+
+            this.destroy();
+        }
+    });
 
 }
