@@ -218,10 +218,10 @@ Quintus.Powerup = function (Q) {
 
     Q.Powerup.extend("FlagMove", {
         init: function (p) {
-            this._super(p, {
+            this._super(Q._defaults(p, {
                 sheet: "white",
                 powerupId: ++flagMoveId
-            });
+            }));
         },
 
         flagPositions: [
@@ -244,7 +244,7 @@ Quintus.Powerup = function (Q) {
             var flagPos = this.flagPositions[randomIndex];
             var flag = Q("Flag").first();
 
-            flag.destroy;
+            flag.destroy();
 
             colObj.p.socket.emit("powerUp", {
                 name: "FlagMove",
