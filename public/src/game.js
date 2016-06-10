@@ -39,13 +39,13 @@ var files = [
     "../data/powerups.json"
 ];
 
-Q.loadTMX(files.join(','), function() {
+Q.loadTMX(files.join(','), function () {
     Q.compileSheets("../images/sprites.png", "../data/sprites.json");
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.compileSheets("../images/powerups.png", "../data/powerups.json");
     Q.stageScene("castleLevel");
 }, {
-    progressCallback: function(loaded, total) {
+    progressCallback: function (loaded, total) {
         var element = document.getElementById("loading_progress");
         element.style.width = Math.floor(loaded / total * 100) + "%";
 
@@ -55,7 +55,7 @@ Q.loadTMX(files.join(','), function() {
     }
 });
 
-Q.scene("castleLevel", function(stage) {
+Q.scene("castleLevel", function (stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);
 
     setUpObject.flag = new Q.Flag({
@@ -115,8 +115,8 @@ function addSelf() {
     return setUpObject.player;
 };
 
-setUpObject.updateSpecificPlayerId = function(data) {
-    var actor = actors.filter(function(obj) {
+setUpObject.updateSpecificPlayerId = function (data) {
+    var actor = actors.filter(function (obj) {
         return obj.player.p.playerId === data.playerId;
     })[0];
 
@@ -150,8 +150,8 @@ setUpObject.updateSpecificPlayerId = function(data) {
     return actor;
 };
 
-setUpObject.updateScores = function(data) {
-    var actor = actors.filter(function(obj) {
+setUpObject.updateScores = function (data) {
+    var actor = actors.filter(function (obj) {
         return obj.player.p.playerId === data.playerId;
     })[0];
 
@@ -185,36 +185,43 @@ function setUp(stage) {
 
     socket.on("newScore", setUpObject.updateScores);
 
-    socket.on("makeFast", function(data) {
+    socket.on("makeFast", function (data) {
         stage.insert(new Q.Fast({
             x: data.x,
             y: data.y
         }));
     });
 
-    socket.on("makeSlow", function(data) {
+    socket.on("makeSlow", function (data) {
         stage.insert(new Q.Slow({
             x: data.x,
             y: data.y
         }));
     });
 
-    socket.on("makeHeavy", function(data) {
+    socket.on("makeHeavy", function (data) {
         stage.insert(new Q.Heavy({
             x: data.x,
             y: data.y
         }));
     });
 
-    socket.on("makeLight", function(data) {
+    socket.on("makeLight", function (data) {
         stage.insert(new Q.Light({
             x: data.x,
             y: data.y
         }));
     });
 
-    socket.on("makeFreeze", function(data) {
+    socket.on("makeFreeze", function (data) {
         stage.insert(new Q.Freeze({
+            x: data.x,
+            y: data.y
+        }));
+    });
+
+    socket.on("makeFlagMove", function (data) {
+        stage.insert(new Q.FlagMove({
             x: data.x,
             y: data.y
         }));
@@ -223,13 +230,24 @@ function setUp(stage) {
     // When a powerup has been collected, a message specific to that
     // powerup will be emitted, causing the other players to get the
     // corresponding component for that powerup
-    socket.on("powerupAcquired", function(data) {
-        Q(data.name).each(function() {
+    socket.on("powerupAcquired", function (data) {
+        Q(data.name).each(function () {
             if (this.p.powerupId === data.powerupId) {
                 this.destroy();
             }
         });
 
-        setUpObject.player.add(data.name);
+        if (data.name === "FlagMove") {
+            setUpObject.flag.destroy();
+
+            setUpObject.flag = new Q.Flag({
+                x: data.flagPos.x,
+                y: data.flagPos.y
+            });
+
+            stage.insert(setUpObject.flag);
+        } else {
+            setUpObject.player.add(data.name);
+        }
     });
 }
