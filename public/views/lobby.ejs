@@ -39,14 +39,14 @@
             <a href="/"><img src="../images/cap-pow.png" /></a>
         </div>
         <div class="page-header text-center">
-            <h1><span class="fa fa-list-ul"></span> Lobby</h1>
+            <h1 style="color:white"><span class="fa fa-list-ul"></span> Lobby</h1>
         </div>
 
         <div class="row" ng-controller="rooms">
             <!-- GAME ROOMS LIST -->
             <div class="col-sm-8 text-center">
                 <table class="table table-hover">
-                    <thead align="center">
+                    <thead>
                         <th>Room Name</th>
                         <th># Players</th>
                     </thead>
@@ -61,7 +61,7 @@
                     </tbody>
                 </table>
                 <hr>
-                <a href="/lobby" style="color: black"> <span class="fa fa-refresh"></span> Refresh</a>
+                <a href="/lobby" style="color: white"> <span class="fa fa-refresh"></span> Refresh</a>
             </div>
 
             <br>
@@ -74,10 +74,10 @@
                 <% } %>
 
                 <form id="roomform" action="/lobby" method="post">
-                    <label>Make your own room!</label>
-                    <input type="text" class="form-control" name="roomname">
+                    <label style="color:white">Make your own room!</label>
+                    <input type="text" class="form-control" name="roomname" placeholder="Room Name" style="color:darksalmon">
                     <br>
-                    <button id="create" ng-click="loadRoom()" type="submit" class="btn btn-warning btn-md">Create Room</button>
+                    <button id="create" ng-click="loadRoom()" type="submit" class="btn btn-md style='color:white'">Create Room</button>
                 </form>
 
                 <hr>
@@ -90,7 +90,7 @@
         <div class="container" style="padding-top: 1cm; padding-bottom: 2cm">
             <div class="row">
                 <div class="span12 text-center">
-                    <p><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</p>
+                    <p style="color:white"><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</p>
                 </div>
             </div>
         </div>

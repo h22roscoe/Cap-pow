@@ -11,16 +11,38 @@
     right: 0px;
 }
 
-.table th {
-    text-align: center;
+table {
+    border:solid white 1px;
+    border-radius:25px;
+    -moz-border-radius:6px;
 }
 
 .table td {
+    background: #E59761;
     text-align: center;
+    color: aliceblue;
+}
+
+.table th {
+    background: #E37722;
+    text-align: center;
+    color: aliceblue;
+}
+
+thead {
+    background: #E37722;
 }
 
 body {
-    background: #F1F2B5; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #F1F2B5 , #135058); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #F1F2B5 , #135058); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #66B9BF;
 }
+
+#create {
+    background-color: #E59761;
+    color: aliceblue;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #EEAA7B;
+}
+
