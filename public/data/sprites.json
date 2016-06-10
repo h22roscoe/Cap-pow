@@ -17,13 +17,13 @@
         "tileh": 19
     },
 
-    "bug": {
-        "sx": 163,
+    "door": {
+        "sx": 162,
         "sy": 2,
         "cols": 1,
-        "tilew": 18,
+        "tilew": 21,
         "frames": 1,
-        "tileh": 12
+        "tileh": 21
     },
 
     "bullet": {
@@ -62,7 +62,7 @@
         "tileh": 21
     },
 
-    "power": {
+    "gem": {
         "sx": 146,
         "sy": 2,
         "cols": 1,

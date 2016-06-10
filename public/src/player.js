@@ -1,23 +1,25 @@
 Quintus.Player = function (Q) {
-    // The very basic player sprite, this is just a normal sprite
-    // using the player sprite sheet with default controls added to it.
     Q.Sprite.extend("Player", {
-        // the init constructor is called on creation
         init: function (p) {
-            // You can call the parent's constructor with this._super(..)
             this._super(p, {
                 sheet: "player",
-                // Setting a sprite sheet sets sprite width
-                // and height
+                // Setting a sprite sheet sets sprite width and height
                 type: Q.SPRITE_PLAYER,
                 // TODO: Need to change collisionMask so that players
                 // dont collide with each other
+                collisionMask: Q.SPRITE_DEFAULT | Q.SPRITE_DOOR | Q.SPRITE_COLLECTABLE | Q.SPRITE_POWERUP,
                 jumpSpeed: -300,
                 speed: 100,
                 gamePoints: 0
             });
 
             this.add("2d, platformerControls, animation");
+
+            Q.input.on("down", this, "checkDoor");
+        },
+
+        checkDoor: function() {
+            this.p.checkDoor = true;
         },
 
         step: function (dt) {
@@ -27,14 +29,33 @@ Quintus.Player = function (Q) {
                 y: this.p.y,
                 sheet: this.p.sheet
             });
-        }
 
+            if (this.p.door) {
+                if (this.p.checkDoor) {
+                    // Enter door.
+                    this.p.y = this.p.door.p.y;
+                    this.p.x = this.p.door.p.x;
+                    this.p.toDoor = this.p.door.findLinkedDoor();
+                }  else if (this.p.toDoor) {
+                    // Transport to matching door.
+                    this.p.y = this.p.toDoor.p.y;
+                    this.p.x = this.p.toDoor.p.x;
+                    this.stage.centerOn(this.p.x, this.p.y);
+                    this.p.toDoor = false;
+                    this.stage.follow(this);
+                }
+            }
+
+            this.p.door = false;
+            this.p.checkDoor = false;
+        }
     });
 
     Q.Sprite.extend("Actor", {
         init: function (p) {
             this._super(p, {
                 update: true,
+                type: Q.SPRITE_ACTOR,
                 collisionMask: Q.SPRITE_DEFAULT
             });
 

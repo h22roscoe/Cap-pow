@@ -34,6 +34,7 @@ module.exports = function (config) {
             },
             'public/lib/quintus-all.js',
             'public/src/player.js',
+            'public/src/door.js',
             'public/src/powerup.js',
             'public/src/flag.js',
             'public/src/game.js',
