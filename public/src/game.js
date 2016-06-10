@@ -47,7 +47,7 @@ Q.loadTMX(files.join(','), function () {
 }, {
     progressCallback: function (loaded, total) {
         var element = document.getElementById("loading_progress");
-        element.style.width = Math.floor(loaded / total * 100) + "%";
+        element.style.width = Math.flsproor(loaded / total * 100) + "%";
 
         if (loaded === total) {
             document.getElementById("loading").remove();
@@ -58,7 +58,7 @@ Q.loadTMX(files.join(','), function () {
 Q.scene("castleLevel", function (stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);
 
-    //move creation
+    //move creation to server
     setUpObject.flag = new Q.Flag({
         x: 693,
         y: 557
@@ -85,12 +85,13 @@ function createTableDataRow(playerId, gamePoints) {
     return "<td>" + playerId + "</td><td>" + gamePoints + "</td>";
 }
 
-function addSelf() {
+function addSelf(playerId) {
     // Set this players unique id
     setUpObject.selfId = sessionStorage.getItem("playerId");
 
     // Create the actual player with this unique id
     setUpObject.player = new Q.Player({
+        sheet: "player"+playerId,
         socket: socket,
         roomName: roomName,
         playerId: setUpObject.selfId,
@@ -179,12 +180,14 @@ function updatePoints() {
 function setUp(stage) {
     setUpObject.stage = stage;
 
-    addSelf();
-
     // Updates the player (actor) w/ playerId who just asked to be updated
     socket.on("updated", setUpObject.updateSpecificPlayerId);
 
     socket.on("newScore", setUpObject.updateScores);
+
+    socket.on("playerNumber", function (data) {
+      addSelf(data.id);
+    });
 
     socket.on("makeFast", function (data) {
         stage.insert(new Q.Fast({

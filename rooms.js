@@ -1,14 +1,15 @@
 // Global variables set at the bottom
 var roomSocket;
 var currentRoom;
+var roomData;
+var disconnected;
 var playerCount = 0;
 
 // Called when a player clicks on a room to join it takes that player
 // to the lobby screen
 function joinRoom(data) {
-    // Socket for the player joining room
-    this.join(data.roomName);
-    playerCount++;
+    // this is the socket for the player joining room
+    roomData.joinRoom(this, {name: data.playerName, id: playerCount++}, data.roomName);
     currentRoom = data.roomName;
 }
 
@@ -17,6 +18,7 @@ function joinRoom(data) {
 // is removed from the list of available rooms.
 // Started by button press to start countdown.
 function startCountdown(data) {
+    disconnected = false;
     var time = 5;
     var id = setInterval(function () {
         roomNsp.to(data.roomName).emit("countdown", {
@@ -34,9 +36,11 @@ function sendHeartbeat(){
     setTimeout(sendHeartbeat, 8000);
 }
 
-module.exports = function (roomio, models, roomSocket) {
+module.exports = function (roomio, models, roomdata, roomSocket) {
     roomNsp = roomio;
     roomSocket = roomSocket;
+    roomData = roomdata;
+    disconnected = true
 
     // Host Events
     // Emitted when start button pressed
@@ -56,23 +60,25 @@ module.exports = function (roomio, models, roomSocket) {
     roomSocket.on("disconnect", function () {
         console.log("Setup: A user disconnected");
 
-        roomSocket.leave(currentRoom);
-        playerCount--;
+        if (disconnected) {
+            roomData.leaveRoom(roomSocket);
+            playerCount--;
 
-        if (playerCount <= 0) {
-            models.room.destroy({
-                where: {
-                    id: currentRoom
-                }
-            });
-        } else {
-            models.room.update({
-                players: models.sequelize.literal("players - 1")
-            }, {
-                where: {
-                    id: currentRoom
-                }
-            });
+            if (playerCount <= 0) {
+                models.room.destroy({
+                    where: {
+                        id: currentRoom
+                    }
+                });
+            } else {
+                models.room.update({
+                    players: models.sequelize.literal("players - 1")
+                }, {
+                    where: {
+                        id: currentRoom
+                    }
+                });
+            }
         }
     });
 };

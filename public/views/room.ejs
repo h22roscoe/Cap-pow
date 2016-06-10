@@ -85,7 +85,8 @@
             $scope.socket = io.connect("/room");
 
             $scope.socket.emit("joinRoom", {
-                roomName: sessionStorage.getItem("roomName")
+                roomName: sessionStorage.getItem("roomName"),
+                playerName: sessionStorage.getItem("playerId")
             });
 
             $scope.socket.on("countdown", function (data) {

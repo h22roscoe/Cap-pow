@@ -10,7 +10,7 @@ var io = require("socket.io")(server, {
     pingInterval: 25000
 });
 var rooms = require("./rooms");
-var roomData = require("roomdata");
+var roomData = require("./app/roomdata");
 
 io.serveClient(true);
 
@@ -88,10 +88,16 @@ gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
 
     socket.on("joinGame", function(gameData) {
-        roomData.joinRoom(socket, gameData.roomName);
+
+        roomData.rejoinRoom(socket, null, gameData.roomName);
+
+        socket.emit("playerNumber", {
+          id: getPlayerNumber(gameData.playerId)
+        });
+
         var ownerId = roomData.get(socket, "owner");
 
-        if (socket.id === ownerId) {
+        if (gameData.playerId === ownerId) {
             roomData.set(socket, "powerUpsGiven", 0);
             roomData.set(socket, "powerUpPositions", [{
                 x: 380,
@@ -183,6 +189,11 @@ gameNsp.on("connection", function(socket) {
             roomData.set(socket, "powerUpsGiven",
                 roomData.get(socket, "powerUpsGiven") - 1);
         });
+    });
+
+    socket.on("disconnect", function() {
+      roomData.set(socket, "disconnected", true);
+      roomData.clearUsers(socket);
     });
 });
 
