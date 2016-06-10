@@ -219,7 +219,7 @@ Quintus.Powerup = function (Q) {
     Q.Powerup.extend("FlagMove", {
         init: function (p) {
             this._super(Q._defaults(p, {
-                sheet: "white",
+                sheet: "purple",
                 powerupId: ++flagMoveId
             }));
         },
