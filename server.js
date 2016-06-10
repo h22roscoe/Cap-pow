@@ -11,6 +11,7 @@ var io = require("socket.io")(server, {
 });
 var rooms = require("./rooms");
 var roomData = require("./app/roomdata");
+roomData.Debug = true;
 
 io.serveClient(true);
 
@@ -89,7 +90,7 @@ gameNsp.on("connection", function(socket) {
 
     socket.on("joinGame", function(gameData) {
 
-        roomData.rejoinRoom(socket, null, gameData.roomName);
+        roomData.rejoinRoom(socket, gameData.roomName);
 
         socket.emit("playerNumber", {
           id: roomData.getPlayerNumber(gameData.playerId)

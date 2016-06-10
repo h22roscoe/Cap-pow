@@ -56,11 +56,18 @@ exports.rejoinRoom = function(socket, room) {
 }
 
 exports.joinRoom = function(socket, user, room) {
-    if (exports.Debug) console.log(username + ": Joining room: " + room);
-    if (socket.roomdata_room) this.leaveRoom(socket, room);
+    if (exports.Debug) {
+        console.log(username + ": Joining room: " + room);
+    }
+
+    if (socket.roomdata_room) {
+        this.leaveRoom(socket, room);
+    }
+
     if (!this.roomExists(room)) {
         this.createRoom(socket, user, room)
     }
+    
     this.rooms[room].users.push(user);
     socket.join(room);
     socket.roomdata_room = room;
