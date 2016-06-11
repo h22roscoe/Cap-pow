@@ -13,10 +13,10 @@ Quintus.KillLayer = function(Q) {
             if (killLayer.p.kill) {
                 if (colObj.isA("Player")) {
                     killLayer.p.kill = false;
-                    console.log("Before: ", colObj.p);
 
                     // Remove the player from stage
-                    setUpObject.stage.remove(colObj);
+                    setUpObject.stage.unfollow();
+                    colObj.hide();
 
                     // Wait 5 seconds before adding again
                     var t = setTimeout(function() {
@@ -25,9 +25,9 @@ Quintus.KillLayer = function(Q) {
                         colObj.p.x = randPos.x;
                         colObj.p.y = randPos.y;
 
-                        setUpObject.stage.insert(colObj);
+                        setUpObject.stage.follow(colObj);
+                        colObj.show();
                         killLayer.p.kill = true;
-                        console.log("After: ", colObj.p);
                     }, 3000);
                 }
             }
