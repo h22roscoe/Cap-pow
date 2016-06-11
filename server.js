@@ -11,7 +11,6 @@ var io = require("socket.io")(server, {
 });
 var rooms = require("./rooms");
 var roomData = require("./app/roomdata");
-roomData.Debug = true;
 
 io.serveClient(true);
 
