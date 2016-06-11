@@ -3,8 +3,7 @@ exports.Debug = false;
 exports.rooms = {};
 
 exports.roomExists = function(room) {
-    if (!this.rooms[room]) return false;
-    return true;
+    return this.rooms[room];
 };
 
 exports.createRoom = function(socket, user, room) {
@@ -32,7 +31,7 @@ exports.get = function(socket, variable) {
         console.log(socket.id + ": Getting variable: " + variable);
     }
 
-    if (variable == "room") {
+    if (variable === "room") {
         if (!socket.roomdata_room) return undefined;
         return socket.roomdata_room;
     }
@@ -67,6 +66,8 @@ exports.joinRoom = function(socket, user, room) {
         this.createRoom(socket, user, room);
     }
 
+    user.socket = socket.id;
+
     this.rooms[room].owner = user.name
     this.rooms[room].users.push(user);
     socket.join(room);
@@ -77,12 +78,7 @@ exports.clearRoom = function(room) {
     delete this.rooms[room];
 };
 
-exports.clearUsers = function(socket) {
-    this.rooms[socket.roomdata_room].users = [];
-}
-
 exports.leaveRoom = function(socket) {
-    console.log(socket);
     var room = socket.roomdata_room;
 
     if (room === undefined) {
@@ -93,8 +89,13 @@ exports.leaveRoom = function(socket) {
         console.log(socket.id + ": Leaving room: " + room);
     }
 
-    var i = this.rooms[room].users.indexOf(socket.id);
-    if (i != -1) this.rooms[room].users.splice(i, 1);
+    var users = this.rooms[room].users
+
+    for (var i = users.length - 1; i >= 0; i--) {
+        if (users[i].socket === socket.id) {
+            users.splice(i, 1);
+        }
+    }
 
     socket.leave(room);
 
@@ -105,7 +106,7 @@ exports.leaveRoom = function(socket) {
 
 exports.getPlayerNumber = function(socket, name) {
     var roomUsers = this.rooms[socket.roomdata_room].users;
-    for (i = 0; i < roomUsers.length; i++) {
+    for (var i = 0; i < roomUsers.length; i++) {
         if (roomUsers[i].name === name) {
             return roomUsers[i].id;
         }

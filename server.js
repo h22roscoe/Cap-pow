@@ -87,6 +87,7 @@ var MAX_POWER_UPS = 2;
 
 gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
+    var timeout;
 
     socket.on("joinGame", function(gameData) {
         roomData.rejoinRoom(socket, gameData.roomName);
@@ -124,7 +125,7 @@ gameNsp.on("connection", function(socket) {
                         Math.random() * roomData.get(
                             socket, "powerUpPositions").length);
 
-                setTimeout(function() {
+                timeout = setTimeout(function() {
                     if (roomData.get(socket, "powerUpsGiven") < MAX_POWER_UPS) {
                         var powerUpPositions = roomData.get(
                             socket, "powerUpPositions");
@@ -188,7 +189,7 @@ gameNsp.on("connection", function(socket) {
     });
 
     socket.on("disconnect", function() {
-        roomData.clearUsers(socket);
+        clearTimeout(timeout);
     });
 });
 

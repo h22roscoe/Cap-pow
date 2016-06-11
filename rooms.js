@@ -24,32 +24,36 @@ module.exports = function (roomNsp, models, roomData, roomSocket) {
     roomSocket.on("joinRoom", function (data) {
         var socket = this;
 
-        models.room.update({
-            players: models.sequelize.literal("players + 1")
-        }, {
-            where: {
-                id: data.roomName
-            }
-        });
-
         models.room.find({
             where: {
                 id: data.roomName
             }
         }).then(function (rooms) {
-            roomData.joinRoom(socket, {
-                name: data.playerName,
-                id: rooms.players
-            }, data.roomName);
-
-            if (data.playerName === roomData.get(socket, "owner")) {
-                models.room.find({
+            if (rooms) {
+                models.room.update({
+                    players: models.sequelize.literal("players + 1")
+                }, {
                     where: {
                         id: data.roomName
                     }
-                }).then(function (room) {
-                    roomData.set(socket, "winPoints", room.winPoints);
-                })
+                });
+
+                roomData.joinRoom(socket, {
+                    name: data.playerName,
+                    id: rooms.players
+                }, data.roomName);
+
+                if (data.playerName === roomData.get(socket, "owner")) {
+                    models.room.find({
+                        where: {
+                            id: data.roomName
+                        }
+                    }).then(function (room) {
+                        roomData.set(socket, "winPoints", room.winPoints);
+                    })
+                }
+            } else {
+                roomData.rejoinRoom(socket, data.roomName);
             }
         });
 
@@ -82,15 +86,16 @@ module.exports = function (roomNsp, models, roomData, roomSocket) {
                     id: currentRoom
                 }
             }).then(function(room) {
-                console.log(room.players);
-                if (room.players <= 0) {
-                    models.room.destroy({
-                        where: {
-                            id: currentRoom
-                        }
-                    });
+                if (room) {
+                    if (room.players <= 0) {
+                        models.room.destroy({
+                            where: {
+                                id: currentRoom
+                            }
+                        });
+                    }
                 }
-            })
+            });
         });
 
         if (disconnected) {
