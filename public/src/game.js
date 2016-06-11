@@ -3,7 +3,7 @@ var Q = window.Q = Quintus({
         development: true
     })
     .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
-    .include("Player, Flag, Powerup, Door")
+    .include("Player, Flag, Powerup, Door, KillLayer")
     .setup({
         width: $(window).width() - 10,
         height: $(window).height() - 10,
@@ -19,6 +19,7 @@ Q.SPRITE_FLAG = 128;
 Q.SPRITE_POWERUP = 256;
 Q.SPRITE_ACTOR = 512;
 Q.SPRITE_DOOR = 1024;
+Q.KILL_LAYER = 2048;
 
 var actors = [];
 setUpObject = {

@@ -7,7 +7,7 @@ Quintus.Player = function (Q) {
                 type: Q.SPRITE_PLAYER,
                 // TODO: Need to change collisionMask so that players
                 // dont collide with each other
-                collisionMask: Q.SPRITE_DEFAULT | Q.SPRITE_DOOR | Q.SPRITE_COLLECTABLE | Q.SPRITE_POWERUP,
+                collisionMask: Q.SPRITE_DEFAULT | Q.SPRITE_DOOR | Q.SPRITE_COLLECTABLE | Q.SPRITE_POWERUP | Q.KILL_LAYER,
                 jumpSpeed: -300,
                 speed: 100,
                 gamePoints: 0
