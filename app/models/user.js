@@ -1,6 +1,6 @@
 var bcrypt = require("bcrypt-nodejs");
 
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
     "use strict";
 
     var User = sequelize.define("users", {
@@ -14,10 +14,7 @@ module.exports = function (sequelize, DataTypes) {
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notEmpty: true
-            }
+            allowNull: true
         },
         roomId: {
             type: DataTypes.STRING,
@@ -25,20 +22,26 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         classMethods: {
-            validPassword: function (password, dbpassword) {
-                return bcrypt.compareSync(password, dbpassword);
+            validPassword: function(password, dbpassword) {
+                if (dbpassword) {
+                    return bcrypt.compareSync(password, dbpassword);
+                } else {
+                    return true;
+                }
             }
         },
         dialect: "postgres",
         freezeTableName: true
     });
 
-    User.beforeCreate(function (user) {
-        user.password = bcrypt.hashSync(
-            user.password,
-            bcrypt.genSaltSync(8),
-            null
-        );
+    User.beforeCreate(function(user) {
+        if (user.password) {
+            user.password = bcrypt.hashSync(
+                user.password,
+                bcrypt.genSaltSync(8),
+                null
+            );
+        }
     });
 
     return User;

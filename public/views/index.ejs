@@ -37,36 +37,43 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="../css/index.css">
 </head>
 
 <body>
     <div class="site-wrapper">
-
         <div class="site-wrapper-inner">
-
             <div class="cover-container">
-                <br><br><br>
+                <br>
+                <br>
+                <br>
                 <div id="logo" style="text-align: center;">
                     <img src="../images/cap-pow.png" height="350" width="350">
                 </div>
-
                 <br>
-
                 <div class="inner-cover" style="text-align: center;">
-                    <a href="/login" class="btn btn-lg btn-default">Log in!</a><br>
-                    <a href="/signup" class="btn btn-lg btn-default">Register!</a><br>
-                    <a href="/game" class="btn btn-lg btn-default">Play as guest!</a>
+                    <a href="/login" class="btn btn-lg btn-default">Log in!</a>
                     <br>
+                    <a href="/signup" class="btn btn-lg btn-default">Register!</a>
+                    <br>
+                    <button id="guest" class="btn btn-lg btn-primary"> Play as guest!</button>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
+    <script>
+        $("#guest").click(function() {
+            $.post("/signup", {
+                guest: true
+            }, function (data, status) {
+                console.log(data);
+            });
+        });
+    </script>
 </body>
 
 </html>

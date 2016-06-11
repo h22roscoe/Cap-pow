@@ -1,7 +1,7 @@
 var models = require("../app/models");
-
 // Route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
+    console.log(req);
     // If user is authenticated in the session, carry on
     if (req.isAuthenticated()) {
         return next();
@@ -44,7 +44,16 @@ module.exports = function (app, passport) {
     });
 
     // Process the signup form
-    app.post("/signup", passport.authenticate("local-signup", {
+    app.post("/signup", function(req, res, next) {
+        if (req.body.guest) {
+            (passport.authenticate("guest-signup", {
+                successRedirect: "/lobby",
+                failureRedirect: "/signup"
+            }))(req, res);
+        } else {
+            next();
+        }
+    }, passport.authenticate("local-signup", {
         successRedirect: "/lobby",
         failureRedirect: "/signup",
         failureFlash: true
