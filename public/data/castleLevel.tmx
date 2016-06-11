@@ -54,6 +54,16 @@
     <property name="points" value="0,0 1,1 0,1"/>
    </properties>
   </tile>
+  <tile id="308">
+   <properties>
+    <property name="points" value="0,0 1,0 1,0.5 0,0.5"/>
+   </properties>
+  </tile>
+  <tile id="309">
+   <properties>
+    <property name="points" value="0,0 1,0 1,0.5 0,0.5"/>
+   </properties>
+  </tile>
   <tile id="312">
    <properties>
     <property name="Class" value="Flag"/>
@@ -62,6 +72,16 @@
   <tile id="313">
    <properties>
     <property name="Class" value="Flag"/>
+   </properties>
+  </tile>
+  <tile id="338">
+   <properties>
+    <property name="points" value="0,0 1,0 1,0.5 0,0.5"/>
+   </properties>
+  </tile>
+  <tile id="339">
+   <properties>
+    <property name="points" value="0,0 1,0 1,0.5 0,0.5"/>
    </properties>
   </tile>
   <tile id="743">
@@ -76,7 +96,7 @@
   </tile>
   <tile id="745">
    <properties>
-    <property name="points" value="0,0 1,0 1,0.5 0,0,5"/>
+    <property name="points" value="0,0 1,0 1,0.5 0,0.5"/>
    </properties>
   </tile>
   <tile id="773">
@@ -92,6 +112,11 @@
   <tile id="775">
    <properties>
     <property name="points" value="0,1 0.5,0.5, 1,1"/>
+   </properties>
+  </tile>
+  <tile id="776">
+   <properties>
+    <property name="points" value="0,0 1,0 0.5,0.5"/>
    </properties>
   </tile>
  </tileset>
