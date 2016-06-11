@@ -178,6 +178,7 @@ setUpObject.updateSpecificPlayerId = function (data) {
     if (actor) {
         actor.player.p.x = data.x;
         actor.player.p.y = data.y;
+        actor.player.p.hidden = data.hidden;
         actor.player.p.sheet = data.sheet;
         actor.player.p.update = true;
     } else {

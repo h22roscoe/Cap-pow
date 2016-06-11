@@ -25,6 +25,7 @@ Quintus.Player = function (Q) {
         step: function (dt) {
             this.p.socket.emit("update", {
                 playerId: this.p.playerId,
+                hidden: this.p.hidden,
                 x: this.p.x,
                 y: this.p.y,
                 sheet: this.p.sheet
