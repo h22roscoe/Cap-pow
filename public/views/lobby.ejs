@@ -62,7 +62,7 @@
                             style="cursor: pointer; cursor: hand;">
                                 <td>{{ room.name }}</td>
                                 <td>
-                                    <form class="form-signin" onsubmit='return loadRoom(room, this)'>
+                                    <form class="form-signin" onsubmit='loadRoom(room, this);'>
                                         <input type="password" id="inputPassword" name="joinPwd" class="form-control" placeholder="Password" required>
                                     </form>
                                 </td>
