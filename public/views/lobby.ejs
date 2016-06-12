@@ -133,7 +133,7 @@
 
             $scope.loadRoom = function(room, form) {
                 console.log(room.password);
-                if ((form === undefined && !room.password) || (room.password === form.value.joinPwd) {
+                if ((form === undefined && !room.password) || (room.password === form.value.joinPwd)) {
                 
                     $http.put("/room/" + room.name).then(angular.noop);
 
