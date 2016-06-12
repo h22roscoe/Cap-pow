@@ -47,10 +47,10 @@ Quintus.Player = function (Q) {
                 console.log("attacking");
                 var direction;
                 if (Q.inputs["left"]) {
-                    this.p.vx -= 1500;
+                    this.p.vx -= 1000;
                     direction = "left";
                 } else if (Q.inputs["right"]) {
-                    this.p.vx += 1500;
+                    this.p.vx += 1000;
                     direction = "right";
                 } else if (Q.inputs["up"]) {
                     this.p.vy -= 300;

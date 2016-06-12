@@ -236,6 +236,11 @@ function updatePoints() {
     }
 }
 
+function isWithinRadius(higherObj, lowerObj, radius) {
+   return ((Math.abs(higherObj.p.x - lowerObj.p.x) <= radius) &&
+            (Math.abs(higherObj.p.y - lowerObj.p.y) <= radius));
+}
+
 // setUp deals with communication over the socket
 function setUp(stage) {
     setUpObject.stage = stage;
@@ -317,42 +322,31 @@ function setUp(stage) {
         }
     });
 
-    function isWithinRadius(higherObj, lowerObj, radius) {
-       return (((higherObj.p.x - lowerObj.p.x) <= radius) &&
-                ((higherObj.p.y - lowerObj.p.y) <= radius));
-    }
-
     socket.on("someoneAttacked", function(data) {
-        console.log("someone might have attacked me" data);
+        console.log("someone might have attacked me", data);
         var actor = actors.filter(function (obj) {
-            return obj.player.p.playerId === data.playerId;
+            return obj.player.p.playerId === data.attackingPlayer;
         })[0];
 
+        var move = function(col) {
+            setUpObject.player.p.x += 10;
+            setUpObject.player.p.y -= 5;
+        };
 
         if (data.direction === "left") {
-          if (isWithinRadius(actor.player, setUpObject.player, 50)) {
-            setUpObject.player.on("bump.right", function(col) {
-                setUpObject.player.p.vx = -col;
-            });
+            if (isWithinRadius(actor.player, setUpObject.player, 100)) {
+                // setUpObject.player.on("bump.left", move);
+                setUpObject.player.p.vx -= 1000;
 
-            setUpObject.player.vx -= 5000;
-          }
+                // setUpObject.player.off("bump.left", move);
+            }
         } else if (data.direction === "right") {
-          if(isWithinRadius(setUpObject.player, actor.player, 50)) {
-            setUpObject.player.on("bump.left", function(col) {
-                setUpObject.player.p.vx = -col;
-            });
-
-            setUpObject.player.vx += 5000;
-          }
-        } else if (data.direction === "up") {
-          if(isWithinRadius(actor.player, setUpObject.player, 50 )) {
-            setUpObject.player.on("bump.up", function(col) {
-                setUpObject.player.p.vy = -col;
-            });
-
-            setUpObject.player.p.vy -= 5000;
-          }
-        };
+            if (isWithinRadius(setUpObject.player, actor.player, 100)) {
+                // setUpObject.player.on("bump.right", function (col) {
+                //     setUpObject.player.p.vx = -col.impact ;
+                // });
+                setUpObject.player.p.vx += 1000;
+            }
+        }
     });
 }
