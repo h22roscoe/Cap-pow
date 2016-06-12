@@ -44,6 +44,7 @@ module.exports = function (app, passport) {
             if (!models.room.validPassword(req.body.password, room.password)) {
                 res.render("lobby", {
                     message: "Nope, that's not the password",
+                    success: false,
                     user: req.user
                 });
             } else {
