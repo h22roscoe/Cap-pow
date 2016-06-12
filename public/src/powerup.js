@@ -81,14 +81,14 @@ Quintus.Powerup = function (Q) {
 
     Q.component("Fast", {
         added: function () {
-            this.entity.p.speed *= 2;
+            this.entity.p.speed *= 4;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
         step: function (dt) {
             if (this.timeLeft === 0) {
-                this.entity.p.speed /= 2;
+                this.entity.p.speed /= 4;
                 this.entity.del("Fast");
             } else {
                 this.timeLeft--;
@@ -121,7 +121,7 @@ Quintus.Powerup = function (Q) {
     Q.component("Heavy", {
         added: function () {
             this.entity.p.gravity *= 2;
-            this.timeLeft = 5 * 60;
+            this.timeLeft = 10 * 60;
             this.entity.on("step", this, "step");
         },
 
@@ -159,14 +159,14 @@ Quintus.Powerup = function (Q) {
 
     Q.component("Light", {
         added: function () {
-            this.entity.p.gravity /= 2;
+            this.entity.p.gravity /= 3;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
         step: function (dt) {
             if (this.timeLeft === 0) {
-                this.entity.p.gravity *= 2;
+                this.entity.p.gravity *= 3;
                 this.entity.del("Light");
             } else {
                 this.timeLeft--;
