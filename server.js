@@ -160,6 +160,7 @@ gameNsp.on("connection", function(socket) {
         });
 
         socket.on("justAttacked", function(updateInfo) {
+            console.log("server got", updateInfo);
             socket.broadcast.to(gameData.roomName)
                 .emit("someoneAttacked", updateInfo);
         })

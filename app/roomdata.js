@@ -68,7 +68,7 @@ exports.joinRoom = function(socket, user, room) {
 
     user.socket = socket.id;
 
-    this.rooms[room].owner = user.name
+    this.rooms[room].owner = user.name;
     this.rooms[room].users.push(user);
     socket.join(room);
     socket.roomdata_room = room;

@@ -26,15 +26,12 @@ Quintus.Player = function (Q) {
 
             this.attackedInterval = setInterval(function () {
                 player.justAttacked = false;
-                console.log("playerJustAttack is", player.justAttacked);
             }, 3000);
 
             this.bumpedInterval = setInterval(function () {
                 player.justBumped = false;
-                console.log("playerJustBump is", player.justBumped);
                 player.timeOut = setTimeout(function () {
                     Q.input.on("fire", player, "attack");
-                    console.log("fireOn");
                 }, 500);
             }, 1000);
         },

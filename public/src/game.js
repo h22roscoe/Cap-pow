@@ -317,24 +317,42 @@ function setUp(stage) {
         }
     });
 
-    socket.on.("someoneAttacked", function(data) {
+    function isWithinRadius(higherObj, lowerObj, radius) {
+       return (((higherObj.p.x - lowerObj.p.x) <= radius) &&
+                ((higherObj.p.y - lowerObj.p.y) <= radius));
+    }
 
-        if (data.direction == "left") {
-          setUpObject.player.on("bump.right", function(col) {
-            setUpObject.player.vx = -col;
-          });
-          setUpObject.player.vx -= 500;
-        } else if (data.direction == "right") {
-          setUpObject.player.on("bump.left", function(col) {
-            setUpObject.player.vx = -col;
-          });
-          setUpObject.player.vx += 500;
-        } else if (data.direction == "up" {
-          setUpObject.player.on("bump.up", function(col) {
-            setUpObject.player.vy = -col;
-          });
-          setUpObject.player.vy += 500;
+    socket.on("someoneAttacked", function(data) {
+        console.log("someone might have attacked me" data);
+        var actor = actors.filter(function (obj) {
+            return obj.player.p.playerId === data.playerId;
+        })[0];
 
-        });
+
+        if (data.direction === "left") {
+          if (isWithinRadius(actor.player, setUpObject.player, 50)) {
+            setUpObject.player.on("bump.right", function(col) {
+                setUpObject.player.p.vx = -col;
+            });
+
+            setUpObject.player.vx -= 5000;
+          }
+        } else if (data.direction === "right") {
+          if(isWithinRadius(setUpObject.player, actor.player, 50)) {
+            setUpObject.player.on("bump.left", function(col) {
+                setUpObject.player.p.vx = -col;
+            });
+
+            setUpObject.player.vx += 5000;
+          }
+        } else if (data.direction === "up") {
+          if(isWithinRadius(actor.player, setUpObject.player, 50 )) {
+            setUpObject.player.on("bump.up", function(col) {
+                setUpObject.player.p.vy = -col;
+            });
+
+            setUpObject.player.p.vy -= 5000;
+          }
+        };
     });
 }
