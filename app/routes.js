@@ -118,6 +118,7 @@ module.exports = function (app, passport) {
                 if (rooms) {
                     res.render("lobby", {
                         message: "Room is already taken",
+                        success: false,
                         user: req.user
                     });
                 } else {
