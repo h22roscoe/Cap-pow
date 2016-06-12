@@ -34,6 +34,7 @@ module.exports = function (config) {
                 served: true
             },
             'public/lib/quintus-all.js',
+            'public/src/killLayer.js',
             'public/src/player.js',
             'public/src/door.js',
             'public/src/powerup.js',
