@@ -57,13 +57,13 @@
                     <tbody>
                         <tr ng-repeat="room in rooms | orderBy: 'players': true"
                             ng-show="room.players < 4;"
-                            ng-click="if (room.password === document.getElementById('inputJoinPwd').value) {loadRoom(room);}"
+                            ng-click="loadRoom(room, document.getElementById('inputJoinPwd'));"
                             ng-href="/room/{{ room.name }}"
                             style="cursor: pointer; cursor: hand;">
                                 <td>{{ room.name }}</td>
                                 <td>
                                     <!--<form class="form-signin" ng-submit='loadRoom(room, this);' method="post">-->
-                                        <input type="text" id="inputJoinPwd" name="joinPwd" ng-model="pwd" class="form-control" placeholder="Password" required>
+                                        <input type="text" id="inputJoinPwd" name="joinPwd" ng-model="pwd" value="" class="form-control" placeholder="Password" required>
                                         <!--<button class="btn btn-lg btn-primary btn-block" type="submit"><span class="fa fa-sign-in"></span> Join room</button>-->
                                     <!--</form>-->
                                 </td>
@@ -131,19 +131,19 @@
 
             $scope.ajax();
 
-            $scope.loadRoom = function(room) {
+            $scope.loadRoom = function(room, password) {
             //    console.log("Room password is " + room.password);
               //  console.log("You entered " + $scope.pwd);
                 //console.log("You entered "+form.joinPwd.value);
                 //if ((form === undefined && !room.password) || (form !== undefined && form.joinPwd && (room.password === form.joinPwd.value))) {
-               // if ($scope.pwd === room.password) {
+                if (password === room.password) {
                     console.log("Correct room password!")
                     $http.put("/room/" + room.name).then(angular.noop);
 
                     sessionStorage.setItem("roomName", room.name);
 
                     $window.location.href = "/room/" + room.name;
-                //}
+                }
                 //}
             }
         });
