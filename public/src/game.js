@@ -72,7 +72,7 @@ Q.loadTMX(files.join(','), function () {
     Q.compileSheets("../images/sprites.png", "../data/sprites.json");
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.compileSheets("../images/powerups.png", "../data/powerups.json");
-    Q.stageScene("castleLevel"); TESTING
+    Q.stageScene("castleLevel");
     // Q.stageScene("mountainLevel");
 
     socket.emit("joinGame", {

@@ -53,7 +53,7 @@ Quintus.Door = function(Q) {
     Q.Door.extend("Original", {
         init: function(p) {
             this._super(Q._defaults(p, {
-                sheet: "door"
+                sheet: "original"
             }));
         }
     });
