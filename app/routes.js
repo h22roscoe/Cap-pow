@@ -88,6 +88,7 @@ module.exports = function (app, passport) {
                         id: req.body.roomname,
                         name: req.body.roomname,
                         winPoints: req.body.winPoints,
+                        password: req.body.password,
                         players: 0
                     });
                 }

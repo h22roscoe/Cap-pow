@@ -51,6 +51,7 @@
                 <table class="table table-hover">
                     <thead>
                         <th>Room Name</th>
+                        <th>Room Password</th>
                         <th># Players</th>
                     </thead>
                     <tbody>
@@ -60,6 +61,11 @@
                             ng-href="/room/{{ room.name }}"
                             style="cursor: pointer; cursor: hand;">
                                 <td>{{ room.name }}</td>
+                                <td>
+                                    <form class="form-signin" onsubmit='return loadRoom(room, this)'>
+                                        <input type="password" id="inputPassword" name="joinPwd" class="form-control" placeholder="Password" required>
+                                    </form>
+                                </td>
                                 <td>{{ room.players }}</td>
                         </tr>
                     </tbody>
@@ -86,6 +92,8 @@
                     <span style="color: aliceblue">10</span>
                     <input id="points" class="form-control" type="text" name="winPoints">
                     <span style="color: aliceblue">100</span>
+                    <br>
+                    <input type="text" class="form-control" name="password" placeholder="Password" style="color: darksalmon">
                     <br>
                     <br>
                     <button id="create" type="submit" class="btn btn-md">Create Room</button>
@@ -120,12 +128,15 @@
 
             $scope.ajax();
 
-            $scope.loadRoom = function(room) {
-                $http.put("/room/" + room.name).then(angular.noop);
+            $scope.loadRoom = function(room, form) {
+                if (room.password === form.value.joinPwd) {
 
-                sessionStorage.setItem("roomName", room.name);
+                    $http.put("/room/" + room.name).then(angular.noop);
 
-                $window.location.href = "/room/" + room.name;
+                    sessionStorage.setItem("roomName", room.name);
+
+                    $window.location.href = "/room/" + room.name;
+                }
             }
         });
     </script>
