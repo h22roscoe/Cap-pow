@@ -64,7 +64,7 @@
                                 <td>{{ room.players }}</td>
                                 <td>
                                     <form ng-show="hasPassword(room)" action="/join" method="post">
-                                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                        <input type="password" name="password" ng-focus="stopRefresh()" ng-blur="ajax()" class="form-control" placeholder="Password" required>
                                         <input type="hidden" name="room" class="form-control" value="{{ room.name }}">
                                         <button class="btn btn-lg btn-primary" type="submit"><span class="fa fa-sign-in"></span> Join room</button>
                                     </form>
@@ -117,6 +117,7 @@
                     <input id="points" class="form-control" type="text" name="winPoints">
                     <span style="color: aliceblue">100</span>
                     <br>
+                    <br>
                     <input type="text" class="form-control" name="password" placeholder="Password" style="color: darksalmon">
                     <br>
                     <br>
@@ -140,14 +141,18 @@
         var app = angular.module("lobby", []);
 
         app.controller("rooms", function($scope, $http, $timeout, $window) {
-            //var timeout;
+            var timeout;
 
             $scope.ajax = function() {
                 $http.get($window.location.href + "/data").then(function(rooms) {
                     $scope.rooms = rooms.data;
                 });
 
-                //timeout = $timeout($scope.ajax, 2000); //clearTimeout
+                timeout = $timeout($scope.ajax, 2000); // clearTimeout
+            }
+
+            $scope.stopRefresh = function () {
+                $timeout.cancel(timeout);
             }
 
             $scope.ajax();

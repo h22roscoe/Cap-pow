@@ -101,6 +101,7 @@ module.exports = function (app, passport) {
         }).then(function () {
             res.render("lobby", {
                 message: "",
+                success: false,
                 user: req.user
             });
         });
@@ -128,6 +129,7 @@ module.exports = function (app, passport) {
                     }).then(function() {
                         res.render("lobby", {
                             message: "",
+                            success: false,
                             user: req.user
                         })
                     });
@@ -136,6 +138,7 @@ module.exports = function (app, passport) {
         } else {
             res.render("lobby", {
                 message: "The room needs a name!",
+                success: false,
                 user: req.user
             });
         }
