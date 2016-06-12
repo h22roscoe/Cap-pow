@@ -62,7 +62,7 @@
                             style="cursor: pointer; cursor: hand;">
                                 <td>{{ room.name }}</td>
                                 <td>
-                                    <form class="form-signin" onsubmit='loadRoom(room, this);'>
+                                    <form class="form-signin" ng-submit='loadRoom(room, this);'>
                                         <input type="password" id="inputPassword" name="joinPwd" class="form-control" placeholder="Password" required>
                                         <button class="btn btn-lg btn-primary btn-block" type="submit"><span class="fa fa-sign-in"></span> Join room</button>
                                     </form>
