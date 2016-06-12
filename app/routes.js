@@ -34,6 +34,18 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
+    // GUEST
+    app.post("/guest", function (req, res, next) {
+        req.user = {
+            username: req.body.username,
+            password: req.body.password
+        };
+
+        next();
+    }, passport.authenticate("guest-signup", {
+        successRedirect: "/lobby"
+    }));
+
     // SIGNUP
     // Show the signup form
     app.get("/signup", function (req, res) {
@@ -50,6 +62,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
+    // LOBBY
     app.get("/lobby/data", isLoggedIn, function (req, res) {
         models.room.findAll().then(function (rooms) {
             res.json(rooms);
@@ -135,7 +148,7 @@ module.exports = function (app, passport) {
     });
 
     // GAME
-    app.get("/game/", isLoggedIn, function (req, res) {
+    app.get("/game", isLoggedIn, function (req, res) {
         res.render("game", {});
     });
 };

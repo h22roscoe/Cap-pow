@@ -84,11 +84,18 @@
                     </div>
                 <% } %>
 
+                <% if (user) { %>
+                    <script>
+                        var username = "<%= user.username %>";
+                        sessionStorage.setItem("playerId", username);
+                    </script>
+                <% } %>
+
                 <form id="roomform" action="/lobby" method="post">
                     <label style="color:white">Make your own room!</label>
-                    <input type="text" class="form-control" name="roomname" placeholder="Room Name" style="color: darksalmon">
+                    <input type="text" class="form-control" name="roomname" placeholder="Room Name" style="color:#E37722">
                     <br>
-                    <span style="color: aliceblue">Points to win: <span id="val" value="50"></span>
+                    <span style="color: aliceblue">Points to win: <span id="val" value="50"></span></span>
                     <br>
                     <span style="color: aliceblue">10</span>
                     <input id="points" class="form-control" type="text" name="winPoints">
@@ -99,9 +106,7 @@
                     <br>
                     <button id="create" type="submit" class="btn btn-md">Create Room</button>
                 </form>
-
                 <hr>
-
                 <a href="/logout" class="btn btn-default btn-sm">Logout</a>
             </div>
         </div>
@@ -141,16 +146,18 @@
         });
     </script>
     <script>
-        $("#points").slider({
-            min: 10,
-            max: 100,
-            value: 50,
-            step: 10,
-            tooltip: 'hide'
-        });
+        $(document).ready(function() {
+            $("#points").slider({
+                min: 10,
+                max: 100,
+                value: 50,
+                step: 10,
+                tooltip: 'hide'
+            });
 
-        $("#points").on("slide", function(slideEvt) {
-	        $("#val").text(slideEvt.value);
+            $("#points").on("slide", function(slideEvt) {
+    	        $("#val").text(slideEvt.value);
+            });
         });
     </script>
 </body>

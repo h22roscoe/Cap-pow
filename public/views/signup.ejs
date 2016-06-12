@@ -55,7 +55,7 @@
             </div>
 
             <form class="form-signin" onsubmit='return checkForm(this);'
-                  action="/signup" method="post">
+                  action="/signup" method="post" style="color:aliceblue">
                 <h2 class="form-signin-heading">Sign Up</h2>
                 <p>Password must:</p>
                 <ul>
@@ -87,8 +87,8 @@
 
                 <hr>
 
-                <p>
-                    Already have an account? <a href="/login">Log in here!</a>
+                <p style="color:aliceblue">
+                    Already have an account? <a href="/login" style="color:#E37722">Log in here!</a>
                 </p>
             </form>
         </div>
@@ -98,7 +98,7 @@
         <div class="container" style="padding-top: 1cm; padding-bottom: 2cm">
             <div class="row">
                 <div class="span12 text-center">
-                    <p>
+                    <p style="color:aliceblue">
                         <span class="fa fa-copyright"></span>&copy; Cap-pow 2016
                     </p>
                 </div>
@@ -137,8 +137,6 @@
                 writeMessage("Passwords must match.");
                 return false;
             }
-
-            sessionStorage.setItem("playerId", form.username.value);
 
             return true;
         }

@@ -3,7 +3,7 @@ var Q = window.Q = Quintus({
         development: true
     })
     .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
-    .include("Player, Flag, Powerup, Door")
+    .include("Player, Flag, Powerup, Door, KillLayer")
     .setup({
         width: $(window).width() - 10,
         height: $(window).height() - 10,
@@ -19,6 +19,7 @@ Q.SPRITE_FLAG = 128;
 Q.SPRITE_POWERUP = 256;
 Q.SPRITE_ACTOR = 512;
 Q.SPRITE_DOOR = 1024;
+Q.KILL_LAYER = 2048;
 
 var actors = [];
 setUpObject = {
@@ -49,7 +50,7 @@ var startPos = {
 
 var files = [
     "../data/castleLevel.tmx",
-    "../data/level1.tmx",
+    "../data/mountainLevel.tmx",
     "../images/tmptiles.png",
     "../data/tmplevel.json",
     "../images/tmpsprites.png",
@@ -58,7 +59,8 @@ var files = [
     "../data/sprites.json",
     "../images/sprites.png",
     "../images/powerups.png",
-    "../data/powerups.json"
+    "../data/powerups.json",
+    "../audio/MLGHornsSoundEffect.mp3"
 ];
 
 var roomName = sessionStorage.getItem("roomName");
@@ -71,6 +73,7 @@ Q.loadTMX(files.join(','), function () {
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.compileSheets("../images/powerups.png", "../data/powerups.json");
     Q.stageScene("castleLevel");
+    // Q.stageScene("mountainLevel");
 
     socket.emit("joinGame", {
         roomName: roomName,
@@ -91,21 +94,23 @@ Q.scene("endGame", function(stage) {
     var box = stage.insert(new Q.UI.Container({
         x: Q.width / 2,
         y: Q.height / 2,
-        fill: "rgba(0,0,0,0.5)"
+        fill: "rgba(255,255,255,0.5)"
     }));
 
     var button = box.insert(new Q.UI.Button({
         x: 0,
         y: 0,
-        fill: "#CCCCCC",
+        fill: "#888888",
         label: "Back to room"
-    }))
+    }));
 
     var label = box.insert(new Q.UI.Text({
         x: 10,
         y: -10 - button.p.h,
         label: stage.options.label
     }));
+
+    Q.audio.play("../audio/MLGHornsSoundEffect.mp3");
 
     button.on("click", function() {
         Q.clearStages();
@@ -115,6 +120,14 @@ Q.scene("endGame", function(stage) {
 
     box.fit(20);
 });
+
+Q.scene("mountainLevel", function(stage) {
+    Q.stageTMX("../data/mountainLevel.tmx", stage);
+
+    // Set up the socket connections.
+    setUp(stage);
+});
+
 
 Q.scene("castleLevel", function(stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);
@@ -177,6 +190,7 @@ setUpObject.updateSpecificPlayerId = function (data) {
     if (actor) {
         actor.player.p.x = data.x;
         actor.player.p.y = data.y;
+        actor.player.p.hidden = data.hidden;
         actor.player.p.sheet = data.sheet;
         actor.player.p.update = true;
     } else {
