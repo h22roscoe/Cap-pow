@@ -119,19 +119,21 @@
         var app = angular.module("lobby", []);
 
         app.controller("rooms", function($scope, $http, $timeout, $window) {
+            //var timeout;
+            
             $scope.ajax = function() {
                 $http.get($window.location.href + "/data").then(function(rooms) {
                     $scope.rooms = rooms.data;
                 });
-
-                $timeout($scope.ajax, 2000);
+                
+                timeout = $timeout($scope.ajax, 2000); //clearTimeout
             }
 
             $scope.ajax();
 
             $scope.loadRoom = function(room, form) {
                 console.log(room.password);
-                if (form === undefined || room.password === form.value.joinPwd) {
+                if ((form === undefined && !room.password) || (room.password === form.value.joinPwd) {
                 
                     $http.put("/room/" + room.name).then(angular.noop);
 

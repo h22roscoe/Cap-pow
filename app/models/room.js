@@ -42,7 +42,9 @@ module.exports = function (sequelize, DataTypes) {
                 Room.hasMany(models.users);
             },
             validPassword: function (password, dbpassword) {
-                return bcrypt.compareSync(password, dbpassword);
+                if (dbpassword) {
+                  return bcrypt.compareSync(password, dbpassword);
+                }
             }
         },
         dialect: "postgres",
