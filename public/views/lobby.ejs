@@ -132,7 +132,8 @@
             $scope.ajax();
 
             $scope.loadRoom = function(room, form) {
-                console.log(room.password);
+                console.log("Room password is "+room.password);
+                console.log("You entered "+form.joinPwd.value);
                 if ((form === undefined && !room.password) || (form !== undefined && form.joinPwd && (room.password === form.joinPwd.value))) {
                     console.log("Correct room password!")
                     $http.put("/room/" + room.name).then(angular.noop);
