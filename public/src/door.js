@@ -15,8 +15,26 @@ Quintus.Door = function(Q) {
 
         findLinkedDoor: function() {
             var door = this;
-            var returnVal;
-            Q("Door").each(function() {
+
+            Q("Original").each(function() {
+                if (this.p.id === door.p.link) {
+                    returnVal = this;
+                }
+            });
+
+            Q("Normal").each(function() {
+                if (this.p.id === door.p.link) {
+                    returnVal = this;
+                }
+            });
+
+            Q("Pipe").each(function() {
+                if (this.p.id === door.p.link) {
+                    returnVal = this;
+                }
+            });
+
+            Q("Igloo").each(function() {
                 if (this.p.id === door.p.link) {
                     returnVal = this;
                 }
