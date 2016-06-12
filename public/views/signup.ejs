@@ -122,7 +122,7 @@
 
             re = /^guest/;
 
-            if (!re.test(form.username.value)) {
+            if (re.test(form.username.value)) {
                 writeMessage("Username must not begin with 'guest'");
                 return false;
             }
