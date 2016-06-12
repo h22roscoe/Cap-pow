@@ -134,7 +134,7 @@
             $scope.loadRoom = function(room, form) {
                 console.log(room.password);
                 if ((form === undefined && !room.password) || (form !== undefined && form.joinPwd && (room.password === form.joinPwd.value))) {
-                
+                    console.log("Correct room password!")
                     $http.put("/room/" + room.name).then(angular.noop);
 
                     sessionStorage.setItem("roomName", room.name);
