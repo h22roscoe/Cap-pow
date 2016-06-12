@@ -26,6 +26,11 @@ module.exports = function (sequelize, DataTypes) {
             unique: false,
             allowNull: false
         },
+        winPoints: {
+            type: DataTypes.INTEGER,
+            unique: false,
+            allowNull: true
+        },
         password: {
             type: DataTypes.STRING,
             unique: false,

@@ -92,9 +92,11 @@
 
         app.controller("roomCtrl", function ($scope, $http, $timeout, $window) {
             $scope.socket = io.connect("/room");
+            var roomName = sessionStorage.getItem("roomName");
 
             $scope.socket.emit("joinRoom", {
-                roomName: sessionStorage.getItem("roomName")
+                roomName: roomName,
+                playerName: sessionStorage.getItem("playerId")
             });
 
             $scope.socket.on("countdown", function (data) {
@@ -107,7 +109,7 @@
 
             $scope.startGame = function () {
                 $scope.socket.emit('countdown', {
-                    roomName: sessionStorage.getItem("roomName")
+                    roomName: roomName
                 });
             }
 

@@ -14,6 +14,7 @@ module.exports = function (config) {
         files: [
             'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js',
             'https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js',
+            'http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js',
             {
                 pattern: 'public/images/*.png',
                 watched: false,

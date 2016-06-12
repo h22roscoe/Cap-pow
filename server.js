@@ -10,7 +10,8 @@ var io = require("socket.io")(server, {
     pingInterval: 25000
 });
 var rooms = require("./rooms");
-var roomData = require("roomdata");
+var roomData = require("./app/roomdata");
+roomData.Debug = true;
 
 io.serveClient(true);
 
@@ -70,7 +71,7 @@ route(app, passport);
 // Whenever a user connects set up default event listeners.
 roomNsp.on("connection", function(socket) {
     console.log("Setup: A user connected");
-    rooms(roomNsp, models, socket);
+    rooms(roomNsp, models, roomData, socket);
 });
 
 var POWER_UPS = [
@@ -79,6 +80,8 @@ var POWER_UPS = [
     "makeFreeze",
     "makeLight",
     "makeHeavy",
+    "makeFlagMove",
+    "makeFlagMove",
     "makeFlagMove"
 ]
 
@@ -86,12 +89,22 @@ var MAX_POWER_UPS = 2;
 
 gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
+    var timeout;
 
     socket.on("joinGame", function(gameData) {
-        roomData.joinRoom(socket, gameData.roomName);
+        roomData.rejoinRoom(socket, gameData.roomName);
+
+        var spriteId = roomData.getPlayerNumber(socket, gameData.playerId);
+        var winPoints = roomData.get(socket, "winPoints");
+
+        socket.emit("gameInfo", {
+            id: spriteId,
+            winPoints: winPoints
+        });
+
         var ownerId = roomData.get(socket, "owner");
 
-        if (socket.id === ownerId) {
+        if (gameData.playerId === ownerId) {
             roomData.set(socket, "powerUpsGiven", 0);
             roomData.set(socket, "powerUpPositions", [{
                 x: 380,
@@ -114,19 +127,12 @@ gameNsp.on("connection", function(socket) {
                         Math.random() * roomData.get(
                             socket, "powerUpPositions").length);
 
-                setTimeout(function() {
+                timeout = setTimeout(function() {
                     if (roomData.get(socket, "powerUpsGiven") < MAX_POWER_UPS) {
                         var powerUpPositions = roomData.get(
                             socket, "powerUpPositions");
 
-                        console.log("Before: ", powerUpPositions);
-                        console.log("index: ", randPos);
-
                         var pos = powerUpPositions.splice(randPos, 1);
-
-                        console.log("After: ", powerUpPositions);
-                        console.log("Spliced: ", pos);
-                        console.log("-----------------------");
 
                         roomData.set(
                             socket, "powerUpPositions", powerUpPositions);
@@ -160,29 +166,32 @@ gameNsp.on("connection", function(socket) {
                 .emit("newScore", updateInfo);
         });
 
-        socket.on("powerUp", function(powerUpInfo) {
-            console.log("Someone got a powerUp with this x: ", powerUpInfo.x);
-            console.log("It had this y: ", powerUpInfo.y);
+        socket.on("gameWon", function(updateInfo) {
+            console.log("This guy won!: ", updateInfo.playerId);
+            gameNsp.to(gameData.roomName)
+                .emit("gameWon", updateInfo);
+        });
 
+        socket.on("powerUp", function(powerUpInfo) {
             socket.broadcast.to(gameData.roomName)
                 .emit("powerupAcquired", powerUpInfo);
 
             var powerUpPositions = roomData.get(socket, "powerUpPositions");
-
-            console.log("This is our possible positions list before: ", powerUpPositions);
 
             powerUpPositions.push({
                 x: powerUpInfo.x,
                 y: powerUpInfo.y
             });
 
-            console.log("This is our possible positions list after: ", powerUpPositions);
-
             roomData.set(socket, "powerUpPositions", powerUpPositions);
 
             roomData.set(socket, "powerUpsGiven",
                 roomData.get(socket, "powerUpsGiven") - 1);
         });
+    });
+
+    socket.on("disconnect", function() {
+        clearTimeout(timeout);
     });
 });
 

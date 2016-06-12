@@ -1,78 +1,105 @@
-// Global variables set at the bottom
-var roomSocket;
-var currentRoom;
-var playerCount = 0;
-
-// Called when a player clicks on a room to join it takes that player
-// to the lobby screen
-function joinRoom(data) {
-    // Socket for the player joining room
-    this.join(data.roomName);
-    playerCount++;
-    currentRoom = data.roomName;
-}
-
-// Called when there are between 2 and 4 players present.
-// Stops people being able to connect to this room as it
-// is removed from the list of available rooms.
-// Started by button press to start countdown.
-function startCountdown(data) {
-    var time = 5;
-    var id = setInterval(function () {
-        roomNsp.to(data.roomName).emit("countdown", {
-            time: time--
-        });
-
-        if (time < 0) {
-            clearInterval(id);
-        }
-    }, 1000);
-}
-
-function sendHeartbeat(){
-    roomNsp.emit('ping', { beat : 1 });
-    setTimeout(sendHeartbeat, 8000);
-}
-
-module.exports = function (roomio, models, roomSocket) {
-    roomNsp = roomio;
-    roomSocket = roomSocket;
+module.exports = function (roomNsp, models, roomData, roomSocket) {
+    disconnected = true;
+    var currentRoom;
 
     // Host Events
     // Emitted when start button pressed
     //  (this only shows to host when they are in lobby),
     //  calls function and then redirects to game
-    roomSocket.on("countdown", startCountdown);
+    roomSocket.on("countdown", function (data) {
+        disconnected = false;
+        var time = 5;
+        var id = setInterval(function () {
+            roomNsp.to(data.roomName).emit("countdown", {
+                time: time--
+            });
+
+            if (time < 0) {
+                clearInterval(id);
+            }
+        }, 1000);
+    });
 
     // Player Events
-    roomSocket.on("joinRoom", joinRoom);
+    roomSocket.on("joinRoom", function (data) {
+        var socket = this;
+
+        models.room.find({
+            where: {
+                id: data.roomName
+            }
+        }).then(function (rooms) {
+            if (rooms) {
+                models.room.update({
+                    players: models.sequelize.literal("players + 1")
+                }, {
+                    where: {
+                        id: data.roomName
+                    }
+                });
+
+                roomData.joinRoom(socket, {
+                    name: data.playerName,
+                    id: rooms.players
+                }, data.roomName);
+
+                if (data.playerName === roomData.get(socket, "owner")) {
+                    models.room.find({
+                        where: {
+                            id: data.roomName
+                        }
+                    }).then(function (room) {
+                        roomData.set(socket, "winPoints", room.winPoints);
+                    })
+                }
+            } else {
+                roomData.rejoinRoom(socket, data.roomName);
+            }
+        });
+
+        currentRoom = data.roomName;
+    });
 
     roomSocket.on('pong', function(data){
         console.log("Pong received from client");
     });
+
+    var sendHeartbeat = function () {
+        roomNsp.emit('ping', { beat : 1 });
+        setTimeout(sendHeartbeat, 8000);
+    }
 
     setTimeout(sendHeartbeat, 8000);
 
     roomSocket.on("disconnect", function () {
         console.log("Setup: A user disconnected");
 
-        roomSocket.leave(currentRoom);
-        playerCount--;
+        models.room.update({
+            players: models.sequelize.literal("players - 1")
+        }, {
+            where: {
+                id: currentRoom
+            }
+        }).then(function () {
+            models.room.find({
+                where: {
+                    id: currentRoom
+                }
+            }).then(function(room) {
+                if (room) {
+                    if (room.players <= 0) {
+                        models.room.destroy({
+                            where: {
+                                id: currentRoom
+                            }
+                        });
+                    }
+                }
+            });
+        });
 
-        if (playerCount <= 0) {
-            models.room.destroy({
-                where: {
-                    id: currentRoom
-                }
-            });
-        } else {
-            models.room.update({
-                players: models.sequelize.literal("players - 1")
-            }, {
-                where: {
-                    id: currentRoom
-                }
-            });
+        if (disconnected) {
+            roomData.leaveRoom(roomSocket);
         }
     });
 };

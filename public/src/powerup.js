@@ -81,14 +81,14 @@ Quintus.Powerup = function (Q) {
 
     Q.component("Fast", {
         added: function () {
-            this.entity.p.speed *= 2;
+            this.entity.p.speed *= 4;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
         step: function (dt) {
             if (this.timeLeft === 0) {
-                this.entity.p.speed /= 2;
+                this.entity.p.speed /= 4;
                 this.entity.del("Fast");
             } else {
                 this.timeLeft--;
@@ -121,7 +121,7 @@ Quintus.Powerup = function (Q) {
     Q.component("Heavy", {
         added: function () {
             this.entity.p.gravity *= 2;
-            this.timeLeft = 5 * 60;
+            this.timeLeft = 10 * 60;
             this.entity.on("step", this, "step");
         },
 
@@ -159,14 +159,14 @@ Quintus.Powerup = function (Q) {
 
     Q.component("Light", {
         added: function () {
-            this.entity.p.gravity /= 2;
+            this.entity.p.gravity /= 3;
             this.timeLeft = 5 * 60;
             this.entity.on("step", this, "step");
         },
 
         step: function (dt) {
             if (this.timeLeft === 0) {
-                this.entity.p.gravity *= 2;
+                this.entity.p.gravity *= 3;
                 this.entity.del("Light");
             } else {
                 this.timeLeft--;
@@ -230,36 +230,36 @@ Quintus.Powerup = function (Q) {
                 y: 557
             },
             {
-                x: 300,
-                y: 50
+                x: 83,
+                y: 735
             },
             {
-                x: 1400,
-                y: 160
+                x: 1029,
+                y: 273
             },
             {
-                x: 1300,
-                y: 190
+                x: 924,
+                y: 462
             },
             {
-                x: 200,
-                y: 200
+                x: 735,
+                y: 756
             },
             {
-                x: 400,
-                y: 400
+                x: 104,
+                y: 84
             },
             {
-                x: 800,
-                y: 800
+                x: 105,
+                y: 274
             },
             {
-                x: 1200,
-                y: 900
+                x: 567,
+                y: 378
             },
             {
-                x: 1300,
-                y: 190
+                x: 672,
+                y: 357
             }
         ],
 
