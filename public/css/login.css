@@ -37,8 +37,8 @@ body {
     background: #66B9BF;
 }
 
-#create {
-    background-color: #E59761;
+.btn {
+    background-color: #E37722;
     color: aliceblue;
 }
 
