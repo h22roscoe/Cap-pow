@@ -57,7 +57,7 @@
                     <tbody>
                         <tr ng-repeat="room in rooms | orderBy: 'players': true"
                             ng-show="room.players < 4;"
-                            ng-click="loadRoom(room);"
+                            
                             ng-href="/room/{{ room.name }}"
                             style="cursor: pointer; cursor: hand;">
                                 <td>{{ room.name }}</td>
