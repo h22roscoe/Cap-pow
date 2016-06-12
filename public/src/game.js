@@ -50,7 +50,7 @@ var startPos = {
 
 var files = [
     "../data/castleLevel.tmx",
-    "../data/level1.tmx",
+    "../data/mountainLevel.tmx",
     "../images/tmptiles.png",
     "../data/tmplevel.json",
     "../images/tmpsprites.png",
@@ -72,7 +72,8 @@ Q.loadTMX(files.join(','), function () {
     Q.compileSheets("../images/sprites.png", "../data/sprites.json");
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.compileSheets("../images/powerups.png", "../data/powerups.json");
-    Q.stageScene("castleLevel");
+    // Q.stageScene("castleLevel"); TESTING
+    Q.stageScene("mountainLevel");
 
     socket.emit("joinGame", {
         roomName: roomName,
@@ -119,6 +120,14 @@ Q.scene("endGame", function(stage) {
 
     box.fit(20);
 });
+
+Q.scene("mountainLevel", function(stage) {
+    Q.stageTMX("../data/mountainLevel.tmx", stage);
+
+    // Set up the socket connections.
+    setUp(stage);
+});
+
 
 Q.scene("castleLevel", function(stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);

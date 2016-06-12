@@ -39,7 +39,7 @@
   </tile>
   <tile id="137">
    <properties>
-    <property name="Class" value="Door"/>
+    <property name="Class" value="Original"/>
     <property name="open" type="bool" value="true"/>
     <property name="sprite" value="door_open"/>
    </properties>
