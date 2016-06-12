@@ -169,8 +169,8 @@ setUpObject.addSelf = function(data) {
     setUpObject.stage.add("viewport").follow(setUpObject.player);
 
     setUpObject.flag = new Q.Flag({
-        x: 693,
-        y: 557,
+        x: 698,
+        y: 552,
         player: setUpObject.player
     });
 
