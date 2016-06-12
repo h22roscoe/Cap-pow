@@ -224,61 +224,13 @@ Quintus.Powerup = function (Q) {
             }));
         },
 
-        flagPositions: [
-            {
-                x: 693,
-                y: 557
-            },
-            {
-                x: 83,
-                y: 735
-            },
-            {
-                x: 1029,
-                y: 273
-            },
-            {
-                x: 924,
-                y: 462
-            },
-            {
-                x: 735,
-                y: 756
-            },
-            {
-                x: 104,
-                y: 84
-            },
-            {
-                x: 105,
-                y: 274
-            },
-            {
-                x: 567,
-                y: 378
-            },
-            {
-                x: 672,
-                y: 357
-            }
-        ],
-
         sensor: function (colObj) {
-            var randomIndex = Math.floor(Math.random() * this.flagPositions.length);
-            var flagPos = this.flagPositions[randomIndex];
-            var flag = Q("Flag").first();
-
-            flag.p.x = flagPos.x;
-            flag.p.y = flagPos.y;
-
-
             colObj.p.socket.emit("powerUp", {
                 name: "FlagMove",
                 playerId: colObj.p.playerId,
                 powerupId: this.p.powerupId,
                 x: this.p.x,
-                y: this.p.y,
-                flagPos: flagPos
+                y: this.p.y
             });
 
             this.destroy();
