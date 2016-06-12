@@ -57,15 +57,15 @@
                     <tbody>
                         <tr ng-repeat="room in rooms | orderBy: 'players': true"
                             ng-show="room.players < 4;"
-                            
+                            ng-click="loadRoom(room);"
                             ng-href="/room/{{ room.name }}"
                             style="cursor: pointer; cursor: hand;">
                                 <td>{{ room.name }}</td>
                                 <td>
-                                    <form class="form-signin" ng-submit='loadRoom(room, this);' method="post">
-                                        <input type="password" id="inputPassword" name="joinPwd" class="form-control" placeholder="Password" required>
-                                        <button class="btn btn-lg btn-primary btn-block" type="submit"><span class="fa fa-sign-in"></span> Join room</button>
-                                    </form>
+                                    <!--<form class="form-signin" ng-submit='loadRoom(room, this);' method="post">-->
+                                        <input type="password" id="inputJoinPwd" name="joinPwd" class="form-control" placeholder="Password" required>
+                                        <!--<button class="btn btn-lg btn-primary btn-block" type="submit"><span class="fa fa-sign-in"></span> Join room</button>-->
+                                    <!--</form>-->
                                 </td>
                                 <td>{{ room.players }}</td>
                         </tr>
@@ -131,11 +131,12 @@
 
             $scope.ajax();
 
-            $scope.loadRoom = function(room, form) {
+            $scope.loadRoom = function(room) {
                 console.log("Room password is "+room.password);
-                console.log("You entered "+document.getElementById('inputPassword').value);
-                console.log("You entered "+form.joinPwd.value);
-                if ((form === undefined && !room.password) || (form !== undefined && form.joinPwd && (room.password === form.joinPwd.value))) {
+                console.log("You entered "+document.getElementById('inputJoinPwd').value);
+                //console.log("You entered "+form.joinPwd.value);
+                //if ((form === undefined && !room.password) || (form !== undefined && form.joinPwd && (room.password === form.joinPwd.value))) {
+                if (document.getElementById('inputJoinPwd') === room.password) {
                     console.log("Correct room password!")
                     $http.put("/room/" + room.name).then(angular.noop);
 
@@ -143,6 +144,7 @@
 
                     $window.location.href = "/room/" + room.name;
                 }
+                //}
             }
         });
     </script>
