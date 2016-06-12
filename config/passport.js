@@ -104,7 +104,7 @@ module.exports = function(passport) {
                 randId++;
                 models.users.create({
                     "username": "guest" + randId,
-                    "password": "password"
+                    "password": null
                 }).then(function(user) {
                     return done(null, user);
                 }).error(function(err) {

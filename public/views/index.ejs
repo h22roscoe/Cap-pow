@@ -59,21 +59,15 @@
                     <br>
                     <a href="/signup" class="btn btn-lg btn-default">Register!</a>
                     <br>
-                    <button id="guest" class="btn btn-lg btn-primary"> Play as guest!</button>
+                    <form action="/guest" method="post">
+                        <button id="guest" type="submit" class="btn btn-lg btn-primary"> Play as guest!</button>
+                        <input name="username" value="guest" class="form-control" type="hidden">
+                        <input name="password" value="guest" class="form-control" type="hidden">
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        $("#guest").click(function() {
-            $.post("/signup", {
-                guest: true
-            }, function (data, status) {
-                console.log(data);
-            });
-        });
-    </script>
 </body>
 
 </html>
