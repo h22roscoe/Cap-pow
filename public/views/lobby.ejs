@@ -51,23 +51,23 @@
                 <table class="table table-hover">
                     <thead>
                         <th>Room Name</th>
-                        <th>Room Password</th>
                         <th># Players</th>
+                        <th>Room Password</th>
                     </thead>
                     <tbody>
                         <tr ng-repeat="room in rooms | orderBy: 'players': true"
                             ng-show="room.players < 4;"
-                            ng-click="loadRoom(room, document.getElementById('inputJoinPwd'));"
+                            ng-click="loadRoom(room);"
                             ng-href="/room/{{ room.name }}"
                             style="cursor: pointer; cursor: hand;">
                                 <td>{{ room.name }}</td>
-                                <td>
-                                    <!--<form class="form-signin" ng-submit='loadRoom(room, this);' method="post">-->
-                                        <input type="text" id="inputJoinPwd" value="" class="form-control" placeholder="Password" required>
-                                        <!--<button class="btn btn-lg btn-primary btn-block" type="submit"><span class="fa fa-sign-in"></span> Join room</button>-->
-                                    <!--</form>-->
-                                </td>
                                 <td>{{ room.players }}</td>
+                                <td>
+                                    <form action="/join" method="post">
+                                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                        <button class="btn btn-lg btn-primary" type="submit"><span class="fa fa-sign-in"></span> Join room</button>
+                                    </form>
+                                </td>
                         </tr>
                     </tbody>
                 </table>
@@ -120,31 +120,23 @@
 
         app.controller("rooms", function($scope, $http, $timeout, $window) {
             //var timeout;
-            
+
             $scope.ajax = function() {
                 $http.get($window.location.href + "/data").then(function(rooms) {
                     $scope.rooms = rooms.data;
                 });
-                
+
                 //timeout = $timeout($scope.ajax, 2000); //clearTimeout
             }
 
             $scope.ajax();
 
-            $scope.loadRoom = function(room, password) {
-                console.log("Room password is " + room.password);
-                console.log("You entered " + password);
-                //console.log("You entered "+form.joinPwd.value);
-                //if ((form === undefined && !room.password) || (form !== undefined && form.joinPwd && (room.password === form.joinPwd.value))) {
-                if (password === room.password) {
-                    console.log("Correct room password!")
-                    $http.put("/room/" + room.name).then(angular.noop);
+            $scope.loadRoom = function(room) {
+                $http.put("/room/" + room.name).then(angular.noop);
 
-                    sessionStorage.setItem("roomName", room.name);
+                sessionStorage.setItem("roomName", room.name);
 
-                    $window.location.href = "/room/" + room.name;
-                }
-                //}
+                $window.location.href = "/room/" + room.name;
             }
         });
     </script>
