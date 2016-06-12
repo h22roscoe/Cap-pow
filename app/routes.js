@@ -34,6 +34,27 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
+    // JOIN (ROOM)
+    app.post("/join", function (req, res) {
+        models.room.find({
+            where: {
+                id: req.body.room
+            }
+        }).then(function (room) {
+            if (!models.room.validPassword(req.body.password, room.password)) {
+                res.render("lobby", {
+                    message: "Nope, that's not the password",
+                    user: req.user
+                });
+            } else {
+                res.render("lobby", {
+                    message: "success: " + room.id,
+                    user: req.user
+                });
+            }
+        })
+    });
+
     // GUEST
     app.post("/guest", function (req, res, next) {
         req.user = {
@@ -103,6 +124,11 @@ module.exports = function (app, passport) {
                         winPoints: req.body.winPoints,
                         password: req.body.password,
                         players: 0
+                    }).then(function() {
+                        res.render("lobby", {
+                            message: "",
+                            user: req.user
+                        })
                     });
                 }
             });

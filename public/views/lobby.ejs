@@ -63,8 +63,9 @@
                                 <td>{{ room.name }}</td>
                                 <td>{{ room.players }}</td>
                                 <td>
-                                    <form action="/join" method="post">
+                                    <form ng-show="hasPassword(room)" action="/join" method="post">
                                         <input type="password" name="password" class="form-control" placeholder="Password" required>
+                                        <input type="hidden" name="room" class="form-control" value="{{ room.name }}">
                                         <button class="btn btn-lg btn-primary" type="submit"><span class="fa fa-sign-in"></span> Join room</button>
                                     </form>
                                 </td>
@@ -79,9 +80,25 @@
 
             <div class="col-sm-4 text-center">
                 <% if (message) { %>
-                    <div class="alert alert-danger">
-                        <%= message %>
-                    </div>
+                    <% if (message.startsWith("success")) { %>
+                        <script>
+                            console.log("HAAHAHAHAHAHAH");
+                            var roomname = "<%= message %>".substring(9);
+
+                            $.ajax({
+                                url: "/room/" + roomname,
+                                type: "PUT"
+                            });
+
+                            sessionStorage.setItem("roomName", roomname);
+
+                            window.location.href = "/room/" + roomname;
+                        </script>
+                    <% } else { %>
+                        <div class="alert alert-danger">
+                            <%= message %>
+                        </div>
+                    <% } %>
                 <% } %>
 
                 <% if (user) { %>
@@ -136,12 +153,18 @@
 
             $scope.ajax();
 
+            $scope.hasPassword = function(room) {
+                return room.password;
+            }
+
             $scope.loadRoom = function(room) {
-                $http.put("/room/" + room.name).then(angular.noop);
+                if (!hasPassword(room)) {
+                    $http.put("/room/" + room.name).then(angular.noop);
 
-                sessionStorage.setItem("roomName", room.name);
+                    sessionStorage.setItem("roomName", room.name);
 
-                $window.location.href = "/room/" + room.name;
+                    $window.location.href = "/room/" + room.name;
+                }
             }
         });
     </script>
