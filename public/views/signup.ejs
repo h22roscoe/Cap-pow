@@ -120,6 +120,13 @@
                 return false;
             }
 
+            re = /^guest/;
+
+            if (!re.test(form.username.value)) {
+                writeMessage("Username must not begin with 'guest'");
+                return false;
+            }
+
             length = form.password.value.length;
 
             if (length < 3 || length > 18) {
