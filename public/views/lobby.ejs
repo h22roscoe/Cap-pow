@@ -80,9 +80,9 @@
 
             <div class="col-sm-4 text-center">
                 <% if (message) { %>
-                    <% if (("" + message).startsWith("success")) { %>
+                    <% if (success) { %>
                         <script>
-                            var roomname = "<%= message %>".substring(9);
+                            var roomname = "<%= message %>";
 
                             $.ajax({
                                 url: "/room/" + roomname,

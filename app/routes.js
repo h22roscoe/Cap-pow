@@ -48,7 +48,8 @@ module.exports = function (app, passport) {
                 });
             } else {
                 res.render("lobby", {
-                    message: "success: " + room.id,
+                    message: room.id,
+                    success: true,
                     user: req.user
                 });
             }
