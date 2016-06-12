@@ -53,10 +53,10 @@ module.exports = function (sequelize, DataTypes) {
 
     Room.beforeCreate(function (room) {
         if (room.password) {
-            room.password = bcrypt.hashSync(room.password,
+            /*room.password = bcrypt.hashSync(room.password,
                                             bcrypt.genSaltSync(8),
                                             null
-                                           );
+                                           );*/
         }
     });
 
