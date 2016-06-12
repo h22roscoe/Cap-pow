@@ -97,14 +97,38 @@ gameNsp.on("connection", function(socket) {
         var spriteId = roomData.getPlayerNumber(socket, gameData.playerId);
         var winPoints = roomData.get(socket, "winPoints");
 
+        var startPos = {
+            0: {
+                x: 231,
+                y: 84
+            },
+
+            1: {
+                x: 104,
+                y: 693
+            },
+
+            2: {
+                x: 1365,
+                y: 525
+            },
+
+            3: {
+                x: 1323,
+                y: 41
+            }
+        };
+
         socket.emit("gameInfo", {
             id: spriteId,
+            startPos: startPos[spriteId],
             winPoints: winPoints
         });
 
         var ownerId = roomData.get(socket, "owner");
 
             roomData.set(socket, "powerUpsGiven", 0);
+
             roomData.set(socket, "powerUpPositions", [{
                 x: 380,
                 y: 70

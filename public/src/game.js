@@ -26,28 +26,6 @@ setUpObject = {
     stage: null
 };
 
-var startPos = {
-    0: {
-        x: 231,
-        y: 84
-    },
-
-    1: {
-        x: 104,
-        y: 693
-    },
-
-    2: {
-        x: 1365,
-        y: 525
-    },
-
-    3: {
-        x: 1323,
-        y: 41
-    }
-}
-
 var files = [
     "../data/castleLevel.tmx",
     "../data/mountainLevel.tmx",
@@ -154,8 +132,8 @@ setUpObject.addSelf = function(data) {
         socket: socket,
         roomName: roomName,
         playerId: setUpObject.selfId,
-        x: startPos[data.id].x,
-        y: startPos[data.id].y
+        x: data.startPos.x,
+        y: data.startPos.y
     });
 
     $("#scores > tbody:last-child").append(
@@ -169,8 +147,8 @@ setUpObject.addSelf = function(data) {
     setUpObject.stage.add("viewport").follow(setUpObject.player);
 
     setUpObject.flag = new Q.Flag({
-        x: 693,
-        y: 557,
+        x: 698,
+        y: 552,
         player: setUpObject.player
     });
 
