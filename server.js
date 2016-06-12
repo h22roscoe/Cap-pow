@@ -159,6 +159,11 @@ gameNsp.on("connection", function(socket) {
                 .emit("updated", updateInfo);
         });
 
+        socket.on("justAttacked", function(updateInfo) {
+            socket.broadcast.to(gameData.roomName)
+                .emit("someoneAttacked", updateInfo);
+        })
+
         socket.on("points", function(updateInfo) {
             socket.broadcast.to(gameData.roomName)
                 .emit("newScore", updateInfo);

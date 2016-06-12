@@ -316,4 +316,25 @@ function setUp(stage) {
             setUpObject.player.add(data.name);
         }
     });
+
+    socket.on.("someoneAttacked", function(data) {
+
+        if (data.direction == "left") {
+          setUpObject.player.on("bump.right", function(col) {
+            setUpObject.player.vx = -col;
+          });
+          setUpObject.player.vx -= 500;
+        } else if (data.direction == "right") {
+          setUpObject.player.on("bump.left", function(col) {
+            setUpObject.player.vx = -col;
+          });
+          setUpObject.player.vx += 500;
+        } else if (data.direction == "up" {
+          setUpObject.player.on("bump.up", function(col) {
+            setUpObject.player.vy = -col;
+          });
+          setUpObject.player.vy += 500;
+
+        });
+    });
 }
