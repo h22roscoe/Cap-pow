@@ -85,7 +85,7 @@ var POWER_UPS = [
     "makeFlagMove"
 ]
 
-var MAX_POWER_UPS = 2;
+var MAX_POWER_UPS = 5;
 
 gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
@@ -138,7 +138,24 @@ gameNsp.on("connection", function(socket) {
             }, {
                 x: 273,
                 y: 441
-            }]);
+            }, {
+                x: 658,
+                y: 534
+            }, {
+                x: 1230,
+                y: 689
+            }, {
+                x: 1127,
+                y: 414
+            }, {
+                x: 491,
+                y: 790
+            }, {
+                x: 103,
+                y: 363
+            }
+
+          ]);
 
             roomData.set(socket, "flagPositions", [{
                 x: 698,
