@@ -1,4 +1,4 @@
-Quintus.KillLayer = function(Q) {
+Quintus.CappowLayers = function(Q) {
     Q.TileLayer.extend("KillLayer", {
         init: function(p) {
             this._super(p);
@@ -33,4 +33,5 @@ Quintus.KillLayer = function(Q) {
             }
         }
     });
+
 }

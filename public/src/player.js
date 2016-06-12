@@ -7,7 +7,7 @@ Quintus.Player = function (Q) {
                 type: Q.SPRITE_PLAYER,
                 // TODO: Need to change collisionMask so that players
                 // dont collide with each other
-                collisionMask: Q.SPRITE_DEFAULT | Q.SPRITE_DOOR | Q.SPRITE_COLLECTABLE | Q.SPRITE_POWERUP | Q.KILL_LAYER,
+                collisionMask: Q.SPRITE_DEFAULT | Q.SPRITE_DOOR | Q.SPRITE_COLLECTABLE | Q.SPRITE_POWERUP,
                 jumpSpeed: -300,
                 speed: 100,
                 gamePoints: 0
@@ -15,7 +15,57 @@ Quintus.Player = function (Q) {
 
             this.add("2d, platformerControls, animation");
 
+            this.on("bump.left,bump.right,bump.top", this, "cannotAttack");
+
             Q.input.on("down", this, "checkDoor");
+            Q.input.on("fire", this, "attack");
+
+            player = this;
+            player.justAttacked = false;
+            player.justBumped = false;
+
+            this.attackedInterval = setInterval(function () {
+                player.justAttacked = false;
+                console.log("playerJustAttack is", player.justAttacked);
+            }, 3000);
+
+            this.bumpedInterval = setInterval(function () {
+                player.justBumped = false;
+                console.log("playerJustBump is", player.justBumped);
+                player.timeOut = setTimeout(function () {
+                    Q.input.on("fire", player, "attack");
+                    console.log("fireOn");
+                }, 500);
+            }, 1000);
+        },
+
+        cannotAttack: function(collision) {
+            var player = this;
+            Q.input.off("fire");
+            player.justBumped = true;
+        },
+
+        attack: function() {
+            if (!this.justAttacked && !this.justBumped) {
+                console.log("attacking");
+                var direction;
+                if (Q.inputs["left"]) {
+                    this.p.vx -= 1500;
+                    direction = "left";
+                } else if (Q.inputs["right"]) {
+                    this.p.vx += 1500;
+                    direction = "right";
+                } else if (Q.inputs["up"]) {
+                    this.p.vy -= 300;
+                    direction = "up";
+                };
+
+                this.justAttacked = true;
+                this.p.socket.emit("justAttacked", {
+                    attackingPlayer: player.p.playerId,
+                    direction: direction
+                });
+            }
         },
 
         checkDoor: function() {
@@ -25,7 +75,6 @@ Quintus.Player = function (Q) {
         step: function (dt) {
             this.p.socket.emit("update", {
                 playerId: this.p.playerId,
-                hidden: this.p.hidden,
                 x: this.p.x,
                 y: this.p.y,
                 sheet: this.p.sheet

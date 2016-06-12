@@ -3,7 +3,7 @@ var Q = window.Q = Quintus({
         development: true
     })
     .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
-    .include("Player, Flag, Powerup, Door, KillLayer")
+    .include("Player, Flag, Powerup, Door, CappowLayers")
     .setup({
         width: $(window).width() - 10,
         height: $(window).height() - 10,
