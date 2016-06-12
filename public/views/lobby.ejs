@@ -64,6 +64,7 @@
                                 <td>
                                     <form class="form-signin" onsubmit='loadRoom(room, this);'>
                                         <input type="password" id="inputPassword" name="joinPwd" class="form-control" placeholder="Password" required>
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit"><span class="fa fa-sign-in"></span> Join room</button>
                                     </form>
                                 </td>
                                 <td>{{ room.players }}</td>
@@ -129,8 +130,9 @@
             $scope.ajax();
 
             $scope.loadRoom = function(room, form) {
-                if (room.password === form.value.joinPwd) {
-
+                console.log(room.password);
+                if (form === undefined || room.password === form.value.joinPwd) {
+                
                     $http.put("/room/" + room.name).then(angular.noop);
 
                     sessionStorage.setItem("roomName", room.name);
