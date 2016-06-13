@@ -293,7 +293,7 @@ function setUp(stage) {
         setUpObject.player.p.x = data.newPos.x;
         setUpObject.player.p.y = data.newPos.y;
 
-        setUpObject.stage.follow(colObj);
+        setUpObject.stage.follow(setUpObject.player);
         setUpObject.player.show();
     });
 

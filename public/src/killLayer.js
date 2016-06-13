@@ -21,7 +21,7 @@ Quintus.KillLayer = function(Q) {
                     // Wait 5 seconds before adding again
                     var t = setTimeout(function() {
                         socket.emit("respawn", {});
-                        
+
                         killLayer.p.kill = true;
                     }, 3000);
                 }
