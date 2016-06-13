@@ -144,7 +144,7 @@
             var timeout;
 
             $scope.ajax = function() {
-                $http.get($window.location.href + "/data").then(function(rooms) {
+                $http.get("/lobby/data").then(function(rooms) {
                     $scope.rooms = rooms.data;
                 });
 
