@@ -127,9 +127,9 @@ gameNsp.on("connection", function(socket) {
 
         var ownerId = roomData.get(socket, "owner");
 
-            roomData.set(socket, "powerUpsGiven", 0);
+        roomData.set(socket, "powerUpsGiven", 0);
 
-            roomData.set(socket, "powerUpPositions", [{
+        roomData.set(socket, "powerUpPositions", [{
                 x: 380,
                 y: 70
             }, {
@@ -155,48 +155,48 @@ gameNsp.on("connection", function(socket) {
                 y: 363
             }
 
-          ]);
+        ]);
 
-            roomData.set(socket, "flagPositions", [{
-                x: 698,
-                y: 552
-            }, {
-                x: 98,
-                y: 720
-            }, {
-                x: 1044,
-                y: 258
-            }, {
-                x: 939,
-                y: 447
-            }, {
-                x: 750,
-                y: 741
-            }, {
-                x: 119,
-                y: 69
-            }, {
-                x: 120,
-                y: 259
-            }, {
-                x: 582,
-                y: 363
-            }, {
-                x: 687,
-                y: 342
-            }]);
+        roomData.set(socket, "flagPositions", [{
+            x: 698,
+            y: 552
+        }, {
+            x: 98,
+            y: 720
+        }, {
+            x: 1044,
+            y: 258
+        }, {
+            x: 939,
+            y: 447
+        }, {
+            x: 750,
+            y: 741
+        }, {
+            x: 119,
+            y: 69
+        }, {
+            x: 120,
+            y: 259
+        }, {
+            x: 582,
+            y: 363
+        }, {
+            x: 687,
+            y: 342
+        }]);
 
-            if (gameData.playerId === ownerId) {
-                var flagMoveInterval = setInterval(function() {
-                    var flagPositions = roomData.get(socket, "flagPositions");
-                    var randomIndex = Math.floor(Math.random() * flagPositions.length);
+        if (gameData.playerId === ownerId) {
+            var flagMoveInterval = setInterval(function() {
+                var flagPositions = roomData.get(socket, "flagPositions");
+                var randomIndex = Math.floor(Math.random() * flagPositions.length);
 
-                    gameNsp.to(gameData.roomName)
-                        .emit("powerupAcquired", {
-                            name: "FlagMove",
-                            flagPos: flagPositions[randomIndex]
-                        });
-                }, 15000)
+                gameNsp.to(gameData.roomName)
+                    .emit("powerupAcquired", {
+                        name: "FlagMove",
+                        flagPos: flagPositions[randomIndex]
+                    });
+            }, 15000)
 
             function loop() {
                 var randTime = Math.round(
@@ -253,14 +253,15 @@ gameNsp.on("connection", function(socket) {
                 .emit("gameWon", updateInfo);
         });
 
-        socket.on("respawn", function (updateInfo) {
+        socket.on("respawn", function(updateInfo) {
             var randIdx = Math.floor(Math.random() * 4);
             var randPos = startPos[randIdx];
+            console.log(randPos);
 
-            socket.emit("respawn", function () {
+            socket.emit("respawn", {
                 newPos: randPos
-            })
-        })
+            });
+        });
 
         socket.on("powerUp", function(powerUpInfo) {
             if (powerUpInfo.name === "FlagMove") {
