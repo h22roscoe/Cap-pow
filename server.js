@@ -124,6 +124,13 @@ gameNsp.on("connection", function(socket) {
             startPos: startPos[spriteId],
             winPoints: winPoints
         });
+        
+        socket.on("died", function(data) {
+            var randIdx = Math.floor(Math.random() * 4);
+            socket.emit("newSpawn", {
+                pos: startPos[randIdx]
+            })
+        })
 
         var ownerId = roomData.get(socket, "owner");
 
