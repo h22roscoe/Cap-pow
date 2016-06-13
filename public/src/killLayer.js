@@ -20,13 +20,8 @@ Quintus.KillLayer = function(Q) {
 
                     // Wait 5 seconds before adding again
                     var t = setTimeout(function() {
-                        var randIdx = Math.floor(Math.random() * 4);
-                        var randPos = startPos[randIdx];
-                        colObj.p.x = randPos.x;
-                        colObj.p.y = randPos.y;
-
-                        setUpObject.stage.follow(colObj);
-                        colObj.show();
+                        socket.emit("respawn", {});
+                        
                         killLayer.p.kill = true;
                     }, 3000);
                 }

@@ -253,6 +253,15 @@ gameNsp.on("connection", function(socket) {
                 .emit("gameWon", updateInfo);
         });
 
+        socket.on("respawn", function (updateInfo) {
+            var randIdx = Math.floor(Math.random() * 4);
+            var randPos = startPos[randIdx];
+
+            socket.emit("respawn", function () {
+                newPos: randPos
+            })
+        })
+
         socket.on("powerUp", function(powerUpInfo) {
             if (powerUpInfo.name === "FlagMove") {
                 var flagPositions = roomData.get(socket, "flagPositions");

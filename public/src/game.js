@@ -289,6 +289,14 @@ function setUp(stage) {
         }));
     });
 
+    socket.on("respawn", function (data) {
+        setUpObject.player.p.x = data.newPos.x;
+        setUpObject.player.p.y = data.newPos.y;
+
+        setUpObject.stage.follow(colObj);
+        setUpObject.player.show();
+    });
+
     // When a powerup has been collected, a message specific to that
     // powerup will be emitted, causing the other players to get the
     // corresponding component for that powerup
