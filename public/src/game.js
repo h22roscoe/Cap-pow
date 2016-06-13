@@ -68,7 +68,7 @@ Q.loadTMX(files.join(','), function () {
     }
 });
 
-Q.scene("endGame", function(stage) {
+Q.scene("endGame", function (stage) {
     var box = stage.insert(new Q.UI.Container({
         x: Q.width / 2,
         y: Q.height / 2,
@@ -90,7 +90,7 @@ Q.scene("endGame", function(stage) {
 
     Q.audio.play("../audio/MLGHornsSoundEffect.mp3");
 
-    button.on("click", function() {
+    button.on("click", function () {
         Q.clearStages();
 
         window.location.href = "/room/" + roomName;
@@ -99,7 +99,7 @@ Q.scene("endGame", function(stage) {
     box.fit(20);
 });
 
-Q.scene("mountainLevel", function(stage) {
+Q.scene("mountainLevel", function (stage) {
     Q.stageTMX("../data/mountainLevel.tmx", stage);
 
     // Set up the socket connections.
@@ -107,7 +107,7 @@ Q.scene("mountainLevel", function(stage) {
 });
 
 
-Q.scene("castleLevel", function(stage) {
+Q.scene("castleLevel", function (stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);
 
     // Set up the socket connections.
@@ -122,7 +122,7 @@ function createTableDataRow(playerId, gamePoints) {
     return "<td>" + playerId + "</td><td>" + gamePoints + "</td>";
 }
 
-setUpObject.addSelf = function(data) {
+setUpObject.addSelf = function (data) {
     // Set this players unique id
     setUpObject.selfId = sessionStorage.getItem("playerId");
 
@@ -142,6 +142,9 @@ setUpObject.addSelf = function(data) {
 
     // Insert this player into the stage
     setUpObject.stage.insert(setUpObject.player);
+    
+    setUpObject.player.p.died = false;
+
 
     // Add a camera  for this player
     setUpObject.stage.add("viewport").follow(setUpObject.player);
@@ -207,7 +210,7 @@ setUpObject.updateScores = function (data) {
         createTableDataRow(actor.player.p.playerId, actor.gamePoints));
 }
 
-function updatePoints() {
+function updatePoints(points) {
     if (setUpObject.flag.p.shouldUpdatePoints && noWinner) {
         socket.emit("points", {
             playerId: setUpObject.player.p.playerId,
@@ -220,6 +223,24 @@ function updatePoints() {
             })
         }
 
+        $("#scores #" + setUpObject.selfId).html(
+            createTableDataRow(setUpObject.selfId,
+                setUpObject.player.p.gamePoints));
+    }
+
+    if (setUpObject.player.p.died) {
+        if (setUpObject.player.p.gamePoints > 5) {
+            setUpObject.player.p.gamePoints -= 5;
+            
+        } else {
+            setUpObject.player.p.gamePoints = 0;
+        }
+        socket.emit("points", {
+                playerId: setUpObject.player.p.playerId,
+                gamePoints: setUpObject.player.p.gamePoints
+        });
+        setUpObject.player.p.died = false;
+        
         $("#scores #" + setUpObject.selfId).html(
             createTableDataRow(setUpObject.selfId,
                 setUpObject.player.p.gamePoints));
@@ -276,8 +297,10 @@ function setUp(stage) {
         }));
     });
 
-    socket.on("gameWon", function(data) {
-        Q.stageScene("endGame", 1, { label: data.playerId + " Won!" });
+    socket.on("gameWon", function (data) {
+        Q.stageScene("endGame", 1, {
+            label: data.playerId + " Won!"
+        });
 
         noWinner = false;
     });
@@ -287,14 +310,6 @@ function setUp(stage) {
             x: data.x,
             y: data.y
         }));
-    });
-
-    socket.on("respawn", function (data) {
-        setUpObject.player.p.x = data.newPos.x;
-        setUpObject.player.p.y = data.newPos.y;
-
-        setUpObject.stage.follow(setUpObject.player);
-        setUpObject.player.show();
     });
 
     // When a powerup has been collected, a message specific to that

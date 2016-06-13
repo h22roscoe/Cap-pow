@@ -22,7 +22,7 @@ Quintus.KillLayer = function(Q) {
                     // Remove the player from stage
                     setUpObject.stage.unfollow();
                     colObj.hide();
-                    
+                    colObj.p.died = true;
                     socket.emit("died", {});
 
                     // Wait 5 seconds before adding again
