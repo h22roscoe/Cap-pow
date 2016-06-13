@@ -6,6 +6,11 @@ Quintus.KillLayer = function(Q) {
             this.p.kill = true;
 
             this.on("sensor");
+            
+            var kill = this;
+            socket.on("newSpawn", function (data) {
+                kill.p.newSpawnPosition = data.pos;
+            });
         },
 
         sensor: function(colObj) {
@@ -17,13 +22,13 @@ Quintus.KillLayer = function(Q) {
                     // Remove the player from stage
                     setUpObject.stage.unfollow();
                     colObj.hide();
+                    colObj.p.died = true;
+                    socket.emit("died", {});
 
                     // Wait 5 seconds before adding again
                     var t = setTimeout(function() {
-                        var randIdx = Math.floor(Math.random() * 4);
-                        var randPos = startPos[randIdx];
-                        colObj.p.x = randPos.x;
-                        colObj.p.y = randPos.y;
+                        colObj.p.x = killLayer.p.newSpawnPosition.x;
+                        colObj.p.y = killLayer.p.newSpawnPosition.y;
 
                         setUpObject.stage.follow(colObj);
                         colObj.show();

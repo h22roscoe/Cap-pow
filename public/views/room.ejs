@@ -56,12 +56,12 @@
                 <table class="table table-responsive">
                     <thead>
                         <th align="center">Players</th>
-                        <th align="center">Total score</th>
+                        <th align="center"># Flags</th>
                     </thead>
                     <tbody>
                         <tr ng-repeat="player in players | orderBy: 'username'">
                             <td>{{ player.username }}</td>
-                            <td>{{ player.password }}</td>
+                            <td>{{ player.flags }}</td>
                         </tr>
                     </tbody>
                 </table>
