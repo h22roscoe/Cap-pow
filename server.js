@@ -124,6 +124,13 @@ gameNsp.on("connection", function(socket) {
             startPos: startPos[spriteId],
             winPoints: winPoints
         });
+        
+        socket.on("died", function(data) {
+            var randIdx = Math.floor(Math.random() * 4);
+            socket.emit("newSpawn", {
+                pos: startPos[randIdx]
+            });
+        });
 
         var ownerId = roomData.get(socket, "owner");
 
@@ -251,16 +258,6 @@ gameNsp.on("connection", function(socket) {
             console.log("This guy won!: ", updateInfo.playerId);
             gameNsp.to(gameData.roomName)
                 .emit("gameWon", updateInfo);
-        });
-
-        socket.on("respawn", function(updateInfo) {
-            var randIdx = Math.floor(Math.random() * 4);
-            var randPos = startPos[randIdx];
-            console.log(randPos);
-
-            socket.emit("respawn", {
-                newPos: randPos
-            });
         });
 
         socket.on("powerUp", function(powerUpInfo) {
