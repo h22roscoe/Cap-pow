@@ -1,6 +1,6 @@
 var bcrypt = require("bcrypt-nodejs");
 
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
     "use strict"
 
     var Room = sequelize.define("room", {
@@ -38,23 +38,27 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         classMethods: {
-            associate: function (models) {
+            associate: function(models) {
                 Room.hasMany(models.users);
             },
-            validPassword: function (password, dbpassword) {
-                return bcrypt.compareSync(password, dbpassword);
+            validPassword: function(password, dbpassword) {
+                if (dbpassword) {
+                    return bcrypt.compareSync(password, dbpassword);
+                } else {
+                    return true;
+                }
             }
         },
         dialect: "postgres",
         freezeTableName: true
     });
 
-    Room.beforeCreate(function (room) {
+    Room.beforeCreate(function(room) {
         if (room.password) {
             room.password = bcrypt.hashSync(room.password,
-                                            bcrypt.genSaltSync(8),
-                                            null
-                                           );
+                bcrypt.genSaltSync(8),
+                null
+            );
         }
     });
 

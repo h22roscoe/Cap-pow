@@ -26,31 +26,9 @@ setUpObject = {
     stage: null
 };
 
-var startPos = {
-    0: {
-        x: 231,
-        y: 84
-    },
-
-    1: {
-        x: 104,
-        y: 693
-    },
-
-    2: {
-        x: 1365,
-        y: 525
-    },
-
-    3: {
-        x: 1323,
-        y: 41
-    }
-}
-
 var files = [
     "../data/castleLevel.tmx",
-    "../data/level1.tmx",
+    "../data/mountainLevel.tmx",
     "../images/tmptiles.png",
     "../data/tmplevel.json",
     "../images/tmpsprites.png",
@@ -59,7 +37,8 @@ var files = [
     "../data/sprites.json",
     "../images/sprites.png",
     "../images/powerups.png",
-    "../data/powerups.json"
+    "../data/powerups.json",
+    "../audio/MLGHornsSoundEffect.mp3"
 ];
 
 var roomName = sessionStorage.getItem("roomName");
@@ -72,6 +51,7 @@ Q.loadTMX(files.join(','), function () {
     Q.compileSheets("../images/tmpsprites.png", "../data/tmpsprites.json");
     Q.compileSheets("../images/powerups.png", "../data/powerups.json");
     Q.stageScene("castleLevel");
+    // Q.stageScene("mountainLevel");
 
     socket.emit("joinGame", {
         roomName: roomName,
@@ -88,19 +68,19 @@ Q.loadTMX(files.join(','), function () {
     }
 });
 
-Q.scene("endGame", function(stage) {
+Q.scene("endGame", function (stage) {
     var box = stage.insert(new Q.UI.Container({
         x: Q.width / 2,
         y: Q.height / 2,
-        fill: "rgba(0,0,0,0.5)"
+        fill: "rgba(255,255,255,0.5)"
     }));
 
     var button = box.insert(new Q.UI.Button({
         x: 0,
         y: 0,
-        fill: "#CCCCCC",
+        fill: "#888888",
         label: "Back to room"
-    }))
+    }));
 
     var label = box.insert(new Q.UI.Text({
         x: 10,
@@ -108,7 +88,9 @@ Q.scene("endGame", function(stage) {
         label: stage.options.label
     }));
 
-    button.on("click", function() {
+    Q.audio.play("../audio/MLGHornsSoundEffect.mp3");
+
+    button.on("click", function () {
         Q.clearStages();
 
         window.location.href = "/room/" + roomName;
@@ -117,7 +99,15 @@ Q.scene("endGame", function(stage) {
     box.fit(20);
 });
 
-Q.scene("castleLevel", function(stage) {
+Q.scene("mountainLevel", function (stage) {
+    Q.stageTMX("../data/mountainLevel.tmx", stage);
+
+    // Set up the socket connections.
+    setUp(stage);
+});
+
+
+Q.scene("castleLevel", function (stage) {
     Q.stageTMX("../data/castleLevel.tmx", stage);
 
     // Set up the socket connections.
@@ -132,7 +122,7 @@ function createTableDataRow(playerId, gamePoints) {
     return "<td>" + playerId + "</td><td>" + gamePoints + "</td>";
 }
 
-setUpObject.addSelf = function(data) {
+setUpObject.addSelf = function (data) {
     // Set this players unique id
     setUpObject.selfId = sessionStorage.getItem("playerId");
 
@@ -142,8 +132,8 @@ setUpObject.addSelf = function(data) {
         socket: socket,
         roomName: roomName,
         playerId: setUpObject.selfId,
-        x: startPos[data.id].x,
-        y: startPos[data.id].y
+        x: data.startPos.x,
+        y: data.startPos.y
     });
 
     $("#scores > tbody:last-child").append(
@@ -153,12 +143,15 @@ setUpObject.addSelf = function(data) {
     // Insert this player into the stage
     setUpObject.stage.insert(setUpObject.player);
 
+    setUpObject.player.p.died = false;
+
+
     // Add a camera  for this player
     setUpObject.stage.add("viewport").follow(setUpObject.player);
 
     setUpObject.flag = new Q.Flag({
-        x: 693,
-        y: 557,
+        x: 698,
+        y: 552,
         player: setUpObject.player
     });
 
@@ -217,7 +210,7 @@ setUpObject.updateScores = function (data) {
         createTableDataRow(actor.player.p.playerId, actor.gamePoints));
 }
 
-function updatePoints() {
+function updatePoints(points) {
     if (setUpObject.flag.p.shouldUpdatePoints && noWinner) {
         socket.emit("points", {
             playerId: setUpObject.player.p.playerId,
@@ -234,11 +227,29 @@ function updatePoints() {
             createTableDataRow(setUpObject.selfId,
                 setUpObject.player.p.gamePoints));
     }
+
+    if (setUpObject.player.p.died) {
+        if (setUpObject.player.p.gamePoints > 5) {
+            setUpObject.player.p.gamePoints -= 5;
+
+        } else {
+            setUpObject.player.p.gamePoints = 0;
+        }
+        socket.emit("points", {
+            playerId: setUpObject.player.p.playerId,
+            gamePoints: setUpObject.player.p.gamePoints
+        });
+        setUpObject.player.p.died = false;
+
+        $("#scores #" + setUpObject.selfId).html(
+            createTableDataRow(setUpObject.selfId,
+                setUpObject.player.p.gamePoints));
+    }
 }
 
 function isWithinRadius(higherObj, lowerObj, radius) {
-   return ((Math.abs(higherObj.p.x - lowerObj.p.x) <= radius) &&
-            (Math.abs(higherObj.p.y - lowerObj.p.y) <= radius));
+    return ((Math.abs(higherObj.p.x - lowerObj.p.x) <= radius) &&
+        (Math.abs(higherObj.p.y - lowerObj.p.y) <= radius));
 }
 
 // setUp deals with communication over the socket
@@ -291,8 +302,10 @@ function setUp(stage) {
         }));
     });
 
-    socket.on("gameWon", function(data) {
-        Q.stageScene("endGame", 1, { label: data.playerId + " Won!" });
+    socket.on("gameWon", function (data) {
+        Q.stageScene("endGame", 1, {
+            label: data.playerId + " Won!"
+        });
 
         noWinner = false;
     });
@@ -322,21 +335,50 @@ function setUp(stage) {
         }
     });
 
-    socket.on("someoneAttacked", function(data) {
+    socket.on("someoneAttacked", function (data) {
         console.log("someone might have attacked me", data);
+        var dampenFactor = 0.75;
         var actor = actors.filter(function (obj) {
             return obj.player.p.playerId === data.attackingPlayer;
         })[0];
 
-        var move = function(col) {
-            setUpObject.player.p.x += 10;
-            setUpObject.player.p.y -= 5;
+        var horizontal = function (colObj) {
+            if (Math.abs(colObj.impact) > 200) {
+                move(player, false, colObj.impact * dampenFactor);
+            } else {
+                setUpObject.player.vx = 0;
+                setUpObject.player.vy.off("bump.left, bump.right", this);
+            }
+        };
+        
+        var vertical = function (colObj) {
+            if (Math.abs(colObj.impact) > 200) {
+                move(player, false, colObj.impact * dampenFactor);
+            } else {
+                setUpObject.player.vx = 0;
+                setUpObject.player.vy.off("bump.left, bump.right", this);
+            }
+        }
+        
+        setUpObject.player.on("bump.left, bump.right", "horizontal");
+        
+        setUpObject.player.on("bump.top, bump.bottom", "vertical");
+
+        var move = function (player, isVertical, moveAmount) {
+
+            if (isVertical) {
+                player.p.vy = -moveAmount.impact;
+            } else {
+                player.p.vx = -moveAmount.impact;
+            }
+            //            setUpObject.player.p.x += 10;
+            //            setUpObject.player.p.y -= 5;
         };
 
         if (data.direction === "left") {
             if (isWithinRadius(actor.player, setUpObject.player, 100)) {
                 // setUpObject.player.on("bump.left", move);
-                setUpObject.player.p.vx -= 1000;
+                move(setUpObject.player, false, 1500);
 
                 // setUpObject.player.off("bump.left", move);
             }
@@ -345,7 +387,7 @@ function setUp(stage) {
                 // setUpObject.player.on("bump.right", function (col) {
                 //     setUpObject.player.p.vx = -col.impact ;
                 // });
-                setUpObject.player.p.vx += 1000;
+                move(setUpObject.player, false, -1500);
             }
         }
     });

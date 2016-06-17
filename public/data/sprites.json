@@ -17,7 +17,7 @@
         "tileh": 19
     },
 
-    "door": {
+    "original": {
         "sx": 162,
         "sy": 2,
         "cols": 1,
@@ -114,5 +114,32 @@
         "tilew": 19,
         "frames": 1,
         "tileh": 19
+    },
+
+    "igloo": {
+        "sx": 246,
+        "sy": 2,
+        "cols": 1,
+        "tilew": 21,
+        "frames": 1,
+        "tileh": 21
+    },
+
+    "normal": {
+        "sx": 269,
+        "sy": 2,
+        "cols": 1,
+        "tilew": 21,
+        "frames": 1,
+        "tileh": 21
+    },
+
+    "pipe": {
+        "sx": 292,
+        "sy": 2,
+        "cols": 1,
+        "tilew": 21,
+        "frames": 1,
+        "tileh": 21
     }
 }

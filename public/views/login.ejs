@@ -60,7 +60,7 @@
             <% } %>
 
             <!-- Change /index to /lobby -->
-            <form class="form-signin" onsubmit='return checkForm(this);' action="/login" method="post">
+            <form class="form-signin" action="/login" method="post">
                 <label for="inputUsername" class="sr-only">Username</label>
                 <input type="username" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
                 <label for="inputPassword" class="sr-only">Password</label>
@@ -77,19 +77,13 @@
         <div class="container" style="padding-top: 1cm; padding-bottom: 2cm">
             <div class="row">
                 <div class="span12 text-center">
-                    <p><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</p>
+                    <p><span class="fa fa-copyright"></span>&copy; Cap-pow! 2016</p>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        function checkForm(form) {
-            sessionStorage.setItem("playerId", form.username.value);
-
-            return true;
-        }
-
         $(document).ready(function () {
             $(".close").click(function () {
                 $("#alert").html("");

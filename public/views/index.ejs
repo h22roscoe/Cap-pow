@@ -37,36 +37,54 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="../css/index.css">
 </head>
 
 <body>
     <div class="site-wrapper">
-
         <div class="site-wrapper-inner">
-
             <div class="cover-container">
-                <br><br><br>
+                <br>
+                <br>
+                <br>
                 <div id="logo" style="text-align: center;">
                     <img src="../images/cap-pow.png" height="350" width="350">
                 </div>
-
-                <br>
-
                 <div class="inner-cover" style="text-align: center;">
-                    <a href="/login" class="btn btn-lg btn-default">Log in!</a><br>
-                    <a href="/signup" class="btn btn-lg btn-default">Register!</a><br>
-                    <a href="/game" class="btn btn-lg btn-default">Play as guest!</a>
+                    <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-4">
+                        <h3 style="color:aliceblue">Cap-pow! is an online multiplayer capture the flag game with dynamic powerups. Move with the arrow keys, collect power ups and get the most points by staying on the flag! Press down to go through doors for that crucial advantage!</h3>
+                    </div>
+                    <div class="col-sm-4"></div>
+                    </div>
+                    <br><br><br>
+                    <a href="/login" class="btn btn-lg btn-default" style="color:aliceblue">Log in!</a>
                     <br>
+                    <a href="/signup" class="btn btn-lg btn-default" style="color:aliceblue">Register!</a>
+                    <br>
+                    <br>
+                    <form action="/guest" method="post">
+                        <button id="guest" type="submit" class="btn btn-lg btn-primary"> Play as guest!</button>
+                        <input name="username" value="guest" class="form-control" type="hidden">
+                        <input name="password" value="guest" class="form-control" type="hidden">
+                    </form>
                 </div>
-
             </div>
-
+            <footer>
+                <div class="container" style="padding-top: 1cm; padding-bottom: 2cm">
+                    <div class="row">
+                        <div class="span12 text-center">
+                            <p style="color:aliceblue"><span class="fa fa-copyright"></span>&copy; Cap-pow! 2016</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
-
     </div>
-
 </body>
 
 </html>

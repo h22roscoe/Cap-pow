@@ -52,6 +52,7 @@
                     <thead>
                         <th>Room Name</th>
                         <th># Players</th>
+                        <th>Room Password</th>
                     </thead>
                     <tbody>
                         <tr ng-repeat="room in rooms | orderBy: 'players': true"
@@ -61,6 +62,13 @@
                             style="cursor: pointer; cursor: hand;">
                                 <td>{{ room.name }}</td>
                                 <td>{{ room.players }}</td>
+                                <td>
+                                    <form ng-show="hasPassword(room)" action="/join" method="post">
+                                        <input type="password" name="password" ng-focus="stopRefresh()" ng-blur="ajax()" class="form-control" placeholder="Password" required>
+                                        <input type="hidden" name="room" class="form-control" value="{{ room.name }}">
+                                        <button class="btn btn-lg btn-primary" type="submit"><span class="fa fa-sign-in"></span> Join room</button>
+                                    </form>
+                                </td>
                         </tr>
                     </tbody>
                 </table>
@@ -72,27 +80,50 @@
 
             <div class="col-sm-4 text-center">
                 <% if (message) { %>
-                    <div class="alert alert-danger">
-                        <%= message %>
-                    </div>
+                    <% if (success) { %>
+                        <script>
+                            var roomname = "<%= message %>";
+
+                            $.ajax({
+                                url: "/room/" + roomname,
+                                type: "PUT"
+                            });
+
+                            sessionStorage.setItem("roomName", roomname);
+
+                            window.location.href = "/room/" + roomname;
+                        </script>
+                    <% } else { %>
+                        <div class="alert alert-danger">
+                            <%= message %>
+                        </div>
+                    <% } %>
+                <% } %>
+
+                <% if (user) { %>
+                    <script>
+                        var username = "<%= user.username %>";
+                        sessionStorage.setItem("playerId", username);
+                    </script>
                 <% } %>
 
                 <form id="roomform" action="/lobby" method="post">
                     <label style="color:white">Make your own room!</label>
-                    <input type="text" class="form-control" name="roomname" placeholder="Room Name" style="color: darksalmon">
+                    <input type="text" class="form-control" name="roomname" placeholder="Room Name" style="color:#E37722">
                     <br>
-                    <span style="color: aliceblue">Points to win: <span id="val" value="50"></span>
+                    <span style="color: aliceblue">Points to win: <span id="val" value="50"></span></span>
                     <br>
                     <span style="color: aliceblue">10</span>
                     <input id="points" class="form-control" type="text" name="winPoints">
                     <span style="color: aliceblue">100</span>
                     <br>
                     <br>
+                    <input type="text" class="form-control" name="password" placeholder="Password" style="color: darksalmon">
+                    <br>
+                    <br>
                     <button id="create" type="submit" class="btn btn-md">Create Room</button>
                 </form>
-
                 <hr>
-
                 <a href="/logout" class="btn btn-default btn-sm">Logout</a>
             </div>
         </div>
@@ -101,7 +132,7 @@
         <div class="container" style="padding-top: 1cm; padding-bottom: 2cm">
             <div class="row">
                 <div class="span12 text-center">
-                    <p style="color:white"><span class="fa fa-copyright"></span>&copy; Cap-pow 2016</p>
+                    <p style="color:white"><span class="fa fa-copyright"></span>&copy; Cap-pow! 2016</p>
                 </div>
             </div>
         </div>
@@ -110,36 +141,50 @@
         var app = angular.module("lobby", []);
 
         app.controller("rooms", function($scope, $http, $timeout, $window) {
+            var timeout;
+
             $scope.ajax = function() {
-                $http.get($window.location.href + "/data").then(function(rooms) {
+                $http.get("/lobby/data").then(function(rooms) {
                     $scope.rooms = rooms.data;
                 });
 
-                $timeout($scope.ajax, 2000);
+                timeout = $timeout($scope.ajax, 2000); // clearTimeout
+            }
+
+            $scope.stopRefresh = function () {
+                $timeout.cancel(timeout);
             }
 
             $scope.ajax();
 
+            $scope.hasPassword = function(room) {
+                return room.password;
+            }
+
             $scope.loadRoom = function(room) {
-                $http.put("/room/" + room.name).then(angular.noop);
+                if (!$scope.hasPassword(room)) {
+                    $http.put("/room/" + room.name).then(angular.noop);
 
-                sessionStorage.setItem("roomName", room.name);
+                    sessionStorage.setItem("roomName", room.name);
 
-                $window.location.href = "/room/" + room.name;
+                    $window.location.href = "/room/" + room.name;
+                }
             }
         });
     </script>
     <script>
-        $("#points").slider({
-            min: 10,
-            max: 100,
-            value: 50,
-            step: 10,
-            tooltip: 'hide'
-        });
+        $(document).ready(function() {
+            $("#points").slider({
+                min: 10,
+                max: 100,
+                value: 50,
+                step: 10,
+                tooltip: 'hide'
+            });
 
-        $("#points").on("slide", function(slideEvt) {
-	        $("#val").text(slideEvt.value);
+            $("#points").on("slide", function(slideEvt) {
+    	        $("#val").text(slideEvt.value);
+            });
         });
     </script>
 </body>

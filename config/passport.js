@@ -9,24 +9,24 @@ function findUser(req, username, password, done) {
         where: {
             "username": username
         }
-    }).then(function (user) {
+    }).then(function(user) {
         // Check to see if theres already a user with that email
         if (user) {
             return done(null, false,
                 req.flash("signupMessage",
-                          "That username is already taken."));
+                    "That username is already taken."));
         } else {
             // If there is no user with that username create the user
             models.users.create({
-                    "username": username,
-                    "password": password
-            }).then(function (user) {
+                "username": username,
+                "password": password
+            }).then(function(user) {
                 return done(null, user);
-            }).error(function (err) {
+            }).error(function(err) {
                 return done(err);
             });
         }
-    }).error(function (err) {
+    }).error(function(err) {
         return done(err);
     });
 }
@@ -38,11 +38,11 @@ function findUserLogin(req, username, password, done) {
         where: {
             "username": username
         }
-    }).then(function (user) {
+    }).then(function(user) {
         // If no user is found, return the message
         if (!user) {
             return done(null, false, req.flash("loginMessage",
-                                               "No user found."));
+                "No user found."));
         }
 
         // If the user is found but the password is wrong
@@ -53,32 +53,33 @@ function findUserLogin(req, username, password, done) {
 
         // All is well, return successful user
         return done(null, user);
-    }).error(function (err) {
+    }).error(function(err) {
         return done(err);
     });
 }
 
 // Expose this function to our app using module.exports
-module.exports = function (passport) {
+module.exports = function(passport) {
     "use strict";
     // Passport session setup
     // Required for persistent login sessions
     // Passport needs ability to serialize and unserialize users out of session
+    var randId = 0;
 
     // Used to serialize the user for the session
-    passport.serializeUser(function (user, done) {
+    passport.serializeUser(function(user, done) {
         done(null, user);
     });
 
     // Used to deserialize the user
-    passport.deserializeUser(function (user, done) {
+    passport.deserializeUser(function(user, done) {
         models.users.find({
             where: {
                 "id": user.id
             }
-        }).then(function (user) {
+        }).then(function(user) {
             done(null, user);
-        }).error(function (err) {
+        }).error(function(err) {
             done(err, null);
         });
     });
@@ -90,18 +91,33 @@ module.exports = function (passport) {
         new LocalStrategy({
             // Allows us to pass back the entire request to the callback
             passReqToCallback: true
-        }, function (req, username, password, done) {
+        }, function(req, username, password, done) {
             process.nextTick(
                 findUser.bind(null, req, username, password, done)
             );
         })
     );
 
+    passport.use("guest-signup", new LocalStrategy(
+        function(username, password, done) {
+            process.nextTick(function() {
+                randId++;
+                models.users.create({
+                    "username": "guest" + randId,
+                    "password": null
+                }).then(function(user) {
+                    return done(null, user);
+                }).error(function(err) {
+                    return done(err);
+                });
+            });
+        }));
+
     passport.use("local-login",
         new LocalStrategy({
             // Allows us to pass back the entire request to the callback
             passReqToCallback: true
-        }, function (req, username, password, done) {
+        }, function(req, username, password, done) {
             findUserLogin(req, username, password, done);
         })
     );

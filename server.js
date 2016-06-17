@@ -80,10 +80,12 @@ var POWER_UPS = [
     "makeFreeze",
     "makeLight",
     "makeHeavy",
+    "makeFlagMove",
+    "makeFlagMove",
     "makeFlagMove"
 ]
 
-var MAX_POWER_UPS = 2;
+var MAX_POWER_UPS = 5;
 
 gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
@@ -95,16 +97,46 @@ gameNsp.on("connection", function(socket) {
         var spriteId = roomData.getPlayerNumber(socket, gameData.playerId);
         var winPoints = roomData.get(socket, "winPoints");
 
+        var startPos = {
+            0: {
+                x: 231,
+                y: 84
+            },
+
+            1: {
+                x: 104,
+                y: 693
+            },
+
+            2: {
+                x: 1365,
+                y: 525
+            },
+
+            3: {
+                x: 1323,
+                y: 41
+            }
+        };
+
         socket.emit("gameInfo", {
             id: spriteId,
+            startPos: startPos[spriteId],
             winPoints: winPoints
+        });
+        
+        socket.on("died", function(data) {
+            var randIdx = Math.floor(Math.random() * 4);
+            socket.emit("newSpawn", {
+                pos: startPos[randIdx]
+            });
         });
 
         var ownerId = roomData.get(socket, "owner");
 
-        if (gameData.playerId === ownerId) {
-            roomData.set(socket, "powerUpsGiven", 0);
-            roomData.set(socket, "powerUpPositions", [{
+        roomData.set(socket, "powerUpsGiven", 0);
+
+        roomData.set(socket, "powerUpPositions", [{
                 x: 380,
                 y: 70
             }, {
@@ -113,7 +145,65 @@ gameNsp.on("connection", function(socket) {
             }, {
                 x: 273,
                 y: 441
-            }]);
+            }, {
+                x: 658,
+                y: 534
+            }, {
+                x: 1230,
+                y: 689
+            }, {
+                x: 1127,
+                y: 414
+            }, {
+                x: 491,
+                y: 790
+            }, {
+                x: 103,
+                y: 363
+            }
+
+        ]);
+
+        roomData.set(socket, "flagPositions", [{
+            x: 698,
+            y: 552
+        }, {
+            x: 98,
+            y: 720
+        }, {
+            x: 1044,
+            y: 258
+        }, {
+            x: 939,
+            y: 447
+        }, {
+            x: 750,
+            y: 741
+        }, {
+            x: 119,
+            y: 69
+        }, {
+            x: 120,
+            y: 259
+        }, {
+            x: 582,
+            y: 363
+        }, {
+            x: 687,
+            y: 342
+        }]);
+
+        if (gameData.playerId === ownerId) {
+            var flagMoveInterval = setInterval(function() {
+                var flagPositions = roomData.get(socket, "flagPositions");
+                var randomIndex = Math.floor(Math.random() * flagPositions.length);
+
+                gameNsp.to(gameData.roomName)
+                    .emit("powerupAcquired", {
+                        name: "FlagMove",
+                        flagPos: flagPositions[randomIndex]
+                    });
+            }, 15000)
 
             function loop() {
                 var randTime = Math.round(
@@ -177,8 +267,17 @@ gameNsp.on("connection", function(socket) {
         });
 
         socket.on("powerUp", function(powerUpInfo) {
-            socket.broadcast.to(gameData.roomName)
-                .emit("powerupAcquired", powerUpInfo);
+            if (powerUpInfo.name === "FlagMove") {
+                var flagPositions = roomData.get(socket, "flagPositions");
+                var randomIndex = Math.floor(Math.random() * flagPositions.length);
+                powerUpInfo.flagPos = flagPositions[randomIndex];
+
+                gameNsp.to(gameData.roomName)
+                    .emit("powerupAcquired", powerUpInfo);
+            } else {
+                socket.broadcast.to(gameData.roomName)
+                    .emit("powerupAcquired", powerUpInfo);
+            }
 
             var powerUpPositions = roomData.get(socket, "powerUpPositions");
 

@@ -34,6 +34,41 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
+    // JOIN (ROOM)
+    app.post("/join", function (req, res) {
+        models.room.find({
+            where: {
+                id: req.body.room
+            }
+        }).then(function (room) {
+            if (!models.room.validPassword(req.body.password, room.password)) {
+                res.render("lobby", {
+                    message: "Nope, that's not the password",
+                    success: false,
+                    user: req.user
+                });
+            } else {
+                res.render("lobby", {
+                    message: room.id,
+                    success: true,
+                    user: req.user
+                });
+            }
+        })
+    });
+
+    // GUEST
+    app.post("/guest", function (req, res, next) {
+        req.user = {
+            username: req.body.username,
+            password: req.body.password
+        };
+
+        next();
+    }, passport.authenticate("guest-signup", {
+        successRedirect: "/lobby"
+    }));
+
     // SIGNUP
     // Show the signup form
     app.get("/signup", function (req, res) {
@@ -50,6 +85,7 @@ module.exports = function (app, passport) {
         failureFlash: true
     }));
 
+    // LOBBY
     app.get("/lobby/data", isLoggedIn, function (req, res) {
         models.room.findAll().then(function (rooms) {
             res.json(rooms);
@@ -66,6 +102,7 @@ module.exports = function (app, passport) {
         }).then(function () {
             res.render("lobby", {
                 message: "",
+                success: false,
                 user: req.user
             });
         });
@@ -81,6 +118,7 @@ module.exports = function (app, passport) {
                 if (rooms) {
                     res.render("lobby", {
                         message: "Room is already taken",
+                        success: false,
                         user: req.user
                     });
                 } else {
@@ -88,13 +126,21 @@ module.exports = function (app, passport) {
                         id: req.body.roomname,
                         name: req.body.roomname,
                         winPoints: req.body.winPoints,
+                        password: req.body.password,
                         players: 0
+                    }).then(function() {
+                        res.render("lobby", {
+                            message: "",
+                            success: false,
+                            user: req.user
+                        })
                     });
                 }
             });
         } else {
             res.render("lobby", {
                 message: "The room needs a name!",
+                success: false,
                 user: req.user
             });
         }
@@ -134,7 +180,7 @@ module.exports = function (app, passport) {
     });
 
     // GAME
-    app.get("/game/", isLoggedIn, function (req, res) {
+    app.get("/game", isLoggedIn, function (req, res) {
         res.render("game", {});
     });
 };
