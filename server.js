@@ -83,13 +83,14 @@ var POWER_UPS = [
     "makeFlagMove",
     "makeFlagMove",
     "makeFlagMove"
-]
+];
 
 var MAX_POWER_UPS = 5;
 
 gameNsp.on("connection", function(socket) {
     console.log("Game: A user connected");
     var timeout;
+    var flagMoveInterval;
 
     socket.on("joinGame", function(gameData) {
         roomData.rejoinRoom(socket, gameData.roomName);
@@ -124,7 +125,7 @@ gameNsp.on("connection", function(socket) {
             startPos: startPos[spriteId],
             winPoints: winPoints
         });
-        
+
         socket.on("died", function(data) {
             var randIdx = Math.floor(Math.random() * 4);
             socket.emit("newSpawn", {
@@ -194,7 +195,7 @@ gameNsp.on("connection", function(socket) {
         }]);
 
         if (gameData.playerId === ownerId) {
-            var flagMoveInterval = setInterval(function() {
+            flagMoveInterval = setInterval(function() {
                 var flagPositions = roomData.get(socket, "flagPositions");
                 var randomIndex = Math.floor(Math.random() * flagPositions.length);
 
@@ -203,7 +204,7 @@ gameNsp.on("connection", function(socket) {
                         name: "FlagMove",
                         flagPos: flagPositions[randomIndex]
                     });
-            }, 15000)
+            }, 15000);
 
             function loop() {
                 var randTime = Math.round(
@@ -258,6 +259,7 @@ gameNsp.on("connection", function(socket) {
             console.log("This guy won!: ", updateInfo.playerId);
             gameNsp.to(gameData.roomName)
                 .emit("gameWon", updateInfo);
+            clearInterval(flagMoveInterval);
         });
 
         socket.on("powerUp", function(powerUpInfo) {
