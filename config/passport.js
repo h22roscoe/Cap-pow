@@ -64,8 +64,7 @@ module.exports = function(passport) {
     // Passport session setup
     // Required for persistent login sessions
     // Passport needs ability to serialize and unserialize users out of session
-    var randId = 0;
-
+    
     // Used to serialize the user for the session
     passport.serializeUser(function(user, done) {
         done(null, user);
@@ -101,9 +100,8 @@ module.exports = function(passport) {
     passport.use("guest-signup", new LocalStrategy(
         function(username, password, done) {
             process.nextTick(function() {
-                randId++;
                 models.users.create({
-                    "username": "guest" + randId,
+                    "username": "guest" + Math.floor(Math.random() * 16777215).toString(16),
                     "password": null
                 }).then(function(user) {
                     return done(null, user);
